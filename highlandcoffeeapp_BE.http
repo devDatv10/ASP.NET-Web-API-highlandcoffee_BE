@@ -1,0 +1,6 @@
+@highlandcoffeeapp_BE_HostAddress = http://localhost:5194
+
+GET {{highlandcoffeeapp_BE_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
