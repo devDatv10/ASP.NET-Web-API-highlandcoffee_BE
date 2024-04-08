@@ -10,7 +10,7 @@ namespace highlandcoffeeapp_BE.DataAccess
         {
             _context = context;
         }
-        //
+        // function for admin
         public void AddAdminsRecord(Admin admin)
         {
             _context.admins.Add(admin);
@@ -40,7 +40,7 @@ namespace highlandcoffeeapp_BE.DataAccess
             return _context.admins.ToList();
         }
 
-        //
+        // function for customer
         public void AddCustomersRecord(Customer customer)
         {
             _context.customers.Add(customer);
@@ -68,6 +68,36 @@ namespace highlandcoffeeapp_BE.DataAccess
         public List<Customer> GetCustomersRecords()
         {
             return _context.customers.ToList();
+        }
+
+        // function for category
+        public void AddCategoriesRecord(Category category)
+        {
+            _context.categories.Add(category);
+            _context.SaveChanges();
+        }
+
+        public void UpdateCategoriesRecord(Category category)
+        {
+            _context.categories.Update(category);
+            _context.SaveChanges();
+        }
+
+        public void DeleteCategoriesRecord(int id)
+        {
+            var entity = _context.categories.FirstOrDefault(t => t.id == id);
+            _context.categories.Remove(entity);
+            _context.SaveChanges();
+        }
+
+        public Category GetCategoriesSingleRecord(int id)
+        {
+            return _context.categories.FirstOrDefault(t => t.id == id);
+        }
+
+        public List<Category> GetCategoriesRecords()
+        {
+            return _context.categories.ToList();
         }
     }
 }

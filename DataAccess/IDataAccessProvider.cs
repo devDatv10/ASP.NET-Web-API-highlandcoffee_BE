@@ -17,5 +17,12 @@ namespace highlandcoffeeapp_BE.DataAccess
         void DeleteCustomersRecord(int id);
         Customer GetCustomersSingleRecord(int id);
         List<Customer> GetCustomersRecords();
+
+        // function for category
+        void AddCategoriesRecord(Category category);
+        void UpdateCategoriesRecord(Category category);
+        void DeleteCategoriesRecord(int id);
+        Category GetCategoriesSingleRecord(int id);
+        List<Category> GetCategoriesRecords();
     }
 }
