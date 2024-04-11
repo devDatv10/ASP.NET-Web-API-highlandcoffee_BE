@@ -93,4 +93,9 @@ namespace highlandcoffeeapp_BE.Models
     public class Favorite
     {
     }
+
+    public class Test{
+        public int id { get; set; }
+        public byte[] image_path { get; set; }
+    }
 }

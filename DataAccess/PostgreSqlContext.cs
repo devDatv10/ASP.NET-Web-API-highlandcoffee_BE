@@ -14,6 +14,8 @@ namespace highlandcoffeeapp_BE.DataAccess
         public DbSet<Customer> customers { get; set; }
         public DbSet<Category> categories { get; set; }
 
+        public DbSet<Test> tests { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);

@@ -99,5 +99,35 @@ namespace highlandcoffeeapp_BE.DataAccess
         {
             return _context.categories.ToList();
         }
+
+        // function for test
+        public void AddTestsRecord(Test test)
+        {
+            _context.tests.Add(test);
+            _context.SaveChanges();
+        }
+
+        public void UpdateTestsRecord(Test test)
+        {
+            _context.tests.Update(test);
+            _context.SaveChanges();
+        }
+
+        public void DeleteTestsRecord(int id)
+        {
+            var entity = _context.tests.FirstOrDefault(t => t.id == id);
+            _context.tests.Remove(entity);
+            _context.SaveChanges();
+        }
+
+        public Test GetTestsSingleRecord(int id)
+        {
+            return _context.tests.FirstOrDefault(t => t.id == id);
+        }
+
+        public List<Test> GetTestsRecords()
+        {
+            return _context.tests.ToList();
+        }
     }
 }
