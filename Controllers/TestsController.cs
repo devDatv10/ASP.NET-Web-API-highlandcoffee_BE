@@ -25,13 +25,12 @@ namespace highlandcoffeeapp_BE.Controllers
         {
             if (ModelState.IsValid)
             {
-                Guid obj = Guid.NewGuid();
-                test.id = obj.CompareTo(Guid.NewGuid());
                 _dataAccessProvider.AddTestsRecord(test);
                 return Ok();
             }
             return BadRequest();
         }
+
 
         [HttpGet("{id}")]
         public Test Details(int id)
