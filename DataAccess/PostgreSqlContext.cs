@@ -13,6 +13,19 @@ namespace highlandcoffeeapp_BE.DataAccess
         public DbSet<Admin> admins { get; set; }
         public DbSet<Customer> customers { get; set; }
         public DbSet<Category> categories { get; set; }
+        public DbSet<Staff> staffs { get; set; }
+        public DbSet<Product> products { get; set; }
+        public DbSet<Coffee> coffees { get; set; }
+        public DbSet<Tea> teas { get; set; }
+        public DbSet<Freeze> freezes { get; set; }
+        public DbSet<Bread> breads { get; set; }
+        public DbSet<Cake> cakes { get; set; }
+        public DbSet<Other> others { get; set; }
+        public DbSet<Popular> populars { get; set; }
+        public DbSet<Favorite> favorites { get; set; }
+        public DbSet<Cart> carts { get; set; }
+        public DbSet<Order> orders { get; set; }
+        public DbSet<OrderDetail> orderDetails { get; set; }
 
         public DbSet<Test> tests { get; set; }
 
