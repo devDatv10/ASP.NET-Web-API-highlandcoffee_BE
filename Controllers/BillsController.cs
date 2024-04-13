@@ -1,6 +1,9 @@
-﻿namespace highlandcoffeeapp_BE.Controllers
+﻿using Microsoft.AspNetCore.Mvc;
+
+namespace highlandcoffeeapp_BE.Controllers
 {
-    public class BillsController
+    [Route("api/[controller]")]
+    public class BillsController : ControllerBase
     {
     }
 }
