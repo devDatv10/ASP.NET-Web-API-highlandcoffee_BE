@@ -21,11 +21,20 @@ namespace highlandcoffeeapp_BE.Models
     public class Customer
     {
         public int id { get; set; }
-        public string customer_name { get; set; }
-        public string password { get; set; }
+
+        public string name { get; set; }
+
         public string email { get; set;}
-        public int phone_number { get; set;}
+
+        public string password { get; set; }
+
+        public string confirm_password { get; set; }
+
+        public byte[] image { get; set; }
+
         public string address { get; set;}
+
+        public int phone_number { get; set;}
     }
 
     // Models for Staff
@@ -45,6 +54,7 @@ namespace highlandcoffeeapp_BE.Models
         public int id { get; set; }
 
         public int category_id { get; set; }
+
         public string product_name { get; set; }
 
         public string description { get; set; }
@@ -90,6 +100,7 @@ namespace highlandcoffeeapp_BE.Models
         public int id { get; set; }
 
         public int category_id { get; set; }
+
         public string product_name { get; set; }
 
         public string description { get; set; }
@@ -111,6 +122,7 @@ namespace highlandcoffeeapp_BE.Models
         public int id { get; set; }
 
         public int category_id { get; set; }
+
         public string product_name { get; set; }
 
         public string description { get; set; }
@@ -132,6 +144,7 @@ namespace highlandcoffeeapp_BE.Models
         public int id { get; set; }
 
         public int category_id { get; set; }
+
         public string product_name { get; set; }
 
         public string description { get; set; }
@@ -153,6 +166,7 @@ namespace highlandcoffeeapp_BE.Models
         public int id { get; set; }
 
         public int category_id { get; set; }
+
         public string product_name { get; set; }
 
         public string description { get; set; }
@@ -174,6 +188,7 @@ namespace highlandcoffeeapp_BE.Models
         public int id { get; set; }
 
         public int category_id { get; set; }
+
         public string product_name { get; set; }
 
         public string description { get; set; }
@@ -195,6 +210,7 @@ namespace highlandcoffeeapp_BE.Models
         public int id { get; set; }
 
         public int category_id { get; set; }
+
         public string product_name { get; set; }
 
         public string description { get; set; }
@@ -237,6 +253,7 @@ namespace highlandcoffeeapp_BE.Models
         public int id { get; set; }
 
         public int category_id { get; set; }
+
         public string product_name { get; set; }
 
         public string description { get; set; }
@@ -254,6 +271,7 @@ namespace highlandcoffeeapp_BE.Models
 
     public class Test{
         public int id { get; set; }
+
         public byte[] image_path { get; set; }
     }
 }
