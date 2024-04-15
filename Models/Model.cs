@@ -30,7 +30,7 @@ namespace highlandcoffeeapp_BE.Models
 
         public string confirm_password { get; set; }
 
-        public byte[] image { get; set; }
+        // public byte[] image { get; set; }
 
         public string address { get; set;}
 
