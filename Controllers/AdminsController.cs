@@ -22,11 +22,8 @@ namespace highlandcoffeeapp_BE.Controllers
 
         [HttpPost]
         public IActionResult Create([FromBody] Admin admin)
-        {
-            if (ModelState.IsValid)
+        {if (ModelState.IsValid)
             {
-                Guid obj = Guid.NewGuid();
-                admin.id = obj.CompareTo(Guid.NewGuid());
                 _dataAccessProvider.AddAdminsRecord(admin);
                 return Ok();
             }
