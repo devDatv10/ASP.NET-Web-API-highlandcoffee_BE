@@ -41,7 +41,7 @@ namespace highlandcoffeeapp_BE.Controllers
         public IActionResult Edit([FromBody] Customer customer)
         {
             if (ModelState.IsValid)
-            {
+            {   
                 _dataAccessProvider.UpdateCustomersRecord(customer);
                 return Ok();
             }

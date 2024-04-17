@@ -24,7 +24,7 @@ namespace highlandcoffeeapp_BE.Models
 
         public string name { get; set; }
 
-        public string email { get; set;}
+        public string email { get; set; }
 
         public string password { get; set; }
 
@@ -32,9 +32,9 @@ namespace highlandcoffeeapp_BE.Models
 
         // public byte[] image { get; set; }
 
-        public string address { get; set;}
+        public string address { get; set; }
 
-        public int phone_number { get; set;}
+        public int phone_number { get; set; }
     }
 
     // Models for Staff
@@ -53,15 +53,17 @@ namespace highlandcoffeeapp_BE.Models
     {
         public int id { get; set; }
 
-        public int category_id { get; set; }
+        public string category_name { get; set; }
 
         public string product_name { get; set; }
 
         public string description { get; set; }
 
-        public int new_price { get; set; }
+        public int size_s_price { get; set; }
 
-        public int old_price { get; set; }
+        public int size_m_price { get; set; }
+        public int size_l_price { get; set; }
+        public int unit { get; set; }
 
         public byte[] image { get; set; }
 
@@ -99,15 +101,17 @@ namespace highlandcoffeeapp_BE.Models
     {
         public int id { get; set; }
 
-        public int category_id { get; set; }
+        public string category_name { get; set; }
 
         public string product_name { get; set; }
 
         public string description { get; set; }
 
-        public int new_price { get; set; }
+        public int size_s_price { get; set; }
 
-        public int old_price { get; set; }
+        public int size_m_price { get; set; }
+        
+        public int unit { get; set; }
 
         public byte[] image { get; set; }
 
@@ -121,15 +125,17 @@ namespace highlandcoffeeapp_BE.Models
     {
         public int id { get; set; }
 
-        public int category_id { get; set; }
+        public string category_name { get; set; }
 
         public string product_name { get; set; }
 
         public string description { get; set; }
 
-        public int new_price { get; set; }
+        public int size_s_price { get; set; }
 
-        public int old_price { get; set; }
+        public int size_m_price { get; set; }
+        
+        public int unit { get; set; }
 
         public byte[] image { get; set; }
 
@@ -143,15 +149,17 @@ namespace highlandcoffeeapp_BE.Models
     {
         public int id { get; set; }
 
-        public int category_id { get; set; }
+        public string category_name { get; set; }
 
         public string product_name { get; set; }
 
         public string description { get; set; }
 
-        public int new_price { get; set; }
+        public int size_s_price { get; set; }
 
-        public int old_price { get; set; }
+        public int size_m_price { get; set; }
+        
+        public int unit { get; set; }
 
         public byte[] image { get; set; }
 
@@ -165,15 +173,17 @@ namespace highlandcoffeeapp_BE.Models
     {
         public int id { get; set; }
 
-        public int category_id { get; set; }
+        public string category_name { get; set; }
 
         public string product_name { get; set; }
 
         public string description { get; set; }
 
-        public int new_price { get; set; }
+        public int size_s_price { get; set; }
 
-        public int old_price { get; set; }
+        public int size_m_price { get; set; }
+        
+        public int unit { get; set; }
 
         public byte[] image { get; set; }
 
@@ -187,15 +197,17 @@ namespace highlandcoffeeapp_BE.Models
     {
         public int id { get; set; }
 
-        public int category_id { get; set; }
+        public string category_name { get; set; }
 
         public string product_name { get; set; }
 
         public string description { get; set; }
 
-        public int new_price { get; set; }
+        public int size_s_price { get; set; }
 
-        public int old_price { get; set; }
+        public int size_m_price { get; set; }
+        
+        public int unit { get; set; }
 
         public byte[] image { get; set; }
 
@@ -209,15 +221,17 @@ namespace highlandcoffeeapp_BE.Models
     {
         public int id { get; set; }
 
-        public int category_id { get; set; }
+        public string category_name { get; set; }
 
         public string product_name { get; set; }
 
         public string description { get; set; }
 
-        public int new_price { get; set; }
+        public int size_s_price { get; set; }
 
-        public int old_price { get; set; }
+        public int size_m_price { get; set; }
+        
+        public int unit { get; set; }
 
         public byte[] image { get; set; }
 
@@ -231,14 +245,16 @@ namespace highlandcoffeeapp_BE.Models
     {
         public int id { get; set; }
 
-        public int category_id { get; set; }
+        public string category_name { get; set; }
         public string product_name { get; set; }
 
         public string description { get; set; }
 
-        public int new_price { get; set; }
+        public int size_s_price { get; set; }
 
-        public int old_price { get; set; }
+        public int size_m_price { get; set; }
+        
+        public int unit { get; set; }
 
         public byte[] image { get; set; }
 
@@ -252,15 +268,17 @@ namespace highlandcoffeeapp_BE.Models
     {
         public int id { get; set; }
 
-        public int category_id { get; set; }
+        public string category_name { get; set; }
 
         public string product_name { get; set; }
 
         public string description { get; set; }
 
-        public int new_price { get; set; }
+        public int size_s_price { get; set; }
 
-        public int old_price { get; set; }
+        public int size_m_price { get; set; }
+        
+        public int unit { get; set; }
 
         public byte[] image { get; set; }
 
@@ -269,7 +287,8 @@ namespace highlandcoffeeapp_BE.Models
         public int quantity { get; set; }
     }
 
-    public class Test{
+    public class Test
+    {
         public int id { get; set; }
 
         public byte[] image_path { get; set; }

@@ -25,8 +25,6 @@ namespace highlandcoffeeapp_BE.Controllers
         {
             if (ModelState.IsValid)
             {
-                Guid obj = Guid.NewGuid();
-                favorite.id = obj.CompareTo(Guid.NewGuid());
                 _dataAccessProvider.AddFavoritesRecord(favorite);
                 return Ok();
             }

@@ -25,8 +25,6 @@ namespace highlandcoffeeapp_BE.Controllers
         {
             if (ModelState.IsValid)
             {
-                Guid obj = Guid.NewGuid();
-                category.id = obj.CompareTo(Guid.NewGuid());
                 _dataAccessProvider.AddCategoriesRecord(category);
                 return Ok();
             }
