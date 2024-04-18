@@ -63,7 +63,7 @@ namespace highlandcoffeeapp_BE.Models
 
         public int size_m_price { get; set; }
         public int size_l_price { get; set; }
-        public int unit { get; set; }
+        public string unit { get; set; }
 
         public byte[] image { get; set; }
 
@@ -111,7 +111,7 @@ namespace highlandcoffeeapp_BE.Models
 
         public int size_m_price { get; set; }
         
-        public int unit { get; set; }
+        public string unit { get; set; }
 
         public byte[] image { get; set; }
 
@@ -134,8 +134,9 @@ namespace highlandcoffeeapp_BE.Models
         public int size_s_price { get; set; }
 
         public int size_m_price { get; set; }
+        public int size_l_price { get; set; }
         
-        public int unit { get; set; }
+        public string unit { get; set; }
 
         public byte[] image { get; set; }
 
@@ -158,8 +159,9 @@ namespace highlandcoffeeapp_BE.Models
         public int size_s_price { get; set; }
 
         public int size_m_price { get; set; }
+        public int size_l_price { get; set; }
         
-        public int unit { get; set; }
+        public string unit { get; set; }
 
         public byte[] image { get; set; }
 
@@ -182,8 +184,9 @@ namespace highlandcoffeeapp_BE.Models
         public int size_s_price { get; set; }
 
         public int size_m_price { get; set; }
+        public int size_l_price { get; set; }
         
-        public int unit { get; set; }
+        public string unit { get; set; }
 
         public byte[] image { get; set; }
 
@@ -206,8 +209,8 @@ namespace highlandcoffeeapp_BE.Models
         public int size_s_price { get; set; }
 
         public int size_m_price { get; set; }
-        
-        public int unit { get; set; }
+        public int size_l_price { get; set; }
+        public string unit { get; set; }
 
         public byte[] image { get; set; }
 
@@ -230,8 +233,9 @@ namespace highlandcoffeeapp_BE.Models
         public int size_s_price { get; set; }
 
         public int size_m_price { get; set; }
+        public int size_l_price { get; set; }
         
-        public int unit { get; set; }
+        public string unit { get; set; }
 
         public byte[] image { get; set; }
 
@@ -253,8 +257,9 @@ namespace highlandcoffeeapp_BE.Models
         public int size_s_price { get; set; }
 
         public int size_m_price { get; set; }
+        public int size_l_price { get; set; }
         
-        public int unit { get; set; }
+        public string unit { get; set; }
 
         public byte[] image { get; set; }
 
@@ -277,8 +282,10 @@ namespace highlandcoffeeapp_BE.Models
         public int size_s_price { get; set; }
 
         public int size_m_price { get; set; }
+
+        public int size_l_price { get; set; }
         
-        public int unit { get; set; }
+        public string unit { get; set; }
 
         public byte[] image { get; set; }
 
