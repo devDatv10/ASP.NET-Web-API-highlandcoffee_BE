@@ -14,6 +14,7 @@ namespace highlandcoffeeapp_BE.Models
     {
         public int id { get; set; }
         public string category_name { get; set; }
+        public string description { get; set; }
     }
 
     // Models for Customer
@@ -35,6 +36,7 @@ namespace highlandcoffeeapp_BE.Models
         public string address { get; set; }
 
         public int phone_number { get; set; }
+        // public int point { get; set; }
     }
 
     // Models for Staff
@@ -110,6 +112,7 @@ namespace highlandcoffeeapp_BE.Models
         public int size_s_price { get; set; }
 
         public int size_m_price { get; set; }
+        public int size_l_price { get; set; }
         
         public string unit { get; set; }
 
