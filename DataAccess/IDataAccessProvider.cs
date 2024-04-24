@@ -7,8 +7,8 @@ namespace highlandcoffeeapp_BE.DataAccess
         // function for admin
         void AddAdminsRecord(Admin admin);
         void UpdateAdminsRecord(Admin admin);
-        void DeleteAdminsRecord(int id);
-        Admin GetAdminsSingleRecord(int id);
+        void DeleteAdminsRecord(string id);
+        Admin GetAdminsSingleRecord(string id);
         List<Admin> GetAdminsRecords();
 
         // function for customer
@@ -24,6 +24,13 @@ namespace highlandcoffeeapp_BE.DataAccess
         void DeleteCategoriesRecord(int id);
         Category GetCategoriesSingleRecord(int id);
         List<Category> GetCategoriesRecords();
+
+        // function for cart
+        void AddCartsRecord(Cart cart);
+        void UpdateCartsRecord(Cart cart);
+        void DeleteCartsRecord(string id);
+        Cart GetCartsSingleRecord(string id);
+        List<Cart> GetCartsRecords();
 
         // function for staff
         void AddStaffsRecord(Staff staff);
@@ -95,13 +102,6 @@ namespace highlandcoffeeapp_BE.DataAccess
         Favorite GetFavoritesSingleRecord(int id);
         List<Favorite> GetFavoritesRecords();
 
-        // function for cart
-        void AddCartsRecord(Cart cart);
-        void UpdateCartsRecord(Cart cart);
-        void DeleteCartsRecord(int id);
-        Cart GetCartsSingleRecord(int id);
-        List<Cart> GetCartsRecords();
-
         // function for order
         void AddOrdersRecord(Order order);
         void UpdateOrdersRecord(Order order);
@@ -117,5 +117,12 @@ namespace highlandcoffeeapp_BE.DataAccess
         void DeleteTestsRecord(int id);
         Test GetTestsSingleRecord(int id);
         List<Test> GetTestsRecords();
+
+        // function for test1
+        void AddTest1sRecord(Test1 test1);
+        void UpdateTest1sRecord(Test1 test1);
+        void DeleteTest1sRecord(string id);
+        Test1 GetTest1sSingleRecord(string id);
+        List<Test1> GetTest1sRecords();
     }
 }

@@ -23,14 +23,14 @@ namespace highlandcoffeeapp_BE.DataAccess
             _context.SaveChanges();
         }
 
-        public void DeleteAdminsRecord(int id)
+        public void DeleteAdminsRecord(string id)
         {
             var entity = _context.admins.FirstOrDefault(t => t.id == id);
             _context.admins.Remove(entity);
             _context.SaveChanges();
         }
 
-        public Admin GetAdminsSingleRecord(int id)
+        public Admin GetAdminsSingleRecord(string id)
         {
             return _context.admins.FirstOrDefault(t => t.id == id);
         }
@@ -413,14 +413,14 @@ namespace highlandcoffeeapp_BE.DataAccess
             _context.SaveChanges();
         }
 
-        public void DeleteCartsRecord(int id)
+        public void DeleteCartsRecord(string id)
         {
             var entity = _context.carts.FirstOrDefault(t => t.id == id);
             _context.carts.Remove(entity);
             _context.SaveChanges();
         }
 
-        public Cart GetCartsSingleRecord(int id)
+        public Cart GetCartsSingleRecord(string id)
         {
             return _context.carts.FirstOrDefault(t => t.id == id);
         }
@@ -488,6 +488,36 @@ namespace highlandcoffeeapp_BE.DataAccess
         public List<Test> GetTestsRecords()
         {
             return _context.tests.ToList();
+        }
+
+        // function for test1
+        public void AddTest1sRecord(Test1 test1)
+        {
+            _context.test1s.Add(test1);
+            _context.SaveChanges();
+        }
+
+        public void UpdateTest1sRecord(Test1 test1)
+        {
+            _context.test1s.Update(test1);
+            _context.SaveChanges();
+        }
+
+        public void DeleteTest1sRecord(string id)
+        {
+            var entity = _context.test1s.FirstOrDefault(t => t.id == id);
+            _context.test1s.Remove(entity);
+            _context.SaveChanges();
+        }
+
+        public Test1 GetTest1sSingleRecord(string id)
+        {
+            return _context.test1s.FirstOrDefault(t => t.id == id);
+        }
+
+        public List<Test1> GetTest1sRecords()
+        {
+            return _context.test1s.ToList();
         }
     }
 }

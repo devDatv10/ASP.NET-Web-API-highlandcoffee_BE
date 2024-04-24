@@ -3,7 +3,7 @@ namespace highlandcoffeeapp_BE.Models
     // Models for Admin
     public class Admin
     {
-        public int id { get; set; }
+        public string id { get; set; }
         public string email { get; set; }
         public string password { get; set; }
     }
@@ -89,7 +89,21 @@ namespace highlandcoffeeapp_BE.Models
     // Models for Cart
     public class Cart
     {
-        public int id { get; set; }
+        public string id { get; set; }
+
+        public int customer_id { get; set; }
+
+        public int product_id { get; set; }
+
+        public int quantity { get; set; }
+
+        public byte[] product_image { get; set; }
+
+        public string product_name { get; set; }
+
+        public int selected_price { get; set; }
+        
+        public string selected_size { get; set; }
     }
 
     // Models for CartDetail
@@ -302,5 +316,24 @@ namespace highlandcoffeeapp_BE.Models
         public int id { get; set; }
 
         public byte[] image_path { get; set; }
+    }
+
+    public class Test1
+    {
+        public string id { get; set; }
+
+        public string name { get; set; }
+
+        public string email { get; set; }
+
+        public string password { get; set; }
+
+        public string confirm_password { get; set; }
+
+        public string address { get; set; }
+
+        public int phone_number { get; set; }
+
+        public int point { get; set; }
     }
 }
