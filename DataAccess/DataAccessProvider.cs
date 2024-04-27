@@ -413,14 +413,14 @@ namespace highlandcoffeeapp_BE.DataAccess
             _context.SaveChanges();
         }
 
-        public void DeleteCartsRecord(string id)
+        public void DeleteCartsRecord(int id)
         {
             var entity = _context.carts.FirstOrDefault(t => t.id == id);
             _context.carts.Remove(entity);
             _context.SaveChanges();
         }
 
-        public Cart GetCartsSingleRecord(string id)
+        public Cart GetCartsSingleRecord(int id)
         {
             return _context.carts.FirstOrDefault(t => t.id == id);
         }

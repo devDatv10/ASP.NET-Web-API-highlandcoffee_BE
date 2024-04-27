@@ -28,8 +28,8 @@ namespace highlandcoffeeapp_BE.DataAccess
         // function for cart
         void AddCartsRecord(Cart cart);
         void UpdateCartsRecord(Cart cart);
-        void DeleteCartsRecord(string id);
-        Cart GetCartsSingleRecord(string id);
+        void DeleteCartsRecord(int id);
+        Cart GetCartsSingleRecord(int id);
         List<Cart> GetCartsRecords();
 
         // function for staff

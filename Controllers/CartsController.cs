@@ -32,7 +32,7 @@ namespace highlandcoffeeapp_BE.Controllers
         }
 
         [HttpGet("{id}")]
-        public Cart Details(string id)
+        public Cart Details(int id)
         {
             return _dataAccessProvider.GetCartsSingleRecord(id);
         }
@@ -49,7 +49,7 @@ namespace highlandcoffeeapp_BE.Controllers
         }
 
         [HttpDelete("{id}")]
-        public IActionResult DeleteConfirmed(string id)
+        public IActionResult DeleteConfirmed(int id)
         {
             var data = _dataAccessProvider.GetCartsSingleRecord(id);
             if (data == null)

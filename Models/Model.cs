@@ -89,9 +89,11 @@ namespace highlandcoffeeapp_BE.Models
     // Models for Cart
     public class Cart
     {
-        public string id { get; set; }
+        public int id { get; set; }
 
         public int customer_id { get; set; }
+
+        public string category_name { get; set; }
 
         public int product_id { get; set; }
 
