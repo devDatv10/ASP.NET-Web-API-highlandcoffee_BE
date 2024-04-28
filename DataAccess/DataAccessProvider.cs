@@ -370,6 +370,36 @@ namespace highlandcoffeeapp_BE.DataAccess
             return _context.populars.ToList();
         }
 
+        // function for best sale
+        public void AddBestSalesRecord(BestSale bestSale)
+        {
+            _context.bestsales.Add(bestSale);
+            _context.SaveChanges();
+        }
+
+        public void UpdateBestSalesRecord(BestSale bestSale)
+        {
+            _context.bestsales.Update(bestSale);
+            _context.SaveChanges();
+        }
+
+        public void DeleteBestSalesRecord(int id)
+        {
+            var entity = _context.bestsales.FirstOrDefault(t => t.id == id);
+            _context.bestsales.Remove(entity);
+            _context.SaveChanges();
+        }
+
+        public BestSale GetBestSalesSingleRecord(int id)
+        {
+            return _context.bestsales.FirstOrDefault(t => t.id == id);
+        }
+
+        public List<BestSale> GetBestSalesRecords()
+        {
+            return _context.bestsales.ToList();
+        }
+
         // function for favorite
         public void AddFavoritesRecord(Favorite favorite)
         {

@@ -23,6 +23,7 @@ namespace highlandcoffeeapp_BE.DataAccess
         public DbSet<Cake> cakes { get; set; }
         public DbSet<Other> others { get; set; }
         public DbSet<Popular> populars { get; set; }
+        public DbSet<BestSale> bestsales { get; set; }
         public DbSet<Favorite> favorites { get; set; }
         public DbSet<Order> orders { get; set; }
         public DbSet<OrderDetail> orderDetails { get; set; }

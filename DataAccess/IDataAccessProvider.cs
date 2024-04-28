@@ -95,6 +95,13 @@ namespace highlandcoffeeapp_BE.DataAccess
         Popular GetPopularsSingleRecord(int id);
         List<Popular> GetPopularsRecords();
 
+        // function for best sale
+        void AddBestSalesRecord(BestSale bestSale);
+        void UpdateBestSalesRecord(BestSale bestSale);
+        void DeleteBestSalesRecord(int id);
+        BestSale GetBestSalesSingleRecord(int id);
+        List<BestSale> GetBestSalesRecords();
+
         // function for favorite
         void AddFavoritesRecord(Favorite favorite);
         void UpdateFavoritesRecord(Favorite favorite);

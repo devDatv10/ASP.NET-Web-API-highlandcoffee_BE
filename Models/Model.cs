@@ -270,12 +270,38 @@ namespace highlandcoffeeapp_BE.Models
         public byte[] image_detail { get; set; }
     }
 
+    // Model for Best Sale
+        public class BestSale
+    {
+        public int id { get; set; }
+
+        public string category_name { get; set; }
+        public string product_name { get; set; }
+
+        public string description { get; set; }
+
+        public int size_s_price { get; set; }
+
+        public int size_m_price { get; set; }
+        public int size_l_price { get; set; }
+        
+        public string unit { get; set; }
+
+        public byte[] image { get; set; }
+
+        public byte[] image_detail { get; set; }
+    }
+
     // Models for Favorite
     public class Favorite
     {
         public int id { get; set; }
 
+        public int customer_id { get; set; }
+
         public string category_name { get; set; }
+
+        public int product_id { get; set; }
 
         public string product_name { get; set; }
 
@@ -286,7 +312,6 @@ namespace highlandcoffeeapp_BE.Models
         public int size_m_price { get; set; }
 
         public int size_l_price { get; set; }
-        
         public string unit { get; set; }
 
         public byte[] image { get; set; }
