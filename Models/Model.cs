@@ -70,8 +70,6 @@ namespace highlandcoffeeapp_BE.Models
         public byte[] image { get; set; }
 
         public byte[] image_detail { get; set; }
-
-        public int quantity { get; set; }
     }
 
     // Models for Order
@@ -129,14 +127,11 @@ namespace highlandcoffeeapp_BE.Models
 
         public int size_m_price { get; set; }
         public int size_l_price { get; set; }
-        
         public string unit { get; set; }
 
         public byte[] image { get; set; }
 
         public byte[] image_detail { get; set; }
-
-        public int quantity { get; set; }
     }
 
     // Models for Coffee
@@ -160,8 +155,6 @@ namespace highlandcoffeeapp_BE.Models
         public byte[] image { get; set; }
 
         public byte[] image_detail { get; set; }
-
-        public int quantity { get; set; }
     }
 
     // Models for Tea
@@ -185,8 +178,6 @@ namespace highlandcoffeeapp_BE.Models
         public byte[] image { get; set; }
 
         public byte[] image_detail { get; set; }
-
-        public int quantity { get; set; }
     }
 
     // Models for Bread
@@ -210,8 +201,6 @@ namespace highlandcoffeeapp_BE.Models
         public byte[] image { get; set; }
 
         public byte[] image_detail { get; set; }
-
-        public int quantity { get; set; }
     }
 
     // Models for Cake
@@ -234,8 +223,6 @@ namespace highlandcoffeeapp_BE.Models
         public byte[] image { get; set; }
 
         public byte[] image_detail { get; set; }
-
-        public int quantity { get; set; }
     }
 
     // Models for Freeze
@@ -259,8 +246,6 @@ namespace highlandcoffeeapp_BE.Models
         public byte[] image { get; set; }
 
         public byte[] image_detail { get; set; }
-
-        public int quantity { get; set; }
     }
 
     // Models for Popular
@@ -283,8 +268,6 @@ namespace highlandcoffeeapp_BE.Models
         public byte[] image { get; set; }
 
         public byte[] image_detail { get; set; }
-
-        public int quantity { get; set; }
     }
 
     // Models for Favorite
@@ -309,8 +292,6 @@ namespace highlandcoffeeapp_BE.Models
         public byte[] image { get; set; }
 
         public byte[] image_detail { get; set; }
-
-        public int quantity { get; set; }
     }
 
     public class Test
