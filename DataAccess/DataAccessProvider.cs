@@ -280,34 +280,34 @@ namespace highlandcoffeeapp_BE.DataAccess
             return _context.breads.ToList();
         }
 
-        // function for cake
-        public void AddCakesRecord(Cake cake)
+        // function for Food
+        public void AddFoodsRecord(Food food)
         {
-            _context.cakes.Add(cake);
+            _context.foods.Add(food);
             _context.SaveChanges();
         }
 
-        public void UpdateCakesRecord(Cake cake)
+        public void UpdateFoodsRecord(Food food)
         {
-            _context.cakes.Update(cake);
+            _context.foods.Update(food);
             _context.SaveChanges();
         }
 
-        public void DeleteCakesRecord(int id)
+        public void DeleteFoodsRecord(int id)
         {
-            var entity = _context.cakes.FirstOrDefault(t => t.id == id);
-            _context.cakes.Remove(entity);
+            var entity = _context.foods.FirstOrDefault(t => t.id == id);
+            _context.foods.Remove(entity);
             _context.SaveChanges();
         }
 
-        public Cake GetCakesSingleRecord(int id)
+        public Food GetFoodsSingleRecord(int id)
         {
-            return _context.cakes.FirstOrDefault(t => t.id == id);
+            return _context.foods.FirstOrDefault(t => t.id == id);
         }
 
-        public List<Cake> GetCakesRecords()
+        public List<Food> GetFoodsRecords()
         {
-            return _context.cakes.ToList();
+            return _context.foods.ToList();
         }
 
         // function for other

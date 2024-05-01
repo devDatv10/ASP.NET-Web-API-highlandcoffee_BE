@@ -20,7 +20,7 @@ namespace highlandcoffeeapp_BE.DataAccess
         public DbSet<Tea> teas { get; set; }
         public DbSet<Freeze> freezes { get; set; }
         public DbSet<Bread> breads { get; set; }
-        public DbSet<Cake> cakes { get; set; }
+        public DbSet<Food> foods { get; set; }
         public DbSet<Other> others { get; set; }
         public DbSet<Popular> populars { get; set; }
         public DbSet<BestSale> bestsales { get; set; }

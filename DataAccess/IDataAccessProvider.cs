@@ -74,12 +74,12 @@ namespace highlandcoffeeapp_BE.DataAccess
         Bread GetBreadsSingleRecord(int id);
         List<Bread> GetBreadsRecords();
 
-        // function for cake
-        void AddCakesRecord(Cake cake);
-        void UpdateCakesRecord(Cake cake);
-        void DeleteCakesRecord(int id);
-        Cake GetCakesSingleRecord(int id);
-        List<Cake> GetCakesRecords();
+        // function for food
+        void AddFoodsRecord(Food food);
+        void UpdateFoodsRecord(Food food);
+        void DeleteFoodsRecord(int id);
+        Food GetFoodsSingleRecord(int id);
+        List<Food> GetFoodsRecords();
 
         // function for other
         void AddOthersRecord(Other other);

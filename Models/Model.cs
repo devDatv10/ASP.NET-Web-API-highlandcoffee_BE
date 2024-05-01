@@ -203,8 +203,8 @@ namespace highlandcoffeeapp_BE.Models
         public byte[] image_detail { get; set; }
     }
 
-    // Models for Cake
-    public class Cake
+    // Models for Food
+    public class Food
     {
         public int id { get; set; }
 

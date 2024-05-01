@@ -5,44 +5,44 @@ using Microsoft.AspNetCore.Mvc;
 namespace highlandcoffeeapp_BE.Controllers
 {
     [Route("api/[controller]")]
-    public class CakesController : ControllerBase
+    public class FoodsController : ControllerBase
     {
         private readonly IDataAccessProvider _dataAccessProvider;
 
-        public CakesController(IDataAccessProvider dataAccessProvider)
+        public FoodsController(IDataAccessProvider dataAccessProvider)
         {
             _dataAccessProvider = dataAccessProvider;
         }
 
         [HttpGet]
-        public IEnumerable<Cake> Get()
+        public IEnumerable<Food> Get()
         {
-            return _dataAccessProvider.GetCakesRecords();
+            return _dataAccessProvider.GetFoodsRecords();
         }
 
         [HttpPost]
-        public IActionResult Create([FromBody] Cake cake)
+        public IActionResult Create([FromBody] Food food)
         {
             if (ModelState.IsValid)
             {
-                _dataAccessProvider.AddCakesRecord(cake);
+                _dataAccessProvider.AddFoodsRecord(food);
                 return Ok();
             }
             return BadRequest();
         }
 
         [HttpGet("{id}")]
-        public Cake Details(int id)
+        public Food Details(int id)
         {
-            return _dataAccessProvider.GetCakesSingleRecord(id);
+            return _dataAccessProvider.GetFoodsSingleRecord(id);
         }
 
         [HttpPut]
-        public IActionResult Edit([FromBody] Cake cake)
+        public IActionResult Edit([FromBody] Food food)
         {
             if (ModelState.IsValid)
             {
-                _dataAccessProvider.UpdateCakesRecord(cake);
+                _dataAccessProvider.UpdateFoodsRecord(food);
                 return Ok();
             }
             return BadRequest();
@@ -51,12 +51,12 @@ namespace highlandcoffeeapp_BE.Controllers
         [HttpDelete("{id}")]
         public IActionResult DeleteConfirmed(int id)
         {
-            var data = _dataAccessProvider.GetCakesSingleRecord(id);
+            var data = _dataAccessProvider.GetFoodsSingleRecord(id);
             if (data == null)
             {
                 return NotFound();
             }
-            _dataAccessProvider.DeleteCakesRecord(id);
+            _dataAccessProvider.DeleteFoodsRecord(id);
             return Ok();
     }
 }
