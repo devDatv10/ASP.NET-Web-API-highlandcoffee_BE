@@ -21,8 +21,8 @@ namespace highlandcoffeeapp_BE.DataAccess
         // function for category
         void AddCategoriesRecord(Category category);
         void UpdateCategoriesRecord(Category category);
-        void DeleteCategoriesRecord(int id);
-        Category GetCategoriesSingleRecord(int id);
+        void DeleteCategoriesRecord(string categoryid);
+        Category GetCategoriesSingleRecord(string categoryid);
         List<Category> GetCategoriesRecords();
 
         // function for cart

@@ -12,8 +12,8 @@ namespace highlandcoffeeapp_BE.Models
 
     public class Category
     {
-        public int id { get; set; }
-        public string category_name { get; set; }
+        public string categoryid { get; set; }
+        public string categoryname { get; set; }
         public string description { get; set; }
     }
 
