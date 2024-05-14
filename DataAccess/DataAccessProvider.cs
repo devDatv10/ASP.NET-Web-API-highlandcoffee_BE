@@ -143,16 +143,16 @@ namespace highlandcoffeeapp_BE.DataAccess
             _context.SaveChanges();
         }
 
-        public void DeleteProductsRecord(int id)
+        public void DeleteProductsRecord(string productid)
         {
-            var entity = _context.products.FirstOrDefault(t => t.id == id);
+            var entity = _context.products.FirstOrDefault(t => t.productid == productid);
             _context.products.Remove(entity);
             _context.SaveChanges();
         }
 
-        public Product GetProductsSingleRecord(int id)
+        public Product GetProductsSingleRecord(string productid)
         {
-            return _context.products.FirstOrDefault(t => t.id == id);
+            return _context.products.FirstOrDefault(t => t.productid == productid);
         }
 
         public List<Product> GetProductsRecords()

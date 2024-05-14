@@ -53,23 +53,22 @@ namespace highlandcoffeeapp_BE.Models
     // Models for Product
     public class Product
     {
-        public int id { get; set; }
+        public string productid { get; set; }
 
-        public string category_name { get; set; }
+        public string categoryid { get; set; }
 
-        public string product_name { get; set; }
+        public string productname { get; set; }
 
         public string description { get; set; }
 
-        public int size_s_price { get; set; }
+        public int size { get; set; }
 
-        public int size_m_price { get; set; }
-        public int size_l_price { get; set; }
+        public string price { get; set; }
         public string unit { get; set; }
 
         public byte[] image { get; set; }
 
-        public byte[] image_detail { get; set; }
+        public byte[] imagedetail { get; set; }
     }
 
     // Models for Order
@@ -102,7 +101,7 @@ namespace highlandcoffeeapp_BE.Models
         public string product_name { get; set; }
 
         public int selected_price { get; set; }
-        
+
         public string selected_size { get; set; }
     }
 
@@ -149,7 +148,7 @@ namespace highlandcoffeeapp_BE.Models
 
         public int size_m_price { get; set; }
         public int size_l_price { get; set; }
-        
+
         public string unit { get; set; }
 
         public byte[] image { get; set; }
@@ -172,7 +171,7 @@ namespace highlandcoffeeapp_BE.Models
 
         public int size_m_price { get; set; }
         public int size_l_price { get; set; }
-        
+
         public string unit { get; set; }
 
         public byte[] image { get; set; }
@@ -195,7 +194,7 @@ namespace highlandcoffeeapp_BE.Models
 
         public int size_m_price { get; set; }
         public int size_l_price { get; set; }
-        
+
         public string unit { get; set; }
 
         public byte[] image { get; set; }
@@ -240,7 +239,7 @@ namespace highlandcoffeeapp_BE.Models
 
         public int size_m_price { get; set; }
         public int size_l_price { get; set; }
-        
+
         public string unit { get; set; }
 
         public byte[] image { get; set; }
@@ -262,7 +261,7 @@ namespace highlandcoffeeapp_BE.Models
 
         public int size_m_price { get; set; }
         public int size_l_price { get; set; }
-        
+
         public string unit { get; set; }
 
         public byte[] image { get; set; }
@@ -271,7 +270,7 @@ namespace highlandcoffeeapp_BE.Models
     }
 
     // Model for Best Sale
-        public class BestSale
+    public class BestSale
     {
         public int id { get; set; }
 
@@ -284,7 +283,7 @@ namespace highlandcoffeeapp_BE.Models
 
         public int size_m_price { get; set; }
         public int size_l_price { get; set; }
-        
+
         public string unit { get; set; }
 
         public byte[] image { get; set; }

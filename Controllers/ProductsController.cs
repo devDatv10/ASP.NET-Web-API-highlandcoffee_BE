@@ -31,10 +31,10 @@ namespace highlandcoffeeapp_BE.Controllers
             return BadRequest();
         }
 
-        [HttpGet("{id}")]
-        public Product Details(int id)
+        [HttpGet("{productid}")]
+        public Product Details(string productid)
         {
-            return _dataAccessProvider.GetProductsSingleRecord(id);
+            return _dataAccessProvider.GetProductsSingleRecord(productid);
         }
 
         [HttpPut]
@@ -48,15 +48,15 @@ namespace highlandcoffeeapp_BE.Controllers
             return BadRequest();
         }
 
-        [HttpDelete("{id}")]
-        public IActionResult DeleteConfirmed(int id)
+        [HttpDelete("{productid}")]
+        public IActionResult DeleteConfirmed(string productid)
         {
-            var data = _dataAccessProvider.GetProductsSingleRecord(id);
+            var data = _dataAccessProvider.GetProductsSingleRecord(productid);
             if (data == null)
             {
                 return NotFound();
     }
-            _dataAccessProvider.DeleteProductsRecord(id);
+            _dataAccessProvider.DeleteProductsRecord(productid);
             return Ok();
         }
     }

@@ -42,8 +42,8 @@ namespace highlandcoffeeapp_BE.DataAccess
         // function for product
         void AddProductsRecord(Product product);
         void UpdateProductsRecord(Product product);
-        void DeleteProductsRecord(int id);
-        Product GetProductsSingleRecord(int id);
+        void DeleteProductsRecord(string productid);
+        Product GetProductsSingleRecord(string productid);
         List<Product> GetProductsRecords();
 
         // function for coffee
