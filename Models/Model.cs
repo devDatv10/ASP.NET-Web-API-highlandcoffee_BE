@@ -23,7 +23,7 @@ namespace highlandcoffeeapp_BE.Models
     {
         public string id { get; set; }
         public string name { get; set; }
-        public string phone_number { get; set; }
+        public string phonenumber { get; set; }
         public string address { get; set; }
         public int point { get; set; }
         public string password { get; set; }
@@ -33,12 +33,12 @@ namespace highlandcoffeeapp_BE.Models
     // Models for Staff
     public class Staff
     {
-        public string Id { get; set; }
-        public string Name { get; set; }
-        public string PhoneNumber { get; set; }
-        public DateTime StartDay { get; set; }
-        public int Salary { get; set; }
-        public string Password { get; set; }
+        public string id { get; set; }
+        public string name { get; set; }
+        public string phonenumber { get; set; }
+        public DateTime startday { get; set; }
+        public int salary { get; set; }
+        public string password { get; set; }
     }
 
 

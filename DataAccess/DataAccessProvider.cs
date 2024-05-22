@@ -52,7 +52,7 @@ namespace highlandcoffeeapp_BE.DataAccess
             command.CommandType = CommandType.StoredProcedure;
 
             command.Parameters.Add(new NpgsqlParameter("p_name", customer.name));
-            command.Parameters.Add(new NpgsqlParameter("p_phone_number", customer.phone_number));
+            command.Parameters.Add(new NpgsqlParameter("p_phonenumber", customer.phonenumber));
             command.Parameters.Add(new NpgsqlParameter("p_address", customer.address));
             command.Parameters.Add(new NpgsqlParameter("p_point", customer.point));
             command.Parameters.Add(new NpgsqlParameter("p_password", customer.password));
@@ -72,7 +72,7 @@ namespace highlandcoffeeapp_BE.DataAccess
 
             command.Parameters.Add(new NpgsqlParameter("p_customerid", customer.id));
             command.Parameters.Add(new NpgsqlParameter("p_name", customer.name));
-            command.Parameters.Add(new NpgsqlParameter("p_phone_number", customer.phone_number));
+            command.Parameters.Add(new NpgsqlParameter("p_phonenumber", customer.phonenumber));
             command.Parameters.Add(new NpgsqlParameter("p_address", customer.address));
             command.Parameters.Add(new NpgsqlParameter("p_point", customer.point));
             command.Parameters.Add(new NpgsqlParameter("p_password", customer.password));
@@ -116,7 +116,7 @@ namespace highlandcoffeeapp_BE.DataAccess
                     {
                         id = reader["id"].ToString(),
                         name = reader["name"].ToString(),
-                        phone_number = reader["phone_number"].ToString(),
+                        phonenumber = reader["phonenumber"].ToString(),
                         address = reader["address"].ToString(),
                         point = int.Parse(reader["point"].ToString()),
                         password = reader["password"].ToString()
@@ -145,7 +145,7 @@ namespace highlandcoffeeapp_BE.DataAccess
                     {
                         id = reader["id"].ToString(),
                         name = reader["name"].ToString(),
-                        phone_number = reader["phone_number"].ToString(),
+                        phonenumber = reader["phonenumber"].ToString(),
                         address = reader["address"].ToString(),
                         point = int.Parse(reader["point"].ToString()),
                         password = reader["password"].ToString()
@@ -198,11 +198,11 @@ namespace highlandcoffeeapp_BE.DataAccess
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.CommandText = "add_new_staff";
 
-                    cmd.Parameters.Add(new NpgsqlParameter("p_name", staff.Name));
-                    cmd.Parameters.Add(new NpgsqlParameter("p_phone_number", staff.PhoneNumber));
-                    cmd.Parameters.Add(new NpgsqlParameter("p_startday", staff.StartDay));
-                    cmd.Parameters.Add(new NpgsqlParameter("p_salary", staff.Salary));
-                    cmd.Parameters.Add(new NpgsqlParameter("p_password", staff.Password));
+                    cmd.Parameters.Add(new NpgsqlParameter("p_name", staff.name));
+                    cmd.Parameters.Add(new NpgsqlParameter("p_phonenumber", staff.phonenumber));
+                    cmd.Parameters.Add(new NpgsqlParameter("p_startday", staff.startday));
+                    cmd.Parameters.Add(new NpgsqlParameter("p_salary", staff.salary));
+                    cmd.Parameters.Add(new NpgsqlParameter("p_password", staff.password));
 
                     cmd.ExecuteNonQuery();
                 }
@@ -219,12 +219,12 @@ namespace highlandcoffeeapp_BE.DataAccess
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.CommandText = "update_staff";
 
-                    cmd.Parameters.Add(new NpgsqlParameter("p_staffid", staff.Id));
-                    cmd.Parameters.Add(new NpgsqlParameter("p_name", staff.Name));
-                    cmd.Parameters.Add(new NpgsqlParameter("p_phone_number", staff.PhoneNumber));
-                    cmd.Parameters.Add(new NpgsqlParameter("p_startday", staff.StartDay));
-                    cmd.Parameters.Add(new NpgsqlParameter("p_salary", staff.Salary));
-                    cmd.Parameters.Add(new NpgsqlParameter("p_password", staff.Password));
+                    cmd.Parameters.Add(new NpgsqlParameter("p_staffid", staff.id));
+                    cmd.Parameters.Add(new NpgsqlParameter("p_name", staff.name));
+                    cmd.Parameters.Add(new NpgsqlParameter("p_phonenumber", staff.phonenumber));
+                    cmd.Parameters.Add(new NpgsqlParameter("p_startday", staff.startday));
+                    cmd.Parameters.Add(new NpgsqlParameter("p_salary", staff.salary));
+                    cmd.Parameters.Add(new NpgsqlParameter("p_password", staff.password));
 
                     cmd.ExecuteNonQuery();
                 }
@@ -264,12 +264,12 @@ namespace highlandcoffeeapp_BE.DataAccess
             {
                 return new Staff
                 {
-                    Id = reader["id"].ToString(),
-                    Name = reader["name"].ToString(),
-                    PhoneNumber = reader["phone_number"].ToString(),
-                    StartDay = DateTime.Parse(reader["startday"].ToString()),
-                    Salary = int.Parse(reader["salary"].ToString()),
-                    Password = reader["password"].ToString()
+                    id = reader["id"].ToString(),
+                    name = reader["name"].ToString(),
+                    phonenumber = reader["phonenumber"].ToString(),
+                    startday = DateTime.Parse(reader["startday"].ToString()),
+                    salary = int.Parse(reader["salary"].ToString()),
+                    password = reader["password"].ToString()
                 };
             }
         }
@@ -293,12 +293,12 @@ public List<Staff> GetAllStaffs()
             {
                 staffs.Add(new Staff
                 {
-                    Id = reader["id"].ToString(),
-                    Name = reader["name"].ToString(),
-                    PhoneNumber = reader["phone_number"].ToString(),
-                    StartDay = DateTime.Parse(reader["startday"].ToString()),
-                    Salary = int.Parse(reader["salary"].ToString()),
-                    Password = reader["password"].ToString()
+                    id = reader["id"].ToString(),
+                    name = reader["name"].ToString(),
+                    phonenumber = reader["phonenumber"].ToString(),
+                    startday = DateTime.Parse(reader["startday"].ToString()),
+                    salary = int.Parse(reader["salary"].ToString()),
+                    password = reader["password"].ToString()
                 });
             }
         }
