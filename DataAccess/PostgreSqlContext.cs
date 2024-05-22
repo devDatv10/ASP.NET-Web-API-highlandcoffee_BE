@@ -31,6 +31,24 @@ namespace highlandcoffeeapp_BE.DataAccess
         public DbSet<Test> tests { get; set; }
         public DbSet<Test1> test1s { get; set; }
 
+        // Phương thức mở kết nối
+        public void OpenConnection()
+        {
+            if (Database.GetDbConnection().State != System.Data.ConnectionState.Open)
+            {
+                Database.GetDbConnection().Open();
+            }
+        }
+
+        // Phương thức đóng kết nối
+        public void CloseConnection()
+        {
+            if (Database.GetDbConnection().State != System.Data.ConnectionState.Closed)
+            {
+                Database.GetDbConnection().Close();
+            }
+        }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);

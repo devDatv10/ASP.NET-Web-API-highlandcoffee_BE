@@ -21,34 +21,26 @@ namespace highlandcoffeeapp_BE.Models
 
     public class Customer
     {
-        public int id { get; set; }
-
+        public string id { get; set; }
         public string name { get; set; }
-
-        public string email { get; set; }
-
-        public string password { get; set; }
-
-        public string confirm_password { get; set; }
-
-        // public byte[] image { get; set; }
-
+        public string phone_number { get; set; }
         public string address { get; set; }
-
-        public int phone_number { get; set; }
-        // public int point { get; set; }
+        public int point { get; set; }
+        public string password { get; set; }
     }
+
 
     // Models for Staff
     public class Staff
     {
-        public int id { get; set; }
-        public string staff_name { get; set; }
-        public string password { get; set; }
-        public string email { get; set; }
-        public int phone_number { get; set; }
-        public string address { get; set; }
+        public string Id { get; set; }
+        public string Name { get; set; }
+        public string PhoneNumber { get; set; }
+        public DateTime StartDay { get; set; }
+        public int Salary { get; set; }
+        public string Password { get; set; }
     }
+
 
     // Models for Product
     public class Product

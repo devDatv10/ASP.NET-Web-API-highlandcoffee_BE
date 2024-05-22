@@ -36,3 +36,4 @@ C:\Users\levan\source\repos\highlandcoffeeapp_BE\highlandcoffeeapp_BE\obj\Debug\
 C:\Users\levan\source\repos\highlandcoffeeapp_BE\highlandcoffeeapp_BE\obj\Debug\net8.0\highlandcoffeeapp_BE.genruntimeconfig.cache
 C:\Users\levan\source\repos\highlandcoffeeapp_BE\highlandcoffeeapp_BE\obj\Debug\net8.0\ref\highlandcoffeeapp_BE.dll
 C:\Users\levan\source\repos\highlandcoffeeapp_BE\highlandcoffeeapp_BE\obj\Debug\net8.0\highlandcoffeeapp_BE.sourcelink.json
+C:\Users\levan\source\repos\highlandcoffeeapp_BE\highlandcoffeeapp_BE\bin\Debug\net8.0\Newtonsoft.Json.dll

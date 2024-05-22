@@ -12,11 +12,12 @@ namespace highlandcoffeeapp_BE.DataAccess
         List<Admin> GetAdminsRecords();
 
         // function for customer
-        void AddCustomersRecord(Customer customer);
-        void UpdateCustomersRecord(Customer customer);
-        void DeleteCustomersRecord(int id);
-        Customer GetCustomersSingleRecord(int id);
-        List<Customer> GetCustomersRecords();
+        void AddCustomer(Customer customer);
+        void UpdateCustomer(Customer customer);
+        void DeleteCustomer(string id);
+        Customer GetCustomerById(string id);
+        List<Customer> GetAllCustomers();
+
 
         // function for category
         void AddCategoriesRecord(Category category);
@@ -33,11 +34,13 @@ namespace highlandcoffeeapp_BE.DataAccess
         List<Cart> GetCartsRecords();
 
         // function for staff
-        void AddStaffsRecord(Staff staff);
-        void UpdateStaffsRecord(Staff staff);
-        void DeleteStaffsRecord(int id);
-        Staff GetStaffsSingleRecord(int id);
-        List<Staff> GetStaffsRecords();
+        void AddStaffRecord(Staff staff);
+        void UpdateStaffRecord(Staff staff);
+        void DeleteStaffRecord(string id);
+        Staff GetStaffById(string id);
+        List<Staff> GetAllStaffs();
+
+
 
         // function for product
         void AddProductsRecord(Product product);

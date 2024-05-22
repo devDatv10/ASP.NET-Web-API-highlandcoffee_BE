@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "as7QobKdNmLlBADhRLCENmrsHLI4IT7RlxziHAxW8qPQtL20uEyR0fST03XJ6KdlavT/AGdr6h7BF+CTw7zKtg==",
+  "dgSpecHash": "KHvbfVCI3bHhHW3h3vCKrybEoTB7Gr/tY21EfmPH11sLzMAVebADeeNVTAqCG0ytSVybKzHhoN/pWdV8H7prLA==",
   "success": true,
   "projectFilePath": "C:\\Users\\levan\\source\\repos\\highlandcoffeeapp_BE\\highlandcoffeeapp_BE\\highlandcoffeeapp_BE.csproj",
   "expectedPackageFiles": [
@@ -19,6 +19,7 @@
     "C:\\Users\\levan\\.nuget\\packages\\microsoft.extensions.options\\8.0.0\\microsoft.extensions.options.8.0.0.nupkg.sha512",
     "C:\\Users\\levan\\.nuget\\packages\\microsoft.extensions.primitives\\8.0.0\\microsoft.extensions.primitives.8.0.0.nupkg.sha512",
     "C:\\Users\\levan\\.nuget\\packages\\microsoft.openapi\\1.2.3\\microsoft.openapi.1.2.3.nupkg.sha512",
+    "C:\\Users\\levan\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512",
     "C:\\Users\\levan\\.nuget\\packages\\npgsql\\8.0.2\\npgsql.8.0.2.nupkg.sha512",
     "C:\\Users\\levan\\.nuget\\packages\\npgsql.entityframeworkcore.postgresql\\8.0.2\\npgsql.entityframeworkcore.postgresql.8.0.2.nupkg.sha512",
     "C:\\Users\\levan\\.nuget\\packages\\swashbuckle.aspnetcore\\6.4.0\\swashbuckle.aspnetcore.6.4.0.nupkg.sha512",
