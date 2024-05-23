@@ -13,6 +13,114 @@ namespace highlandcoffeeapp_BE.DataAccess
         {
             _context = context;
         }
+
+        // function for account
+        public void AddAccount(Account account)
+        {
+            using (var command = _context.Database.GetDbConnection().CreateCommand())
+            {
+                command.CommandText = "INSERT INTO accounts (username, password, personid, status) VALUES (@username, @password, @personid, @status)";
+                command.CommandType = CommandType.Text;
+
+                command.Parameters.Add(new NpgsqlParameter("username", account.username));
+                command.Parameters.Add(new NpgsqlParameter("password", account.password));
+                command.Parameters.Add(new NpgsqlParameter("personid", account.personid));
+                command.Parameters.Add(new NpgsqlParameter("status", account.status));
+
+                _context.Database.OpenConnection();
+                command.ExecuteNonQuery();
+                _context.Database.CloseConnection();
+            }
+        }
+
+        public void UpdateAccount(Account account)
+        {
+            using (var command = _context.Database.GetDbConnection().CreateCommand())
+            {
+                command.CommandText = "UPDATE accounts SET password = @password, personid = @personid, status = @status WHERE username = @username";
+                command.CommandType = CommandType.Text;
+
+                command.Parameters.Add(new NpgsqlParameter("username", account.username));
+                command.Parameters.Add(new NpgsqlParameter("password", account.password));
+                command.Parameters.Add(new NpgsqlParameter("personid", account.personid));
+                command.Parameters.Add(new NpgsqlParameter("status", account.status));
+
+                _context.Database.OpenConnection();
+                command.ExecuteNonQuery();
+                _context.Database.CloseConnection();
+            }
+        }
+
+        public void DeleteAccount(string username)
+        {
+            using (var command = _context.Database.GetDbConnection().CreateCommand())
+            {
+                command.CommandText = "DELETE FROM accounts WHERE username = @username";
+                command.CommandType = CommandType.Text;
+
+                command.Parameters.Add(new NpgsqlParameter("username", username));
+
+                _context.Database.OpenConnection();
+                command.ExecuteNonQuery();
+                _context.Database.CloseConnection();
+            }
+        }
+
+        public Account GetAccountByUserName(string username)
+        {
+            using (var command = _context.Database.GetDbConnection().CreateCommand())
+            {
+                command.CommandText = "SELECT * FROM accounts WHERE username = @username";
+                command.CommandType = CommandType.Text;
+
+                command.Parameters.Add(new NpgsqlParameter("username", username));
+
+                _context.Database.OpenConnection();
+                using (var reader = command.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        return new Account
+                        {
+                            username = reader["username"].ToString(),
+                            password = reader["password"].ToString(),
+                            personid = reader["personid"].ToString(),
+                            status = int.Parse(reader["status"].ToString())
+                        };
+                    }
+                }
+                _context.Database.CloseConnection();
+            }
+            return null;
+        }
+
+        public List<Account> GetAllAccounts()
+        {
+            var accounts = new List<Account>();
+            using (var command = _context.Database.GetDbConnection().CreateCommand())
+            {
+                command.CommandText = "SELECT * FROM accounts";
+                command.CommandType = CommandType.Text;
+
+                _context.Database.OpenConnection();
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        accounts.Add(new Account
+                        {
+                            username = reader["username"].ToString(),
+                            password = reader["password"].ToString(),
+                            personid = reader["personid"].ToString(),
+                            status = int.Parse(reader["status"].ToString())
+                        });
+                    }
+                }
+                _context.Database.CloseConnection();
+            }
+            return accounts;
+        }
+
         // function for admin
         public void AddAdminsRecord(Admin admin)
         {

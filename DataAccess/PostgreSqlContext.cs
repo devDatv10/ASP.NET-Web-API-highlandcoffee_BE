@@ -10,6 +10,7 @@ namespace highlandcoffeeapp_BE.DataAccess
         {
         }
 
+        public DbSet<Account> accounts { get; set; }
         public DbSet<Admin> admins { get; set; }
         public DbSet<Customer> customers { get; set; }
         public DbSet<Category> categories { get; set; }

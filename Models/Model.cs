@@ -1,5 +1,16 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace highlandcoffeeapp_BE.Models
 {
+    // Models for Account
+    public class Account
+    {
+        [Key]
+        public string username { get; set; }
+        public string password { get; set; }
+        public string personid { get; set; }
+        public int status { get; set; }
+    }
     // Models for Admin
     public class Admin
     {

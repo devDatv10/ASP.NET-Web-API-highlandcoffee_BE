@@ -4,6 +4,13 @@ namespace highlandcoffeeapp_BE.DataAccess
 {
     public interface IDataAccessProvider
     {
+        // function for account
+        void AddAccount(Account account);
+        void UpdateAccount(Account account);
+        void DeleteAccount(string username);
+        Account GetAccountByUserName(string username);
+        List<Account> GetAllAccounts();
+
         // function for admin
         void AddAdminsRecord(Admin admin);
         void UpdateAdminsRecord(Admin admin);
