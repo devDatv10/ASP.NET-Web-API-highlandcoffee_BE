@@ -17,7 +17,7 @@ namespace highlandcoffeeapp_BE.Controllers
         [HttpGet]
         public IEnumerable<Customer> Get()
         {
-            return _dataAccessProvider.GetCustomersRecords();
+            return _dataAccessProvider.GetAllCustomers();
         }
 
         [HttpPost]
@@ -25,38 +25,38 @@ namespace highlandcoffeeapp_BE.Controllers
         {
             if (ModelState.IsValid)
             {
-                _dataAccessProvider.AddCustomersRecord(customer);
+                _dataAccessProvider.AddCustomer(customer);
                 return Ok();
             }
             return BadRequest();
         }
 
         [HttpGet("{id}")]
-        public Customer Details(int id)
+        public Customer Details(string id)
         {
-            return _dataAccessProvider.GetCustomersSingleRecord(id);
+            return _dataAccessProvider.GetCustomerById(id);
         }
 
         [HttpPut]
         public IActionResult Edit([FromBody] Customer customer)
         {
             if (ModelState.IsValid)
-            {   
-                _dataAccessProvider.UpdateCustomersRecord(customer);
+            {
+                _dataAccessProvider.UpdateCustomer(customer);
                 return Ok();
             }
             return BadRequest();
         }
 
         [HttpDelete("{id}")]
-        public IActionResult DeleteConfirmed(int id)
+        public IActionResult DeleteConfirmed(string id)
         {
-            var data = _dataAccessProvider.GetCustomersSingleRecord(id);
+            var data = _dataAccessProvider.GetCustomerById(id);
             if (data == null)
             {
                 return NotFound();
             }
-            _dataAccessProvider.DeleteCustomersRecord(id);
+            _dataAccessProvider.DeleteCustomer(id);
             return Ok();
         }
     }

@@ -1,15 +1,129 @@
-﻿using highlandcoffeeapp_BE.Models;
+﻿using System.Data;
+using highlandcoffeeapp_BE.Models;
+using Microsoft.EntityFrameworkCore;
+using Npgsql;
+using Microsoft.Extensions.Logging;
 
 namespace highlandcoffeeapp_BE.DataAccess
 {
     public class DataAccessProvider : IDataAccessProvider
     {
         private readonly PostgreSqlContext _context;
+        private readonly ILogger<DataAccessProvider> _logger; // Khai báo ILogger
 
-        public DataAccessProvider(PostgreSqlContext context)
+        public DataAccessProvider(PostgreSqlContext context,  ILogger<DataAccessProvider> logger)
         {
             _context = context;
+            _logger = logger; // Khởi tạo ILogger
         }
+
+        // function for account
+        public void AddAccount(Account account)
+        {
+            using (var command = _context.Database.GetDbConnection().CreateCommand())
+            {
+                command.CommandText = "INSERT INTO accounts (username, password, personid, status) VALUES (@username, @password, @personid, @status)";
+                command.CommandType = CommandType.Text;
+
+                command.Parameters.Add(new NpgsqlParameter("username", account.username));
+                command.Parameters.Add(new NpgsqlParameter("password", account.password));
+                command.Parameters.Add(new NpgsqlParameter("personid", account.personid));
+                command.Parameters.Add(new NpgsqlParameter("status", account.status));
+
+                _context.Database.OpenConnection();
+                command.ExecuteNonQuery();
+                _context.Database.CloseConnection();
+            }
+        }
+
+        public void UpdateAccount(Account account)
+        {
+            using (var command = _context.Database.GetDbConnection().CreateCommand())
+            {
+                command.CommandText = "UPDATE accounts SET password = @password, personid = @personid, status = @status WHERE username = @username";
+                command.CommandType = CommandType.Text;
+
+                command.Parameters.Add(new NpgsqlParameter("username", account.username));
+                command.Parameters.Add(new NpgsqlParameter("password", account.password));
+                command.Parameters.Add(new NpgsqlParameter("personid", account.personid));
+                command.Parameters.Add(new NpgsqlParameter("status", account.status));
+
+                _context.Database.OpenConnection();
+                command.ExecuteNonQuery();
+                _context.Database.CloseConnection();
+            }
+        }
+
+        public void DeleteAccount(string username)
+        {
+            using (var command = _context.Database.GetDbConnection().CreateCommand())
+            {
+                command.CommandText = "DELETE FROM accounts WHERE username = @username";
+                command.CommandType = CommandType.Text;
+
+                command.Parameters.Add(new NpgsqlParameter("username", username));
+
+                _context.Database.OpenConnection();
+                command.ExecuteNonQuery();
+                _context.Database.CloseConnection();
+            }
+        }
+
+        public Account GetAccountByUserName(string username)
+        {
+            using (var command = _context.Database.GetDbConnection().CreateCommand())
+            {
+                command.CommandText = "SELECT * FROM accounts WHERE username = @username";
+                command.CommandType = CommandType.Text;
+
+                command.Parameters.Add(new NpgsqlParameter("username", username));
+
+                _context.Database.OpenConnection();
+                using (var reader = command.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        return new Account
+                        {
+                            username = reader["username"].ToString(),
+                            password = reader["password"].ToString(),
+                            personid = reader["personid"].ToString(),
+                            status = int.Parse(reader["status"].ToString())
+                        };
+                    }
+                }
+                _context.Database.CloseConnection();
+            }
+            return null;
+        }
+
+        public List<Account> GetAllAccounts()
+        {
+            var accounts = new List<Account>();
+            using (var command = _context.Database.GetDbConnection().CreateCommand())
+            {
+                command.CommandText = "SELECT * FROM accounts";
+                command.CommandType = CommandType.Text;
+
+                _context.Database.OpenConnection();
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        accounts.Add(new Account
+                        {
+                            username = reader["username"].ToString(),
+                            password = reader["password"].ToString(),
+                            personid = reader["personid"].ToString(),
+                            status = int.Parse(reader["status"].ToString())
+                        });
+                    }
+                }
+                _context.Database.CloseConnection();
+            }
+            return accounts;
+        }
+
         // function for admin
         public void AddAdminsRecord(Admin admin)
         {
@@ -40,35 +154,131 @@ namespace highlandcoffeeapp_BE.DataAccess
             return _context.admins.ToList();
         }
 
-        // function for customer
-        public void AddCustomersRecord(Customer customer)
+        // Function for adding customer
+        public void AddCustomer(Customer customer)
         {
-            _context.customers.Add(customer);
-            _context.SaveChanges();
+            try
+            {
+                using (var command = _context.Database.GetDbConnection().CreateCommand())
+                {
+                    // Sử dụng SELECT để gọi hàm add_new_customer
+                    command.CommandText = @"
+                        SELECT add_new_customer(@p_name, @p_phonenumber, @p_address, @p_point, @p_password)";
+                    command.CommandType = CommandType.Text;
+
+                    command.Parameters.Add(new NpgsqlParameter("p_name", customer.name));
+                    command.Parameters.Add(new NpgsqlParameter("p_phonenumber", customer.phonenumber));
+                    command.Parameters.Add(new NpgsqlParameter("p_address", customer.address));
+                    command.Parameters.Add(new NpgsqlParameter("p_point", customer.point));
+                    command.Parameters.Add(new NpgsqlParameter("p_password", customer.password));
+
+                    _context.Database.OpenConnection();
+                    command.ExecuteNonQuery();
+                    _context.Database.CloseConnection();
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log lỗi để biết nguyên nhân chính xác
+                _logger.LogError(ex, "Error adding customer");
+                throw;
+            }
         }
 
-        public void UpdateCustomersRecord(Customer customer)
-        {
-            _context.customers.Update(customer);
-            _context.SaveChanges();
-        }
 
-        public void DeleteCustomersRecord(int id)
+        public void UpdateCustomer(Customer customer)
+    {
+        using (var command = _context.Database.GetDbConnection().CreateCommand())
         {
-            var entity = _context.customers.FirstOrDefault(t => t.id == id);
-            _context.customers.Remove(entity);
-            _context.SaveChanges();
-        }
+            command.CommandText = "update_customer";
+            command.CommandType = CommandType.StoredProcedure;
 
-        public Customer GetCustomersSingleRecord(int id)
-        {
-            return _context.customers.FirstOrDefault(t => t.id == id);
-        }
+            command.Parameters.Add(new NpgsqlParameter("p_customerid", customer.id));
+            command.Parameters.Add(new NpgsqlParameter("p_name", customer.name));
+            command.Parameters.Add(new NpgsqlParameter("p_phonenumber", customer.phonenumber));
+            command.Parameters.Add(new NpgsqlParameter("p_address", customer.address));
+            command.Parameters.Add(new NpgsqlParameter("p_point", customer.point));
+            command.Parameters.Add(new NpgsqlParameter("p_password", customer.password));
 
-        public List<Customer> GetCustomersRecords()
-        {
-            return _context.customers.ToList();
+            _context.Database.OpenConnection();
+            command.ExecuteNonQuery();
+            _context.Database.CloseConnection();
         }
+    }
+
+    public void DeleteCustomer(string id)
+    {
+        using (var command = _context.Database.GetDbConnection().CreateCommand())
+        {
+            command.CommandText = "delete_customer";
+            command.CommandType = CommandType.StoredProcedure;
+
+            command.Parameters.Add(new NpgsqlParameter("p_customerid", id));
+
+            _context.Database.OpenConnection();
+            command.ExecuteNonQuery();
+            _context.Database.CloseConnection();
+        }
+    }
+
+    public Customer GetCustomerById(string id)
+    {
+        using (var command = _context.Database.GetDbConnection().CreateCommand())
+        {
+            command.CommandText = "SELECT * FROM get_customer_by_id(@p_customerid)";
+            command.CommandType = CommandType.Text;
+
+            command.Parameters.Add(new NpgsqlParameter("p_customerid", id));
+
+            _context.Database.OpenConnection();
+            using (var reader = command.ExecuteReader())
+            {
+                if (reader.Read())
+                {
+                    return new Customer
+                    {
+                        id = reader["id"].ToString(),
+                        name = reader["name"].ToString(),
+                        phonenumber = reader["phonenumber"].ToString(),
+                        address = reader["address"].ToString(),
+                        point = int.Parse(reader["point"].ToString()),
+                        password = reader["password"].ToString()
+                    };
+                }
+            }
+            _context.Database.CloseConnection();
+        }
+        return null;
+    }
+
+    public List<Customer> GetAllCustomers()
+    {
+        var customers = new List<Customer>();
+        using (var command = _context.Database.GetDbConnection().CreateCommand())
+        {
+            command.CommandText = "SELECT * FROM get_all_customers()";
+            command.CommandType = CommandType.Text;
+
+            _context.Database.OpenConnection();
+            using (var reader = command.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    customers.Add(new Customer
+                    {
+                        id = reader["id"].ToString(),
+                        name = reader["name"].ToString(),
+                        phonenumber = reader["phonenumber"].ToString(),
+                        address = reader["address"].ToString(),
+                        point = int.Parse(reader["point"].ToString()),
+                        password = reader["password"].ToString()
+                    });
+                }
+            }
+            _context.Database.CloseConnection();
+        }
+        return customers;
+    }
 
         // function for category
         public void AddCategoriesRecord(Category category)
@@ -101,34 +311,125 @@ namespace highlandcoffeeapp_BE.DataAccess
         }
 
         // function for staff
-        public void AddStaffsRecord(Staff staff)
+        public void AddStaffRecord(Staff staff)
         {
-            _context.staffs.Add(staff);
-            _context.SaveChanges();
+            using (var conn = _context.Database.GetDbConnection())
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.CommandText = "add_new_staff";
+
+                    cmd.Parameters.Add(new NpgsqlParameter("p_name", staff.name));
+                    cmd.Parameters.Add(new NpgsqlParameter("p_phonenumber", staff.phonenumber));
+                    cmd.Parameters.Add(new NpgsqlParameter("p_startday", staff.startday));
+                    cmd.Parameters.Add(new NpgsqlParameter("p_salary", staff.salary));
+                    cmd.Parameters.Add(new NpgsqlParameter("p_password", staff.password));
+
+                    cmd.ExecuteNonQuery();
+                }
+            }
         }
 
-        public void UpdateStaffsRecord(Staff staff)
+        public void UpdateStaffRecord(Staff staff)
         {
-            _context.staffs.Update(staff);
-            _context.SaveChanges();
+            using (var conn = _context.Database.GetDbConnection())
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.CommandText = "update_staff";
+
+                    cmd.Parameters.Add(new NpgsqlParameter("p_staffid", staff.id));
+                    cmd.Parameters.Add(new NpgsqlParameter("p_name", staff.name));
+                    cmd.Parameters.Add(new NpgsqlParameter("p_phonenumber", staff.phonenumber));
+                    cmd.Parameters.Add(new NpgsqlParameter("p_startday", staff.startday));
+                    cmd.Parameters.Add(new NpgsqlParameter("p_salary", staff.salary));
+                    cmd.Parameters.Add(new NpgsqlParameter("p_password", staff.password));
+
+                    cmd.ExecuteNonQuery();
+                }
+            }
         }
 
-        public void DeleteStaffsRecord(int id)
+        public void DeleteStaffRecord(string id)
         {
-            var entity = _context.staffs.FirstOrDefault(t => t.id == id);
-            _context.staffs.Remove(entity);
-            _context.SaveChanges();
+            using (var conn = _context.Database.GetDbConnection())
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.CommandText = "delete_staff";
+
+                    cmd.Parameters.Add(new NpgsqlParameter("p_staffid", id));
+
+                    cmd.ExecuteNonQuery();
+                }
+            }
         }
 
-        public Staff GetStaffsSingleRecord(int id)
-        {
-            return _context.staffs.FirstOrDefault(t => t.id == id);
-        }
+        public Staff GetStaffById(string id)
+{
+    using (var command = _context.Database.GetDbConnection().CreateCommand())
+    {
+        command.CommandText = "SELECT * FROM get_staff_by_id(@p_staffid)";
+        command.CommandType = CommandType.Text;
 
-        public List<Staff> GetStaffsRecords()
+        command.Parameters.Add(new NpgsqlParameter("p_staffid", id));
+
+        _context.Database.OpenConnection();
+        using (var reader = command.ExecuteReader())
         {
-            return _context.staffs.ToList();
+            if (reader.Read())
+            {
+                return new Staff
+                {
+                    id = reader["id"].ToString(),
+                    name = reader["name"].ToString(),
+                    phonenumber = reader["phonenumber"].ToString(),
+                    startday = DateTime.Parse(reader["startday"].ToString()),
+                    salary = int.Parse(reader["salary"].ToString()),
+                    password = reader["password"].ToString()
+                };
+            }
         }
+        _context.Database.CloseConnection();
+    }
+    return null;
+}
+
+public List<Staff> GetAllStaffs()
+{
+    var staffs = new List<Staff>();
+    using (var command = _context.Database.GetDbConnection().CreateCommand())
+    {
+        command.CommandText = "SELECT * FROM get_all_staffs()";
+        command.CommandType = CommandType.Text;
+
+        _context.Database.OpenConnection();
+        using (var reader = command.ExecuteReader())
+        {
+            while (reader.Read())
+            {
+                staffs.Add(new Staff
+                {
+                    id = reader["id"].ToString(),
+                    name = reader["name"].ToString(),
+                    phonenumber = reader["phonenumber"].ToString(),
+                    startday = DateTime.Parse(reader["startday"].ToString()),
+                    salary = int.Parse(reader["salary"].ToString()),
+                    password = reader["password"].ToString()
+                });
+            }
+        }
+        _context.Database.CloseConnection();
+    }
+    return staffs;
+}
+
 
         // function for product
         public void AddProductsRecord(Product product)
