@@ -163,7 +163,7 @@ namespace highlandcoffeeapp_BE.DataAccess
                 {
                     // Sử dụng SELECT để gọi hàm add_new_customer
                     command.CommandText = @"
-                        SELECT add_new_customer(@p_name, @p_phonenumber, @p_address, @p_point, @p_password)";
+                        SELECT add_customer(@p_name, @p_phonenumber, @p_address, @p_point, @p_password)";
                     command.CommandType = CommandType.Text;
 
                     command.Parameters.Add(new NpgsqlParameter("p_name", customer.name));
