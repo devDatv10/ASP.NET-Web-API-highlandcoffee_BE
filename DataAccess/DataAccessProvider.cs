@@ -2,16 +2,19 @@
 using highlandcoffeeapp_BE.Models;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
+using Microsoft.Extensions.Logging;
 
 namespace highlandcoffeeapp_BE.DataAccess
 {
     public class DataAccessProvider : IDataAccessProvider
     {
         private readonly PostgreSqlContext _context;
+        private readonly ILogger<DataAccessProvider> _logger; // Khai báo ILogger
 
-        public DataAccessProvider(PostgreSqlContext context)
+        public DataAccessProvider(PostgreSqlContext context,  ILogger<DataAccessProvider> logger)
         {
             _context = context;
+            _logger = logger; // Khởi tạo ILogger
         }
 
         // function for account
@@ -151,25 +154,37 @@ namespace highlandcoffeeapp_BE.DataAccess
             return _context.admins.ToList();
         }
 
-        // function for customer
+        // Function for adding customer
         public void AddCustomer(Customer customer)
-    {
-        using (var command = _context.Database.GetDbConnection().CreateCommand())
         {
-            command.CommandText = "add_new_customer";
-            command.CommandType = CommandType.StoredProcedure;
+            try
+            {
+                using (var command = _context.Database.GetDbConnection().CreateCommand())
+                {
+                    // Sử dụng SELECT để gọi hàm add_new_customer
+                    command.CommandText = @"
+                        SELECT add_new_customer(@p_name, @p_phonenumber, @p_address, @p_point, @p_password)";
+                    command.CommandType = CommandType.Text;
 
-            command.Parameters.Add(new NpgsqlParameter("p_name", customer.name));
-            command.Parameters.Add(new NpgsqlParameter("p_phonenumber", customer.phonenumber));
-            command.Parameters.Add(new NpgsqlParameter("p_address", customer.address));
-            command.Parameters.Add(new NpgsqlParameter("p_point", customer.point));
-            command.Parameters.Add(new NpgsqlParameter("p_password", customer.password));
+                    command.Parameters.Add(new NpgsqlParameter("p_name", customer.name));
+                    command.Parameters.Add(new NpgsqlParameter("p_phonenumber", customer.phonenumber));
+                    command.Parameters.Add(new NpgsqlParameter("p_address", customer.address));
+                    command.Parameters.Add(new NpgsqlParameter("p_point", customer.point));
+                    command.Parameters.Add(new NpgsqlParameter("p_password", customer.password));
 
-            _context.Database.OpenConnection();
-            command.ExecuteNonQuery();
-            _context.Database.CloseConnection();
+                    _context.Database.OpenConnection();
+                    command.ExecuteNonQuery();
+                    _context.Database.CloseConnection();
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log lỗi để biết nguyên nhân chính xác
+                _logger.LogError(ex, "Error adding customer");
+                throw;
+            }
         }
-    }
+
 
         public void UpdateCustomer(Customer customer)
     {
