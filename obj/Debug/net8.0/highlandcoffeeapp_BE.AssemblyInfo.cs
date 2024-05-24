@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("highlandcoffeeapp_BE")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+351601195dec8a1910648c1a9d184a24cd61a555")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+17d5c20f3c737c78f54dd2cd52ea2295217c60b0")]
 [assembly: System.Reflection.AssemblyProductAttribute("highlandcoffeeapp_BE")]
 [assembly: System.Reflection.AssemblyTitleAttribute("highlandcoffeeapp_BE")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

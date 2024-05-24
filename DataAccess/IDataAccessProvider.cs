@@ -127,19 +127,5 @@ namespace highlandcoffeeapp_BE.DataAccess
         List<Order> GetOrdersRecords();
 
         // function for order detail
-
-        // function for test
-        void AddTestsRecord(Test test);
-        void UpdateTestsRecord(Test test);
-        void DeleteTestsRecord(int id);
-        Test GetTestsSingleRecord(int id);
-        List<Test> GetTestsRecords();
-
-        // function for test1
-        void AddTest1sRecord(Test1 test1);
-        void UpdateTest1sRecord(Test1 test1);
-        void DeleteTest1sRecord(string id);
-        Test1 GetTest1sSingleRecord(string id);
-        List<Test1> GetTest1sRecords();
     }
 }
