@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace highlandcoffeeapp_BE.Controllers
 {
     [Route("api/[controller]")]
+    [ApiController]
     public class ProductsController : ControllerBase
     {
         private readonly IDataAccessProvider _dataAccessProvider;
@@ -17,7 +18,13 @@ namespace highlandcoffeeapp_BE.Controllers
         [HttpGet]
         public IEnumerable<Product> Get()
         {
-            return _dataAccessProvider.GetProductsRecords();
+            return _dataAccessProvider.GetAllProducts();
+        }
+
+        [HttpGet("category/{categoryid}")]
+        public IEnumerable<Product> GetByCategory(string categoryid)
+        {
+            return _dataAccessProvider.GetProductsByCategoryId(categoryid);
         }
 
         [HttpPost]
@@ -25,16 +32,16 @@ namespace highlandcoffeeapp_BE.Controllers
         {
             if (ModelState.IsValid)
             {
-                _dataAccessProvider.AddProductsRecord(product);
+                _dataAccessProvider.AddProduct(product);
                 return Ok();
             }
             return BadRequest();
         }
 
         [HttpGet("{id}")]
-        public Product Details(int id)
+        public Product Details(string id)
         {
-            return _dataAccessProvider.GetProductsSingleRecord(id);
+            return _dataAccessProvider.GetProductById(id);
         }
 
         [HttpPut]
@@ -42,21 +49,21 @@ namespace highlandcoffeeapp_BE.Controllers
         {
             if (ModelState.IsValid)
             {
-                _dataAccessProvider.UpdateProductsRecord(product);
+                _dataAccessProvider.UpdateProduct(product);
                 return Ok();
             }
             return BadRequest();
         }
 
         [HttpDelete("{id}")]
-        public IActionResult DeleteConfirmed(int id)
+        public IActionResult DeleteConfirmed(string id)
         {
-            var data = _dataAccessProvider.GetProductsSingleRecord(id);
+            var data = _dataAccessProvider.GetProductById(id);
             if (data == null)
             {
                 return NotFound();
-    }
-            _dataAccessProvider.DeleteProductsRecord(id);
+            }
+            _dataAccessProvider.DeleteProduct(id);
             return Ok();
         }
     }

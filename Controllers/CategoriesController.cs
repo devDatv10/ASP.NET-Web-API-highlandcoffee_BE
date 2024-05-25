@@ -5,6 +5,7 @@ using highlandcoffeeapp_BE.Models;
 namespace highlandcoffeeapp_BE.Controllers
 {
     [Route("api/[controller]")]
+    [ApiController]
     public class CategoriesController : ControllerBase
     {
         private readonly IDataAccessProvider _dataAccessProvider;
@@ -17,7 +18,7 @@ namespace highlandcoffeeapp_BE.Controllers
         [HttpGet]
         public IEnumerable<Category> Get()
         {
-            return _dataAccessProvider.GetCategoriesRecords();
+            return _dataAccessProvider.GetAllCategories();
         }
 
         [HttpPost]
@@ -25,38 +26,39 @@ namespace highlandcoffeeapp_BE.Controllers
         {
             if (ModelState.IsValid)
             {
-                _dataAccessProvider.AddCategoriesRecord(category);
+                _dataAccessProvider.AddCategory(category);
                 return Ok();
             }
             return BadRequest();
         }
 
         [HttpGet("{id}")]
-        public Category Details(int id)
+        public Category Details(string id)
         {
-            return _dataAccessProvider.GetCategoriesSingleRecord(id);
+            return _dataAccessProvider.GetCategoryById(id);
         }
 
-        [HttpPut]
+        [HttpPut("{id}")]
         public IActionResult Edit([FromBody] Category category)
         {
             if (ModelState.IsValid)
             {
-                _dataAccessProvider.UpdateCategoriesRecord(category);
+                _dataAccessProvider.UpdateCategory(category);
                 return Ok();
             }
             return BadRequest();
         }
 
         [HttpDelete("{id}")]
-        public IActionResult DeleteConfirmed(int id)
+        public IActionResult Delete(string id)
         {
-            var data = _dataAccessProvider.GetCategoriesSingleRecord(id);
-            if (data == null)
+            var category = _dataAccessProvider.GetCategoryById(id);
+            if (category == null)
             {
                 return NotFound();
             }
-            _dataAccessProvider.DeleteCategoriesRecord(id);
+
+            _dataAccessProvider.DeleteCategory(id);
             return Ok();
         }
     }

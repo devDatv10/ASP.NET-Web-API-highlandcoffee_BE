@@ -27,11 +27,11 @@ namespace highlandcoffeeapp_BE.DataAccess
 
 
         // function for category
-        void AddCategoriesRecord(Category category);
-        void UpdateCategoriesRecord(Category category);
-        void DeleteCategoriesRecord(int id);
-        Category GetCategoriesSingleRecord(int id);
-        List<Category> GetCategoriesRecords();
+        void AddCategory(Category category);
+        void UpdateCategory(Category category);
+        void DeleteCategory(string categoryid);
+        Category GetCategoryById(string categoryid);
+        List<Category> GetAllCategories();
 
         // function for cart
         void AddCartsRecord(Cart cart);
@@ -50,11 +50,12 @@ namespace highlandcoffeeapp_BE.DataAccess
 
 
         // function for product
-        void AddProductsRecord(Product product);
-        void UpdateProductsRecord(Product product);
-        void DeleteProductsRecord(int id);
-        Product GetProductsSingleRecord(int id);
-        List<Product> GetProductsRecords();
+        void AddProduct(Product product);
+        void UpdateProduct(Product product);
+        void DeleteProduct(string productid);
+        Product GetProductById(string productid);
+        List<Product> GetAllProducts();
+        List<Product> GetProductsByCategoryId(string categoryid);
 
         // function for coffee
         void AddCoffeesRecord(Coffee coffee);

@@ -23,10 +23,12 @@ namespace highlandcoffeeapp_BE.Models
 
     public class Category
     {
-        public int id { get; set; }
-        public string category_name { get; set; }
+        [Key]
+        public string categoryid { get; set; }
+        public string categoryname { get; set; }
         public string description { get; set; }
     }
+
 
     // Models for Customer
 
@@ -56,23 +58,15 @@ namespace highlandcoffeeapp_BE.Models
     // Models for Product
     public class Product
     {
-        public int id { get; set; }
-
-        public string category_name { get; set; }
-
-        public string product_name { get; set; }
-
+        public string productid { get; set; }
+        public string categoryid { get; set; }
+        public string productname { get; set; }
         public string description { get; set; }
-
-        public int size_s_price { get; set; }
-
-        public int size_m_price { get; set; }
-        public int size_l_price { get; set; }
+        public string size { get; set; }
+        public int price { get; set; }
         public string unit { get; set; }
-
         public byte[] image { get; set; }
-
-        public byte[] image_detail { get; set; }
+        public byte[] imagedetail { get; set; }
     }
 
     // Models for Order

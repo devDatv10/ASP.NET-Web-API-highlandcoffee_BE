@@ -281,34 +281,116 @@ namespace highlandcoffeeapp_BE.DataAccess
     }
 
         // function for category
-        public void AddCategoriesRecord(Category category)
+        public void AddCategory(Category category)
+    {
+        try
         {
-            _context.categories.Add(category);
-            _context.SaveChanges();
-        }
+            using (var command = _context.Database.GetDbConnection().CreateCommand())
+            {
+                command.CommandText = @"
+                    SELECT add_category(@p_categoryname, @p_description)";
+                command.CommandType = CommandType.Text;
 
-        public void UpdateCategoriesRecord(Category category)
-        {
-            _context.categories.Update(category);
-            _context.SaveChanges();
-        }
+                command.Parameters.Add(new NpgsqlParameter("p_categoryname", category.categoryname));
+                command.Parameters.Add(new NpgsqlParameter("p_description", category.description));
 
-        public void DeleteCategoriesRecord(int id)
-        {
-            var entity = _context.categories.FirstOrDefault(t => t.id == id);
-            _context.categories.Remove(entity);
-            _context.SaveChanges();
+                _context.Database.OpenConnection();
+                command.ExecuteNonQuery();
+                _context.Database.CloseConnection();
+            }
         }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error adding category");
+            throw;
+        }
+    }
 
-        public Category GetCategoriesSingleRecord(int id)
+    public void UpdateCategory(Category category)
+    {
+        using (var command = _context.Database.GetDbConnection().CreateCommand())
         {
-            return _context.categories.FirstOrDefault(t => t.id == id);
-        }
+            command.CommandText = "update_category";
+            command.CommandType = CommandType.StoredProcedure;
 
-        public List<Category> GetCategoriesRecords()
-        {
-            return _context.categories.ToList();
+            command.Parameters.Add(new NpgsqlParameter("p_categoryid", category.categoryid));
+            command.Parameters.Add(new NpgsqlParameter("p_categoryname", category.categoryname));
+            command.Parameters.Add(new NpgsqlParameter("p_description", category.description));
+
+            _context.Database.OpenConnection();
+            command.ExecuteNonQuery();
+            _context.Database.CloseConnection();
         }
+    }
+
+    public void DeleteCategory(string categoryid)
+    {
+        using (var command = _context.Database.GetDbConnection().CreateCommand())
+        {
+            command.CommandText = "delete_category";
+            command.CommandType = CommandType.StoredProcedure;
+
+            command.Parameters.Add(new NpgsqlParameter("p_categoryid", categoryid));
+
+            _context.Database.OpenConnection();
+            command.ExecuteNonQuery();
+            _context.Database.CloseConnection();
+        }
+    }
+
+    public Category GetCategoryById(string categoryid)
+    {
+        using (var command = _context.Database.GetDbConnection().CreateCommand())
+        {
+            command.CommandText = "SELECT * FROM get_category_by_id(@p_categoryid)";
+            command.CommandType = CommandType.Text;
+
+            command.Parameters.Add(new NpgsqlParameter("p_categoryid", categoryid));
+
+            _context.Database.OpenConnection();
+            using (var reader = command.ExecuteReader())
+            {
+                if (reader.Read())
+                {
+                    return new Category
+                    {
+                        categoryid = reader["categoryid"].ToString(),
+                        categoryname = reader["categoryname"].ToString(),
+                        description = reader["description"].ToString()
+                    };
+                }
+            }
+            _context.Database.CloseConnection();
+        }
+        return null;
+    }
+
+    public List<Category> GetAllCategories()
+    {
+        var categories = new List<Category>();
+        using (var command = _context.Database.GetDbConnection().CreateCommand())
+        {
+            command.CommandText = "SELECT * FROM get_all_categories()";
+            command.CommandType = CommandType.Text;
+
+            _context.Database.OpenConnection();
+            using (var reader = command.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    categories.Add(new Category
+                    {
+                        categoryid = reader["categoryid"].ToString(),
+                        categoryname = reader["categoryname"].ToString(),
+                        description = reader["description"].ToString()
+                    });
+                }
+            }
+            _context.Database.CloseConnection();
+        }
+        return categories;
+    }
+
 
         // function for staff
         public void AddStaffRecord(Staff staff)
@@ -319,7 +401,7 @@ namespace highlandcoffeeapp_BE.DataAccess
                 using (var cmd = conn.CreateCommand())
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.CommandText = "add_new_staff";
+                    cmd.CommandText = "add_staff";
 
                     cmd.Parameters.Add(new NpgsqlParameter("p_name", staff.name));
                     cmd.Parameters.Add(new NpgsqlParameter("p_phonenumber", staff.phonenumber));
@@ -432,33 +514,164 @@ public List<Staff> GetAllStaffs()
 
 
         // function for product
-        public void AddProductsRecord(Product product)
+        public void AddProduct(Product product)
         {
-            _context.products.Add(product);
-            _context.SaveChanges();
+            using (var command = _context.Database.GetDbConnection().CreateCommand())
+            {
+                command.CommandText = @"
+                    SELECT add_product(@p_categoryid, @p_productname, @p_description, @p_size, @p_price, @p_unit, @p_image, @p_imagedetail)";
+                command.CommandType = CommandType.Text;
+
+                command.Parameters.Add(new NpgsqlParameter("p_categoryid", product.categoryid));
+                command.Parameters.Add(new NpgsqlParameter("p_productname", product.productname));
+                command.Parameters.Add(new NpgsqlParameter("p_description", product.description));
+                command.Parameters.Add(new NpgsqlParameter("p_size", product.size));
+                command.Parameters.Add(new NpgsqlParameter("p_price", product.price));
+                command.Parameters.Add(new NpgsqlParameter("p_unit", product.unit));
+                command.Parameters.Add(new NpgsqlParameter("p_image", product.image));
+                command.Parameters.Add(new NpgsqlParameter("p_imagedetail", product.imagedetail));
+
+                _context.Database.OpenConnection();
+                command.ExecuteNonQuery();
+                _context.Database.CloseConnection();
+            }
         }
 
-        public void UpdateProductsRecord(Product product)
+        public void UpdateProduct(Product product)
         {
-            _context.products.Update(product);
-            _context.SaveChanges();
+            using (var command = _context.Database.GetDbConnection().CreateCommand())
+            {
+                command.CommandText = "update_product";
+                command.CommandType = CommandType.StoredProcedure;
+
+                command.Parameters.Add(new NpgsqlParameter("p_productid", product.productid));
+                command.Parameters.Add(new NpgsqlParameter("p_categoryid", product.categoryid));
+                command.Parameters.Add(new NpgsqlParameter("p_productname", product.productname));
+                command.Parameters.Add(new NpgsqlParameter("p_description", product.description));
+                command.Parameters.Add(new NpgsqlParameter("p_size", product.size));
+                command.Parameters.Add(new NpgsqlParameter("p_price", product.price));
+                command.Parameters.Add(new NpgsqlParameter("p_unit", product.unit));
+                command.Parameters.Add(new NpgsqlParameter("p_image", product.image));
+                command.Parameters.Add(new NpgsqlParameter("p_imagedetail", product.imagedetail));
+
+                _context.Database.OpenConnection();
+                command.ExecuteNonQuery();
+                _context.Database.CloseConnection();
+            }
         }
 
-        public void DeleteProductsRecord(int id)
+        public void DeleteProduct(string productid)
         {
-            var entity = _context.products.FirstOrDefault(t => t.id == id);
-            _context.products.Remove(entity);
-            _context.SaveChanges();
+            using (var command = _context.Database.GetDbConnection().CreateCommand())
+            {
+                command.CommandText = "delete_product";
+                command.CommandType = CommandType.StoredProcedure;
+
+                command.Parameters.Add(new NpgsqlParameter("p_productid", productid));
+
+                _context.Database.OpenConnection();
+                command.ExecuteNonQuery();
+                _context.Database.CloseConnection();
+            }
         }
 
-        public Product GetProductsSingleRecord(int id)
+        public Product GetProductById(string productid)
         {
-            return _context.products.FirstOrDefault(t => t.id == id);
+            using (var command = _context.Database.GetDbConnection().CreateCommand())
+            {
+                command.CommandText = "SELECT * FROM get_product_by_id(@p_productid)";
+                command.CommandType = CommandType.Text;
+
+                command.Parameters.Add(new NpgsqlParameter("p_productid", productid));
+
+                _context.Database.OpenConnection();
+                using (var reader = command.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        return new Product
+                        {
+                            productid = reader["productid"].ToString(),
+                            categoryid = reader["categoryid"].ToString(),
+                            productname = reader["productname"].ToString(),
+                            description = reader["description"].ToString(),
+                            size = reader["size"].ToString(),
+                            price = int.Parse(reader["p"].ToString()),
+                            unit = reader["unit"].ToString(),
+                            image = reader["image"] as byte[],
+                            imagedetail = reader["imagedetail"] as byte[]
+                        };
+                    }
+                }
+                _context.Database.CloseConnection();
+            }
+            return null;
         }
 
-        public List<Product> GetProductsRecords()
+        public List<Product> GetProductsByCategoryId(string categoryid)
         {
-            return _context.products.ToList();
+            var products = new List<Product>();
+            using (var command = _context.Database.GetDbConnection().CreateCommand())
+            {
+                command.CommandText = "SELECT * FROM get_products_by_category_id(@p_categoryid)";
+                command.CommandType = CommandType.Text;
+
+                command.Parameters.Add(new NpgsqlParameter("p_categoryid",categoryid));
+
+                _context.Database.OpenConnection();
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        products.Add(new Product
+                        {
+                            productid = reader["productid"].ToString(),
+                            categoryid = reader["categoryid"].ToString(),
+                            productname = reader["productname"].ToString(),
+                            description = reader["description"].ToString(),
+                            size = reader["size"].ToString(),
+                            price = int.Parse(reader["price"].ToString()),
+                            unit = reader["unit"].ToString(),
+                            image = reader["image"] as byte[],
+                            imagedetail = reader["imagedetail"] as byte[]
+                        });
+                    }
+                }
+                _context.Database.CloseConnection();
+            }
+            return products;
+        }
+
+        public List<Product> GetAllProducts()
+        {
+            var products = new List<Product>();
+            using (var command = _context.Database.GetDbConnection().CreateCommand())
+            {
+                command.CommandText = "SELECT * FROM get_all_products()";
+                command.CommandType = CommandType.Text;
+
+                _context.Database.OpenConnection();
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        products.Add(new Product
+                        {
+                            productid = reader["productid"].ToString(),
+                            categoryid = reader["categoryid"].ToString(),
+                            productname = reader["productname"].ToString(),
+                            description = reader["description"].ToString(),
+                            size = reader["size"].ToString(),
+                            price = int.Parse(reader["price"].ToString()),
+                            unit = reader["unit"].ToString(),
+                            image = reader["image"] as byte[],
+                            imagedetail = reader["imagedetail"] as byte[]
+                        });
+                    }
+                }
+                _context.Database.CloseConnection();
+            }
+            return products;
         }
 
         // function for coffee
