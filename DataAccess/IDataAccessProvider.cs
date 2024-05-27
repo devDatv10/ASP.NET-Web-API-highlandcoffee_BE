@@ -21,8 +21,8 @@ namespace highlandcoffeeapp_BE.DataAccess
         // function for customer
         void AddCustomer(Customer customer);
         void UpdateCustomer(Customer customer);
-        void DeleteCustomer(string id);
-        Customer GetCustomerById(string id);
+        void DeleteCustomer(string customerid);
+        Customer GetCustomerById(string customerid);
         List<Customer> GetAllCustomers();
 
 
@@ -114,11 +114,11 @@ namespace highlandcoffeeapp_BE.DataAccess
         List<BestSale> GetBestSalesRecords();
 
         // function for favorite
-        void AddFavoritesRecord(Favorite favorite);
-        void UpdateFavoritesRecord(Favorite favorite);
-        void DeleteFavoritesRecord(int id);
-        Favorite GetFavoritesSingleRecord(int id);
-        List<Favorite> GetFavoritesRecords();
+        void AddFavorite(Favorite favorite);
+        void DeleteFavorite(string favoriteId);
+        List<Favorite> GetAllFavorites();
+        Favorite GetFavoriteById(string favoriteId);
+        List<Favorite> GetFavoritesByCustomerId(string customerId);
 
         // function for order
         void AddOrdersRecord(Order order);

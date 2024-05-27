@@ -34,7 +34,7 @@ namespace highlandcoffeeapp_BE.Models
 
     public class Customer
     {
-        public string id { get; set; }
+        public string customerid { get; set; }
         public string name { get; set; }
         public string phonenumber { get; set; }
         public string address { get; set; }
@@ -292,27 +292,16 @@ namespace highlandcoffeeapp_BE.Models
     // Models for Favorite
     public class Favorite
     {
-        public int id { get; set; }
-
-        public int customer_id { get; set; }
-
-        public string category_name { get; set; }
-
-        public int product_id { get; set; }
-
-        public string product_name { get; set; }
-
+        public string favoriteid { get; set; }
+        public string customerid { get; set; }
+        public string productid { get; set; }
+        public string productname { get; set; }
         public string description { get; set; }
-
-        public int size_s_price { get; set; }
-
-        public int size_m_price { get; set; }
-
-        public int size_l_price { get; set; }
+        public string size { get; set; }
+        public int price { get; set; }
         public string unit { get; set; }
-
         public byte[] image { get; set; }
-
-        public byte[] image_detail { get; set; }
+        public byte[] imagedetail { get; set; }
     }
+
 }
