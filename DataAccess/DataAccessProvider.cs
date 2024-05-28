@@ -125,34 +125,131 @@ namespace highlandcoffeeapp_BE.DataAccess
         }
 
         // function for admin
-        public void AddAdminsRecord(Admin admin)
+        // Function for adding admin
+        public void AddAdmin(Admin admin)
         {
-            _context.admins.Add(admin);
-            _context.SaveChanges();
+            try
+            {
+                using (var command = _context.Database.GetDbConnection().CreateCommand())
+                {
+                    // Sử dụng SELECT để gọi hàm add_admin
+                    command.CommandText = @"
+                SELECT add_admin(@p_name, @p_phonenumber, @p_shift, @p_password)";
+                    command.CommandType = CommandType.Text;
+
+                    command.Parameters.Add(new NpgsqlParameter("p_name", admin.name));
+                    command.Parameters.Add(new NpgsqlParameter("p_phonenumber", admin.phonenumber));
+                    command.Parameters.Add(new NpgsqlParameter("p_shift", admin.shift));
+                    command.Parameters.Add(new NpgsqlParameter("p_password", admin.password));
+
+                    _context.Database.OpenConnection();
+                    command.ExecuteNonQuery();
+                    _context.Database.CloseConnection();
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log lỗi để biết nguyên nhân chính xác
+                _logger.LogError(ex, "Error adding admin");
+                throw;
+            }
         }
 
-        public void UpdateAdminsRecord(Admin admin)
+        // Function for updating admin
+        public void UpdateAdmin(Admin admin)
         {
-            _context.admins.Update(admin);
-            _context.SaveChanges();
+            using (var command = _context.Database.GetDbConnection().CreateCommand())
+            {
+                command.CommandText = "update_admin";
+                command.CommandType = CommandType.StoredProcedure;
+
+                command.Parameters.Add(new NpgsqlParameter("p_adminid", admin.adminid));
+                command.Parameters.Add(new NpgsqlParameter("p_name", admin.name));
+                command.Parameters.Add(new NpgsqlParameter("p_phonenumber", admin.phonenumber));
+                command.Parameters.Add(new NpgsqlParameter("p_shift", admin.shift));
+                command.Parameters.Add(new NpgsqlParameter("p_password", admin.password));
+
+                _context.Database.OpenConnection();
+                command.ExecuteNonQuery();
+                _context.Database.CloseConnection();
+            }
         }
 
-        public void DeleteAdminsRecord(string id)
+        // Function for deleting admin
+        public void DeleteAdmin(string adminid)
         {
-            var entity = _context.admins.FirstOrDefault(t => t.id == id);
-            _context.admins.Remove(entity);
-            _context.SaveChanges();
+            using (var command = _context.Database.GetDbConnection().CreateCommand())
+            {
+                command.CommandText = "delete_admin";
+                command.CommandType = CommandType.StoredProcedure;
+
+                command.Parameters.Add(new NpgsqlParameter("p_adminid", adminid));
+
+                _context.Database.OpenConnection();
+                command.ExecuteNonQuery();
+                _context.Database.CloseConnection();
+            }
         }
 
-        public Admin GetAdminsSingleRecord(string id)
+        // Function for getting admin by id
+        public Admin GetAdminById(string adminid)
         {
-            return _context.admins.FirstOrDefault(t => t.id == id);
+            using (var command = _context.Database.GetDbConnection().CreateCommand())
+            {
+                command.CommandText = "SELECT * FROM get_admin_by_id(@p_adminid)";
+                command.CommandType = CommandType.Text;
+
+                command.Parameters.Add(new NpgsqlParameter("p_adminid", adminid));
+
+                _context.Database.OpenConnection();
+                using (var reader = command.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        return new Admin
+                        {
+                            adminid = reader["adminid"].ToString(),
+                            name = reader["name"].ToString(),
+                            phonenumber = reader["phonenumber"].ToString(),
+                            shift = int.Parse(reader["shift"].ToString()),
+                            password = reader["password"].ToString()
+                        };
+                    }
+                }
+                _context.Database.CloseConnection();
+            }
+            return null;
         }
 
-        public List<Admin> GetAdminsRecords()
+        // Function for getting all admins
+        public List<Admin> GetAllAdmins()
         {
-            return _context.admins.ToList();
+            var admins = new List<Admin>();
+            using (var command = _context.Database.GetDbConnection().CreateCommand())
+            {
+                command.CommandText = "SELECT * FROM get_all_admins()";
+                command.CommandType = CommandType.Text;
+
+                _context.Database.OpenConnection();
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        admins.Add(new Admin
+                        {
+                            adminid = reader["adminid"].ToString(),
+                            name = reader["name"].ToString(),
+                            phonenumber = reader["phonenumber"].ToString(),
+                            shift = int.Parse(reader["shift"].ToString()),
+                            password = reader["password"].ToString()
+                        });
+                    }
+                }
+                _context.Database.CloseConnection();
+            }
+            return admins;
         }
+
 
         // Function for adding customer
         public void AddCustomer(Customer customer)
@@ -564,8 +661,9 @@ namespace highlandcoffeeapp_BE.DataAccess
         {
             using (var command = _context.Database.GetDbConnection().CreateCommand())
             {
-                command.CommandText = "delete_product";
-                command.CommandType = CommandType.StoredProcedure;
+                command.CommandText = @"
+                SELECT delete_product(@p_productid)";
+                command.CommandType = CommandType.Text;
 
                 command.Parameters.Add(new NpgsqlParameter("p_productid", productid));
 
@@ -596,7 +694,7 @@ namespace highlandcoffeeapp_BE.DataAccess
                             productname = reader["productname"].ToString(),
                             description = reader["description"].ToString(),
                             size = reader["size"].ToString(),
-                            price = int.Parse(reader["p"].ToString()),
+                            price = int.Parse(reader["price"].ToString()),
                             unit = reader["unit"].ToString(),
                             image = reader["image"] as byte[],
                             imagedetail = reader["imagedetail"] as byte[]

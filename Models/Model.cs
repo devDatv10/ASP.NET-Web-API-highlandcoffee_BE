@@ -14,8 +14,10 @@ namespace highlandcoffeeapp_BE.Models
     // Models for Admin
     public class Admin
     {
-        public string id { get; set; }
-        public string email { get; set; }
+        public string adminid { get; set; }
+        public string name { get; set; }
+        public string phonenumber { get; set; }
+        public int shift { get; set; }
         public string password { get; set; }
     }
 

@@ -17,14 +17,14 @@ namespace highlandcoffeeapp_BE.Controllers
         [HttpGet]
         public IEnumerable<Admin> Get()
         {
-            return _dataAccessProvider.GetAdminsRecords();
+            return _dataAccessProvider.GetAllAdmins();
         }
 
         [HttpPost]
         public IActionResult Create([FromBody] Admin admin)
         {if (ModelState.IsValid)
             {
-                _dataAccessProvider.AddAdminsRecord(admin);
+                _dataAccessProvider.AddAdmin(admin);
                 return Ok();
             }
             return BadRequest();
@@ -33,7 +33,7 @@ namespace highlandcoffeeapp_BE.Controllers
         [HttpGet("{id}")]
         public Admin Details(string id)
         {
-            return _dataAccessProvider.GetAdminsSingleRecord(id);
+            return _dataAccessProvider.GetAdminById(id);
         }
 
         [HttpPut]
@@ -41,7 +41,7 @@ namespace highlandcoffeeapp_BE.Controllers
         {
             if (ModelState.IsValid)
             {
-                _dataAccessProvider.UpdateAdminsRecord(admin);
+                _dataAccessProvider.UpdateAdmin(admin);
                 return Ok();
             }
             return BadRequest();
@@ -50,12 +50,12 @@ namespace highlandcoffeeapp_BE.Controllers
         [HttpDelete("{id}")]
         public IActionResult DeleteConfirmed(string id)
         {
-            var data = _dataAccessProvider.GetAdminsSingleRecord(id);
+            var data = _dataAccessProvider.GetAdminById(id);
             if (data == null)
             {
                 return NotFound();
             }
-            _dataAccessProvider.DeleteAdminsRecord(id);
+            _dataAccessProvider.DeleteAdmin(id);
             return Ok();
         }
     }

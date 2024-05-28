@@ -12,11 +12,11 @@ namespace highlandcoffeeapp_BE.DataAccess
         List<Account> GetAllAccounts();
 
         // function for admin
-        void AddAdminsRecord(Admin admin);
-        void UpdateAdminsRecord(Admin admin);
-        void DeleteAdminsRecord(string id);
-        Admin GetAdminsSingleRecord(string id);
-        List<Admin> GetAdminsRecords();
+        void AddAdmin(Admin admin);
+        void UpdateAdmin(Admin admin);
+        void DeleteAdmin(string adminid);
+        Admin GetAdminById(string adminid);
+        List<Admin> GetAllAdmins();
 
         // function for customer
         void AddCustomer(Customer customer);
