@@ -84,209 +84,23 @@ namespace highlandcoffeeapp_BE.Models
     // Models for Cart
     public class Cart
     {
-        public int id { get; set; }
-
-        public int customer_id { get; set; }
-
-        public string category_name { get; set; }
-
-        public int product_id { get; set; }
-
-        public int quantity { get; set; }
-
-        public byte[] product_image { get; set; }
-
-        public string product_name { get; set; }
-
-        public int selected_price { get; set; }
-        
-        public string selected_size { get; set; }
+        public string cartid { get; set; }
+        public string customerid { get; set; }
     }
 
     // Models for CartDetail
     public class CartDetail
     {
-        public int id { get; set; }
-    }
 
-    // Models for Other
-    public class Other
-    {
-        public int id { get; set; }
-
-        public string category_name { get; set; }
-
-        public string product_name { get; set; }
-
-        public string description { get; set; }
-
-        public int size_s_price { get; set; }
-
-        public int size_m_price { get; set; }
-        public int size_l_price { get; set; }
-        public string unit { get; set; }
-
+        public string cartdetailid { get; set; }
+        public string cartid { get; set; }
+        public string customerid { get; set; }
+        public string productid { get; set; }
+        public string productname { get; set; }
+        public string size { get; set; }
+        public int quantity { get; set; }
+        public int totalprice { get; set; }
         public byte[] image { get; set; }
-
-        public byte[] image_detail { get; set; }
-    }
-
-    // Models for Coffee
-    public class Coffee
-    {
-        public int id { get; set; }
-
-        public string category_name { get; set; }
-
-        public string product_name { get; set; }
-
-        public string description { get; set; }
-
-        public int size_s_price { get; set; }
-
-        public int size_m_price { get; set; }
-        public int size_l_price { get; set; }
-        
-        public string unit { get; set; }
-
-        public byte[] image { get; set; }
-
-        public byte[] image_detail { get; set; }
-    }
-
-    // Models for Tea
-    public class Tea
-    {
-        public int id { get; set; }
-
-        public string category_name { get; set; }
-
-        public string product_name { get; set; }
-
-        public string description { get; set; }
-
-        public int size_s_price { get; set; }
-
-        public int size_m_price { get; set; }
-        public int size_l_price { get; set; }
-        
-        public string unit { get; set; }
-
-        public byte[] image { get; set; }
-
-        public byte[] image_detail { get; set; }
-    }
-
-    // Models for Bread
-    public class Bread
-    {
-        public int id { get; set; }
-
-        public string category_name { get; set; }
-
-        public string product_name { get; set; }
-
-        public string description { get; set; }
-
-        public int size_s_price { get; set; }
-
-        public int size_m_price { get; set; }
-        public int size_l_price { get; set; }
-        
-        public string unit { get; set; }
-
-        public byte[] image { get; set; }
-
-        public byte[] image_detail { get; set; }
-    }
-
-    // Models for Food
-    public class Food
-    {
-        public int id { get; set; }
-
-        public string category_name { get; set; }
-
-        public string product_name { get; set; }
-
-        public string description { get; set; }
-
-        public int size_s_price { get; set; }
-
-        public int size_m_price { get; set; }
-        public int size_l_price { get; set; }
-        public string unit { get; set; }
-
-        public byte[] image { get; set; }
-
-        public byte[] image_detail { get; set; }
-    }
-
-    // Models for Freeze
-    public class Freeze
-    {
-        public int id { get; set; }
-
-        public string category_name { get; set; }
-
-        public string product_name { get; set; }
-
-        public string description { get; set; }
-
-        public int size_s_price { get; set; }
-
-        public int size_m_price { get; set; }
-        public int size_l_price { get; set; }
-        
-        public string unit { get; set; }
-
-        public byte[] image { get; set; }
-
-        public byte[] image_detail { get; set; }
-    }
-
-    // Models for Popular
-    public class Popular
-    {
-        public int id { get; set; }
-
-        public string category_name { get; set; }
-        public string product_name { get; set; }
-
-        public string description { get; set; }
-
-        public int size_s_price { get; set; }
-
-        public int size_m_price { get; set; }
-        public int size_l_price { get; set; }
-        
-        public string unit { get; set; }
-
-        public byte[] image { get; set; }
-
-        public byte[] image_detail { get; set; }
-    }
-
-    // Model for Best Sale
-        public class BestSale
-    {
-        public int id { get; set; }
-
-        public string category_name { get; set; }
-        public string product_name { get; set; }
-
-        public string description { get; set; }
-
-        public int size_s_price { get; set; }
-
-        public int size_m_price { get; set; }
-        public int size_l_price { get; set; }
-        
-        public string unit { get; set; }
-
-        public byte[] image { get; set; }
-
-        public byte[] image_detail { get; set; }
     }
 
     // Models for Favorite

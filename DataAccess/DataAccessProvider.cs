@@ -11,7 +11,7 @@ namespace highlandcoffeeapp_BE.DataAccess
         private readonly PostgreSqlContext _context;
         private readonly ILogger<DataAccessProvider> _logger; // Khai báo ILogger
 
-        public DataAccessProvider(PostgreSqlContext context,  ILogger<DataAccessProvider> logger)
+        public DataAccessProvider(PostgreSqlContext context, ILogger<DataAccessProvider> logger)
         {
             _context = context;
             _logger = logger; // Khởi tạo ILogger
@@ -187,110 +187,133 @@ namespace highlandcoffeeapp_BE.DataAccess
 
 
         public void UpdateCustomer(Customer customer)
-    {
-        using (var command = _context.Database.GetDbConnection().CreateCommand())
-        {
-            command.CommandText = "update_customer";
-            command.CommandType = CommandType.StoredProcedure;
-
-            command.Parameters.Add(new NpgsqlParameter("p_customerid", customer.customerid));
-            command.Parameters.Add(new NpgsqlParameter("p_name", customer.name));
-            command.Parameters.Add(new NpgsqlParameter("p_phonenumber", customer.phonenumber));
-            command.Parameters.Add(new NpgsqlParameter("p_address", customer.address));
-            command.Parameters.Add(new NpgsqlParameter("p_point", customer.point));
-            command.Parameters.Add(new NpgsqlParameter("p_password", customer.password));
-
-            _context.Database.OpenConnection();
-            command.ExecuteNonQuery();
-            _context.Database.CloseConnection();
-        }
-    }
-
-    public void DeleteCustomer(string customerid)
-    {
-        using (var command = _context.Database.GetDbConnection().CreateCommand())
-        {
-            command.CommandText = "delete_customer";
-            command.CommandType = CommandType.StoredProcedure;
-
-            command.Parameters.Add(new NpgsqlParameter("p_customerid", customerid));
-
-            _context.Database.OpenConnection();
-            command.ExecuteNonQuery();
-            _context.Database.CloseConnection();
-        }
-    }
-
-    public Customer GetCustomerById(string customerid)
-    {
-        using (var command = _context.Database.GetDbConnection().CreateCommand())
-        {
-            command.CommandText = "SELECT * FROM get_customer_by_id(@p_customerid)";
-            command.CommandType = CommandType.Text;
-
-            command.Parameters.Add(new NpgsqlParameter("p_customerid", customerid));
-
-            _context.Database.OpenConnection();
-            using (var reader = command.ExecuteReader())
-            {
-                if (reader.Read())
-                {
-                    return new Customer
-                    {
-                        customerid = reader["customerid"].ToString(),
-                        name = reader["name"].ToString(),
-                        phonenumber = reader["phonenumber"].ToString(),
-                        address = reader["address"].ToString(),
-                        point = int.Parse(reader["point"].ToString()),
-                        password = reader["password"].ToString()
-                    };
-                }
-            }
-            _context.Database.CloseConnection();
-        }
-        return null;
-    }
-
-    public List<Customer> GetAllCustomers()
-    {
-        var customers = new List<Customer>();
-        using (var command = _context.Database.GetDbConnection().CreateCommand())
-        {
-            command.CommandText = "SELECT * FROM get_all_customers()";
-            command.CommandType = CommandType.Text;
-
-            _context.Database.OpenConnection();
-            using (var reader = command.ExecuteReader())
-            {
-                while (reader.Read())
-                {
-                    customers.Add(new Customer
-                    {
-                        customerid = reader["customerid"].ToString(),
-                        name = reader["name"].ToString(),
-                        phonenumber = reader["phonenumber"].ToString(),
-                        address = reader["address"].ToString(),
-                        point = int.Parse(reader["point"].ToString()),
-                        password = reader["password"].ToString()
-                    });
-                }
-            }
-            _context.Database.CloseConnection();
-        }
-        return customers;
-    }
-
-        // function for category
-        public void AddCategory(Category category)
-    {
-        try
         {
             using (var command = _context.Database.GetDbConnection().CreateCommand())
             {
-                command.CommandText = @"
-                    SELECT add_category(@p_categoryname, @p_description)";
+                command.CommandText = "update_customer";
+                command.CommandType = CommandType.StoredProcedure;
+
+                command.Parameters.Add(new NpgsqlParameter("p_customerid", customer.customerid));
+                command.Parameters.Add(new NpgsqlParameter("p_name", customer.name));
+                command.Parameters.Add(new NpgsqlParameter("p_phonenumber", customer.phonenumber));
+                command.Parameters.Add(new NpgsqlParameter("p_address", customer.address));
+                command.Parameters.Add(new NpgsqlParameter("p_point", customer.point));
+                command.Parameters.Add(new NpgsqlParameter("p_password", customer.password));
+
+                _context.Database.OpenConnection();
+                command.ExecuteNonQuery();
+                _context.Database.CloseConnection();
+            }
+        }
+
+        public void DeleteCustomer(string customerid)
+        {
+            using (var command = _context.Database.GetDbConnection().CreateCommand())
+            {
+                command.CommandText = "delete_customer";
+                command.CommandType = CommandType.StoredProcedure;
+
+                command.Parameters.Add(new NpgsqlParameter("p_customerid", customerid));
+
+                _context.Database.OpenConnection();
+                command.ExecuteNonQuery();
+                _context.Database.CloseConnection();
+            }
+        }
+
+        public Customer GetCustomerById(string customerid)
+        {
+            using (var command = _context.Database.GetDbConnection().CreateCommand())
+            {
+                command.CommandText = "SELECT * FROM get_customer_by_id(@p_customerid)";
                 command.CommandType = CommandType.Text;
 
+                command.Parameters.Add(new NpgsqlParameter("p_customerid", customerid));
+
+                _context.Database.OpenConnection();
+                using (var reader = command.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        return new Customer
+                        {
+                            customerid = reader["customerid"].ToString(),
+                            name = reader["name"].ToString(),
+                            phonenumber = reader["phonenumber"].ToString(),
+                            address = reader["address"].ToString(),
+                            point = int.Parse(reader["point"].ToString()),
+                            password = reader["password"].ToString()
+                        };
+                    }
+                }
+                _context.Database.CloseConnection();
+            }
+            return null;
+        }
+
+        public List<Customer> GetAllCustomers()
+        {
+            var customers = new List<Customer>();
+            using (var command = _context.Database.GetDbConnection().CreateCommand())
+            {
+                command.CommandText = "SELECT * FROM get_all_customers()";
+                command.CommandType = CommandType.Text;
+
+                _context.Database.OpenConnection();
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        customers.Add(new Customer
+                        {
+                            customerid = reader["customerid"].ToString(),
+                            name = reader["name"].ToString(),
+                            phonenumber = reader["phonenumber"].ToString(),
+                            address = reader["address"].ToString(),
+                            point = int.Parse(reader["point"].ToString()),
+                            password = reader["password"].ToString()
+                        });
+                    }
+                }
+                _context.Database.CloseConnection();
+            }
+            return customers;
+        }
+
+        // function for category
+        public void AddCategory(Category category)
+        {
+            try
+            {
+                using (var command = _context.Database.GetDbConnection().CreateCommand())
+                {
+                    command.CommandText = @"
+                    SELECT add_category(@p_categoryname, @p_description)";
+                    command.CommandType = CommandType.Text;
+
+                    command.Parameters.Add(new NpgsqlParameter("p_categoryname", category.categoryname));
+                    command.Parameters.Add(new NpgsqlParameter("p_description", category.description));
+
+                    _context.Database.OpenConnection();
+                    command.ExecuteNonQuery();
+                    _context.Database.CloseConnection();
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error adding category");
+                throw;
+            }
+        }
+
+        public void UpdateCategory(Category category)
+        {
+            using (var command = _context.Database.GetDbConnection().CreateCommand())
+            {
+                command.CommandText = "update_category";
+                command.CommandType = CommandType.StoredProcedure;
+
+                command.Parameters.Add(new NpgsqlParameter("p_categoryid", category.categoryid));
                 command.Parameters.Add(new NpgsqlParameter("p_categoryname", category.categoryname));
                 command.Parameters.Add(new NpgsqlParameter("p_description", category.description));
 
@@ -299,97 +322,74 @@ namespace highlandcoffeeapp_BE.DataAccess
                 _context.Database.CloseConnection();
             }
         }
-        catch (Exception ex)
+
+        public void DeleteCategory(string categoryid)
         {
-            _logger.LogError(ex, "Error adding category");
-            throw;
-        }
-    }
-
-    public void UpdateCategory(Category category)
-    {
-        using (var command = _context.Database.GetDbConnection().CreateCommand())
-        {
-            command.CommandText = "update_category";
-            command.CommandType = CommandType.StoredProcedure;
-
-            command.Parameters.Add(new NpgsqlParameter("p_categoryid", category.categoryid));
-            command.Parameters.Add(new NpgsqlParameter("p_categoryname", category.categoryname));
-            command.Parameters.Add(new NpgsqlParameter("p_description", category.description));
-
-            _context.Database.OpenConnection();
-            command.ExecuteNonQuery();
-            _context.Database.CloseConnection();
-        }
-    }
-
-    public void DeleteCategory(string categoryid)
-    {
-        using (var command = _context.Database.GetDbConnection().CreateCommand())
-        {
-            command.CommandText = "delete_category";
-            command.CommandType = CommandType.StoredProcedure;
-
-            command.Parameters.Add(new NpgsqlParameter("p_categoryid", categoryid));
-
-            _context.Database.OpenConnection();
-            command.ExecuteNonQuery();
-            _context.Database.CloseConnection();
-        }
-    }
-
-    public Category GetCategoryById(string categoryid)
-    {
-        using (var command = _context.Database.GetDbConnection().CreateCommand())
-        {
-            command.CommandText = "SELECT * FROM get_category_by_id(@p_categoryid)";
-            command.CommandType = CommandType.Text;
-
-            command.Parameters.Add(new NpgsqlParameter("p_categoryid", categoryid));
-
-            _context.Database.OpenConnection();
-            using (var reader = command.ExecuteReader())
+            using (var command = _context.Database.GetDbConnection().CreateCommand())
             {
-                if (reader.Read())
-                {
-                    return new Category
-                    {
-                        categoryid = reader["categoryid"].ToString(),
-                        categoryname = reader["categoryname"].ToString(),
-                        description = reader["description"].ToString()
-                    };
-                }
-            }
-            _context.Database.CloseConnection();
-        }
-        return null;
-    }
+                command.CommandText = "delete_category";
+                command.CommandType = CommandType.StoredProcedure;
 
-    public List<Category> GetAllCategories()
-    {
-        var categories = new List<Category>();
-        using (var command = _context.Database.GetDbConnection().CreateCommand())
+                command.Parameters.Add(new NpgsqlParameter("p_categoryid", categoryid));
+
+                _context.Database.OpenConnection();
+                command.ExecuteNonQuery();
+                _context.Database.CloseConnection();
+            }
+        }
+
+        public Category GetCategoryById(string categoryid)
         {
-            command.CommandText = "SELECT * FROM get_all_categories()";
-            command.CommandType = CommandType.Text;
-
-            _context.Database.OpenConnection();
-            using (var reader = command.ExecuteReader())
+            using (var command = _context.Database.GetDbConnection().CreateCommand())
             {
-                while (reader.Read())
+                command.CommandText = "SELECT * FROM get_category_by_id(@p_categoryid)";
+                command.CommandType = CommandType.Text;
+
+                command.Parameters.Add(new NpgsqlParameter("p_categoryid", categoryid));
+
+                _context.Database.OpenConnection();
+                using (var reader = command.ExecuteReader())
                 {
-                    categories.Add(new Category
+                    if (reader.Read())
                     {
-                        categoryid = reader["categoryid"].ToString(),
-                        categoryname = reader["categoryname"].ToString(),
-                        description = reader["description"].ToString()
-                    });
+                        return new Category
+                        {
+                            categoryid = reader["categoryid"].ToString(),
+                            categoryname = reader["categoryname"].ToString(),
+                            description = reader["description"].ToString()
+                        };
+                    }
                 }
+                _context.Database.CloseConnection();
             }
-            _context.Database.CloseConnection();
+            return null;
         }
-        return categories;
-    }
+
+        public List<Category> GetAllCategories()
+        {
+            var categories = new List<Category>();
+            using (var command = _context.Database.GetDbConnection().CreateCommand())
+            {
+                command.CommandText = "SELECT * FROM get_all_categories()";
+                command.CommandType = CommandType.Text;
+
+                _context.Database.OpenConnection();
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        categories.Add(new Category
+                        {
+                            categoryid = reader["categoryid"].ToString(),
+                            categoryname = reader["categoryname"].ToString(),
+                            description = reader["description"].ToString()
+                        });
+                    }
+                }
+                _context.Database.CloseConnection();
+            }
+            return categories;
+        }
 
 
         // function for staff
@@ -454,63 +454,63 @@ namespace highlandcoffeeapp_BE.DataAccess
         }
 
         public Staff GetStaffById(string id)
-{
-    using (var command = _context.Database.GetDbConnection().CreateCommand())
-    {
-        command.CommandText = "SELECT * FROM get_staff_by_id(@p_staffid)";
-        command.CommandType = CommandType.Text;
-
-        command.Parameters.Add(new NpgsqlParameter("p_staffid", id));
-
-        _context.Database.OpenConnection();
-        using (var reader = command.ExecuteReader())
         {
-            if (reader.Read())
+            using (var command = _context.Database.GetDbConnection().CreateCommand())
             {
-                return new Staff
+                command.CommandText = "SELECT * FROM get_staff_by_id(@p_staffid)";
+                command.CommandType = CommandType.Text;
+
+                command.Parameters.Add(new NpgsqlParameter("p_staffid", id));
+
+                _context.Database.OpenConnection();
+                using (var reader = command.ExecuteReader())
                 {
-                    id = reader["id"].ToString(),
-                    name = reader["name"].ToString(),
-                    phonenumber = reader["phonenumber"].ToString(),
-                    startday = DateTime.Parse(reader["startday"].ToString()),
-                    salary = int.Parse(reader["salary"].ToString()),
-                    password = reader["password"].ToString()
-                };
+                    if (reader.Read())
+                    {
+                        return new Staff
+                        {
+                            id = reader["id"].ToString(),
+                            name = reader["name"].ToString(),
+                            phonenumber = reader["phonenumber"].ToString(),
+                            startday = DateTime.Parse(reader["startday"].ToString()),
+                            salary = int.Parse(reader["salary"].ToString()),
+                            password = reader["password"].ToString()
+                        };
+                    }
+                }
+                _context.Database.CloseConnection();
             }
+            return null;
         }
-        _context.Database.CloseConnection();
-    }
-    return null;
-}
 
-public List<Staff> GetAllStaffs()
-{
-    var staffs = new List<Staff>();
-    using (var command = _context.Database.GetDbConnection().CreateCommand())
-    {
-        command.CommandText = "SELECT * FROM get_all_staffs()";
-        command.CommandType = CommandType.Text;
-
-        _context.Database.OpenConnection();
-        using (var reader = command.ExecuteReader())
+        public List<Staff> GetAllStaffs()
         {
-            while (reader.Read())
+            var staffs = new List<Staff>();
+            using (var command = _context.Database.GetDbConnection().CreateCommand())
             {
-                staffs.Add(new Staff
+                command.CommandText = "SELECT * FROM get_all_staffs()";
+                command.CommandType = CommandType.Text;
+
+                _context.Database.OpenConnection();
+                using (var reader = command.ExecuteReader())
                 {
-                    id = reader["id"].ToString(),
-                    name = reader["name"].ToString(),
-                    phonenumber = reader["phonenumber"].ToString(),
-                    startday = DateTime.Parse(reader["startday"].ToString()),
-                    salary = int.Parse(reader["salary"].ToString()),
-                    password = reader["password"].ToString()
-                });
+                    while (reader.Read())
+                    {
+                        staffs.Add(new Staff
+                        {
+                            id = reader["id"].ToString(),
+                            name = reader["name"].ToString(),
+                            phonenumber = reader["phonenumber"].ToString(),
+                            startday = DateTime.Parse(reader["startday"].ToString()),
+                            salary = int.Parse(reader["salary"].ToString()),
+                            password = reader["password"].ToString()
+                        });
+                    }
+                }
+                _context.Database.CloseConnection();
             }
+            return staffs;
         }
-        _context.Database.CloseConnection();
-    }
-    return staffs;
-}
 
 
         // function for product
@@ -616,7 +616,7 @@ public List<Staff> GetAllStaffs()
                 command.CommandText = "SELECT * FROM get_products_by_category_id(@p_categoryid)";
                 command.CommandType = CommandType.Text;
 
-                command.Parameters.Add(new NpgsqlParameter("p_categoryid",categoryid));
+                command.Parameters.Add(new NpgsqlParameter("p_categoryid", categoryid));
 
                 _context.Database.OpenConnection();
                 using (var reader = command.ExecuteReader())
@@ -674,418 +674,393 @@ public List<Staff> GetAllStaffs()
             return products;
         }
 
-        // function for coffee
-        public void AddCoffeesRecord(Coffee coffee)
-        {
-            _context.coffees.Add(coffee);
-            _context.SaveChanges();
-        }
-
-        public void UpdateCoffeesRecord(Coffee coffee)
-        {
-            _context.coffees.Update(coffee);
-            _context.SaveChanges();
-        }
-
-        public void DeleteCoffeesRecord(int id)
-        {
-            var entity = _context.coffees.FirstOrDefault(t => t.id == id);
-            _context.coffees.Remove(entity);
-            _context.SaveChanges();
-        }
-
-        public Coffee GetCoffeesSingleRecord(int id)
-        {
-            return _context.coffees.FirstOrDefault(t => t.id == id);
-        }
-
-        public List<Coffee> GetCoffeesRecords()
-        {
-            return _context.coffees.ToList();
-        }
-
-        // function for tea
-        public void AddTeasRecord(Tea tea)
-        {
-            _context.teas.Add(tea);
-            _context.SaveChanges();
-        }
-
-        public void UpdateTeasRecord(Tea tea)
-        {
-            _context.teas.Update(tea);
-            _context.SaveChanges();
-        }
-        
-        public void DeleteTeasRecord(int id)
-        {
-            var entity = _context.teas.FirstOrDefault(t => t.id == id);
-            _context.teas.Remove(entity);
-            _context.SaveChanges();
-        }
-
-        public Tea GetTeasSingleRecord(int id)
-        {
-            return _context.teas.FirstOrDefault(t => t.id == id);
-        }
-
-        public List<Tea> GetTeasRecords()
-        {
-            return _context.teas.ToList();
-        }
-
-        // function for freeze
-        public void AddFreezesRecord(Freeze freeze)
-        {
-            _context.freezes.Add(freeze);
-            _context.SaveChanges();
-        }
-
-        public void UpdateFreezesRecord(Freeze freeze)
-        {
-            _context.freezes.Update(freeze);
-            _context.SaveChanges();
-        }
-
-        public void DeleteFreezesRecord(int id)
-        {
-            var entity = _context.freezes.FirstOrDefault(t => t.id == id);
-            _context.freezes.Remove(entity);
-            _context.SaveChanges();
-        }
-
-        public Freeze GetFreezesSingleRecord(int id)
-        {
-            return _context.freezes.FirstOrDefault(t => t.id == id);
-        }
-
-        public List<Freeze> GetFreezesRecords()
-        {
-            return _context.freezes.ToList();
-        }
-
-        // function for bread
-        public void AddBreadsRecord(Bread bread)
-        {
-            _context.breads.Add(bread);
-            _context.SaveChanges();
-        }
-
-        public void UpdateBreadsRecord(Bread bread)
-        {
-            _context.breads.Update(bread);
-            _context.SaveChanges();
-        }
-
-        public void DeleteBreadsRecord(int id)
-        {
-            var entity = _context.breads.FirstOrDefault(t => t.id == id);
-            _context.breads.Remove(entity);
-            _context.SaveChanges();
-        }
-
-        public Bread GetBreadsSingleRecord(int id)
-        {
-            return _context.breads.FirstOrDefault(t => t.id == id);
-        }
-
-        public List<Bread> GetBreadsRecords()
-        {
-            return _context.breads.ToList();
-        }
-
-        // function for Food
-        public void AddFoodsRecord(Food food)
-        {
-            _context.foods.Add(food);
-            _context.SaveChanges();
-        }
-
-        public void UpdateFoodsRecord(Food food)
-        {
-            _context.foods.Update(food);
-            _context.SaveChanges();
-        }
-
-        public void DeleteFoodsRecord(int id)
-        {
-            var entity = _context.foods.FirstOrDefault(t => t.id == id);
-            _context.foods.Remove(entity);
-            _context.SaveChanges();
-        }
-
-        public Food GetFoodsSingleRecord(int id)
-        {
-            return _context.foods.FirstOrDefault(t => t.id == id);
-        }
-
-        public List<Food> GetFoodsRecords()
-        {
-            return _context.foods.ToList();
-        }
-
-        // function for other
-        public void AddOthersRecord(Other other)
-        {
-            _context.others.Add(other);
-            _context.SaveChanges();
-        }
-
-        public void UpdateOthersRecord(Other other)
-        {
-            _context.others.Update(other);
-            _context.SaveChanges();
-        }
-
-        public void DeleteOthersRecord(int id)
-        {
-            var entity = _context.others.FirstOrDefault(t => t.id == id);
-            _context.others.Remove(entity);
-            _context.SaveChanges();
-        }
-
-        public Other GetOthersSingleRecord(int id)
-        {
-            return _context.others.FirstOrDefault(t => t.id == id);
-        }
-
-        public List<Other> GetOthersRecords()
-        {
-            return _context.others.ToList();
-        }
-
-        // function for popular
-        public void AddPopularsRecord(Popular popular)
-        {
-            _context.populars.Add(popular);
-            _context.SaveChanges();
-        }
-
-        public void UpdatePopularsRecord(Popular popular)
-        {
-            _context.populars.Update(popular);
-            _context.SaveChanges();
-        }
-
-        public void DeletePopularsRecord(int id)
-        {
-            var entity = _context.populars.FirstOrDefault(t => t.id == id);
-            _context.populars.Remove(entity);
-            _context.SaveChanges();
-        }
-
-        public Popular GetPopularsSingleRecord(int id)
-        {
-            return _context.populars.FirstOrDefault(t => t.id == id);
-        }
-
-        public List<Popular> GetPopularsRecords()
-        {
-            return _context.populars.ToList();
-        }
-
-        // function for best sale
-        public void AddBestSalesRecord(BestSale bestSale)
-        {
-            _context.bestsales.Add(bestSale);
-            _context.SaveChanges();
-        }
-
-        public void UpdateBestSalesRecord(BestSale bestSale)
-        {
-            _context.bestsales.Update(bestSale);
-            _context.SaveChanges();
-        }
-
-        public void DeleteBestSalesRecord(int id)
-        {
-            var entity = _context.bestsales.FirstOrDefault(t => t.id == id);
-            _context.bestsales.Remove(entity);
-            _context.SaveChanges();
-        }
-
-        public BestSale GetBestSalesSingleRecord(int id)
-        {
-            return _context.bestsales.FirstOrDefault(t => t.id == id);
-        }
-
-        public List<BestSale> GetBestSalesRecords()
-        {
-            return _context.bestsales.ToList();
-        }
-
         // function for favorite
         public void AddFavorite(Favorite favorite)
-    {
-        using (var command = _context.Database.GetDbConnection().CreateCommand())
         {
-            command.CommandText = @"
+            using (var command = _context.Database.GetDbConnection().CreateCommand())
+            {
+                command.CommandText = @"
                 SELECT add_favorite(@p_customerid, @p_productid, @p_productname, @p_description, @p_size, @p_price, @p_unit, @p_image, @p_imagedetail)";
-            command.CommandType = CommandType.Text;
+                command.CommandType = CommandType.Text;
 
-            command.Parameters.Add(new NpgsqlParameter("p_customerid", favorite.customerid));
-            command.Parameters.Add(new NpgsqlParameter("p_productid", favorite.productid));
-            command.Parameters.Add(new NpgsqlParameter("p_productname", favorite.productname));
-            command.Parameters.Add(new NpgsqlParameter("p_description", favorite.description));
-            command.Parameters.Add(new NpgsqlParameter("p_size", favorite.size));
-            command.Parameters.Add(new NpgsqlParameter("p_price", favorite.price));
-            command.Parameters.Add(new NpgsqlParameter("p_unit", favorite.unit));
-            command.Parameters.Add(new NpgsqlParameter("p_image", favorite.image ?? (object)DBNull.Value));
-            command.Parameters.Add(new NpgsqlParameter("p_imagedetail", favorite.imagedetail ?? (object)DBNull.Value));
+                command.Parameters.Add(new NpgsqlParameter("p_customerid", favorite.customerid));
+                command.Parameters.Add(new NpgsqlParameter("p_productid", favorite.productid));
+                command.Parameters.Add(new NpgsqlParameter("p_productname", favorite.productname));
+                command.Parameters.Add(new NpgsqlParameter("p_description", favorite.description));
+                command.Parameters.Add(new NpgsqlParameter("p_size", favorite.size));
+                command.Parameters.Add(new NpgsqlParameter("p_price", favorite.price));
+                command.Parameters.Add(new NpgsqlParameter("p_unit", favorite.unit));
+                command.Parameters.Add(new NpgsqlParameter("p_image", favorite.image ?? (object)DBNull.Value));
+                command.Parameters.Add(new NpgsqlParameter("p_imagedetail", favorite.imagedetail ?? (object)DBNull.Value));
 
-            _context.Database.OpenConnection();
-            command.ExecuteNonQuery();
-            _context.Database.CloseConnection();
+                _context.Database.OpenConnection();
+                command.ExecuteNonQuery();
+                _context.Database.CloseConnection();
+            }
         }
-    }
 
-    public void DeleteFavorite(string favoriteid)
-    {
-        using (var command = _context.Database.GetDbConnection().CreateCommand())
+        public void DeleteFavorite(string favoriteid)
         {
-            command.CommandText = @"
+            using (var command = _context.Database.GetDbConnection().CreateCommand())
+            {
+                command.CommandText = @"
                 SELECT delete_favorite(@p_favoriteid)";
-            command.CommandType = CommandType.Text;
+                command.CommandType = CommandType.Text;
 
-            command.Parameters.Add(new NpgsqlParameter("p_favoriteid", favoriteid));
+                command.Parameters.Add(new NpgsqlParameter("p_favoriteid", favoriteid));
 
-            _context.Database.OpenConnection();
-            command.ExecuteNonQuery();
-            _context.Database.CloseConnection();
-        }
-    }
-
-    public List<Favorite> GetAllFavorites()
-    {
-        var favorites = new List<Favorite>();
-        using (var command = _context.Database.GetDbConnection().CreateCommand())
-        {
-            command.CommandText = "SELECT * FROM get_all_favorites()";
-            command.CommandType = CommandType.Text;
-
-            _context.Database.OpenConnection();
-            using (var reader = command.ExecuteReader())
-            {
-                while (reader.Read())
-                {
-                    favorites.Add(new Favorite
-                    {
-                        favoriteid = reader["favoriteid"].ToString(),
-                        customerid = reader["customerid"].ToString(),
-                        productid = reader["productid"].ToString(),
-                        productname = reader["productname"].ToString(),
-                        description = reader["description"].ToString(),
-                        size = reader["size"].ToString(),
-                        price = int.Parse(reader["price"].ToString()),
-                        unit = reader["unit"].ToString(),
-                        image = reader["image"] as byte[],
-                        imagedetail = reader["imagedetail"] as byte[]
-                    });
-                }
+                _context.Database.OpenConnection();
+                command.ExecuteNonQuery();
+                _context.Database.CloseConnection();
             }
-            _context.Database.CloseConnection();
         }
-        return favorites;
-    }
 
-    public Favorite GetFavoriteById(string favoriteid)
-    {
-        using (var command = _context.Database.GetDbConnection().CreateCommand())
+        public List<Favorite> GetAllFavorites()
         {
-            command.CommandText = "SELECT * FROM get_favorite_by_id(@p_favoriteid)";
-            command.CommandType = CommandType.Text;
-
-            command.Parameters.Add(new NpgsqlParameter("p_favoriteid", favoriteid));
-
-            _context.Database.OpenConnection();
-            using (var reader = command.ExecuteReader())
+            var favorites = new List<Favorite>();
+            using (var command = _context.Database.GetDbConnection().CreateCommand())
             {
-                if (reader.Read())
-                {
-                    return new Favorite
-                    {
-                        favoriteid = reader["favoriteid"].ToString(),
-                        customerid = reader["customerid"].ToString(),
-                        productid = reader["productid"].ToString(),
-                        productname = reader["productname"].ToString(),
-                        description = reader["description"].ToString(),
-                        size = reader["size"].ToString(),
-                        price = int.Parse(reader["price"].ToString()),
-                        unit = reader["unit"].ToString(),
-                        image = reader["image"] as byte[],
-                        imagedetail = reader["imagedetail"] as byte[]
-                    };
-                }
-            }
-            _context.Database.CloseConnection();
-        }
-        return null;
-    }
+                command.CommandText = "SELECT * FROM get_all_favorites()";
+                command.CommandType = CommandType.Text;
 
-    public List<Favorite> GetFavoritesByCustomerId(string customerId)
-    {
-        var favorites = new List<Favorite>();
-        using (var command = _context.Database.GetDbConnection().CreateCommand())
+                _context.Database.OpenConnection();
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        favorites.Add(new Favorite
+                        {
+                            favoriteid = reader["favoriteid"].ToString(),
+                            customerid = reader["customerid"].ToString(),
+                            productid = reader["productid"].ToString(),
+                            productname = reader["productname"].ToString(),
+                            description = reader["description"].ToString(),
+                            size = reader["size"].ToString(),
+                            price = int.Parse(reader["price"].ToString()),
+                            unit = reader["unit"].ToString(),
+                            image = reader["image"] as byte[],
+                            imagedetail = reader["imagedetail"] as byte[]
+                        });
+                    }
+                }
+                _context.Database.CloseConnection();
+            }
+            return favorites;
+        }
+
+        public Favorite GetFavoriteById(string favoriteid)
         {
-            command.CommandText = "SELECT * FROM get_favorites_by_customer_id(@p_customerid)";
-            command.CommandType = CommandType.Text;
-
-            command.Parameters.Add(new NpgsqlParameter("p_customerid", customerId));
-
-            _context.Database.OpenConnection();
-            using (var reader = command.ExecuteReader())
+            using (var command = _context.Database.GetDbConnection().CreateCommand())
             {
-                while (reader.Read())
+                command.CommandText = "SELECT * FROM get_favorite_by_id(@p_favoriteid)";
+                command.CommandType = CommandType.Text;
+
+                command.Parameters.Add(new NpgsqlParameter("p_favoriteid", favoriteid));
+
+                _context.Database.OpenConnection();
+                using (var reader = command.ExecuteReader())
                 {
-                    favorites.Add(new Favorite
+                    if (reader.Read())
                     {
-                        favoriteid = reader["favoriteid"].ToString(),
-                        customerid = reader["customerid"].ToString(),
-                        productid = reader["productid"].ToString(),
-                        productname = reader["productname"].ToString(),
-                        description = reader["description"].ToString(),
-                        size = reader["size"].ToString(),
-                        price = int.Parse(reader["price"].ToString()),
-                        unit = reader["unit"].ToString(),
-                        image = reader["image"] as byte[],
-                        imagedetail = reader["imagedetail"] as byte[]
-                    });
+                        return new Favorite
+                        {
+                            favoriteid = reader["favoriteid"].ToString(),
+                            customerid = reader["customerid"].ToString(),
+                            productid = reader["productid"].ToString(),
+                            productname = reader["productname"].ToString(),
+                            description = reader["description"].ToString(),
+                            size = reader["size"].ToString(),
+                            price = int.Parse(reader["price"].ToString()),
+                            unit = reader["unit"].ToString(),
+                            image = reader["image"] as byte[],
+                            imagedetail = reader["imagedetail"] as byte[]
+                        };
+                    }
                 }
+                _context.Database.CloseConnection();
             }
-            _context.Database.CloseConnection();
+            return null;
         }
-        return favorites;
-    }
+
+        public List<Favorite> GetFavoritesByCustomerId(string customerid)
+        {
+            var favorites = new List<Favorite>();
+            using (var command = _context.Database.GetDbConnection().CreateCommand())
+            {
+                command.CommandText = "SELECT * FROM get_favorites_by_customer_id(@p_customerid)";
+                command.CommandType = CommandType.Text;
+
+                command.Parameters.Add(new NpgsqlParameter("p_customerid", customerid));
+
+                _context.Database.OpenConnection();
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        favorites.Add(new Favorite
+                        {
+                            favoriteid = reader["favoriteid"].ToString(),
+                            customerid = reader["customerid"].ToString(),
+                            productid = reader["productid"].ToString(),
+                            productname = reader["productname"].ToString(),
+                            description = reader["description"].ToString(),
+                            size = reader["size"].ToString(),
+                            price = int.Parse(reader["price"].ToString()),
+                            unit = reader["unit"].ToString(),
+                            image = reader["image"] as byte[],
+                            imagedetail = reader["imagedetail"] as byte[]
+                        });
+                    }
+                }
+                _context.Database.CloseConnection();
+            }
+            return favorites;
+        }
 
         // function for cart
-        public void AddCartsRecord(Cart cart)
+        public void AddCart(CartDetail cartDetail)
         {
-            _context.carts.Add(cart);
-            _context.SaveChanges();
+            try
+            {
+                using (var command = _context.Database.GetDbConnection().CreateCommand())
+                {
+                    command.CommandText = @"
+                    SELECT add_cart(@p_customerid, @p_productid, @p_quantity, @p_price, @p_productname, @p_size, @p_image)";
+                    command.CommandType = CommandType.Text;
+
+                    command.Parameters.Add(new NpgsqlParameter("p_customerid", cartDetail.customerid));
+                    command.Parameters.Add(new NpgsqlParameter("p_productid", cartDetail.productid));
+                    command.Parameters.Add(new NpgsqlParameter("p_quantity", cartDetail.quantity));
+                    command.Parameters.Add(new NpgsqlParameter("p_price", cartDetail.totalprice));
+                    command.Parameters.Add(new NpgsqlParameter("p_productname", cartDetail.productname));
+                    command.Parameters.Add(new NpgsqlParameter("p_size", cartDetail.size));
+                    command.Parameters.Add(new NpgsqlParameter("p_image", cartDetail.image));
+
+                    _context.Database.OpenConnection();
+                    command.ExecuteNonQuery();
+                    _context.Database.CloseConnection();
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error adding cart");
+                throw;
+            }
         }
 
-        public void UpdateCartsRecord(Cart cart)
+        // Method for getting cart by customer ID
+        public Cart GetCartByCustomerId(string customerid)
         {
-            _context.carts.Update(cart);
-            _context.SaveChanges();
+            try
+            {
+                using (var command = _context.Database.GetDbConnection().CreateCommand())
+                {
+                    command.CommandText = @"
+                SELECT * FROM get_cart_by_customerid(@p_customerid)";
+                    command.CommandType = CommandType.Text;
+
+                    command.Parameters.Add(new NpgsqlParameter("p_customerid", customerid));
+
+                    _context.Database.OpenConnection();
+                    using (var reader = command.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            var cart = new Cart
+                            {
+                                cartid = reader.GetString(0),
+                                customerid = reader.GetString(1)
+                            };
+
+                            // Assuming one cart per customer
+                            return cart;
+                        }
+                    }
+                    _context.Database.CloseConnection();
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error getting cart by customer ID");
+                throw;
+            }
+
+            return null;
         }
 
-        public void DeleteCartsRecord(int id)
+        public Cart GetCartById(string cartid)
         {
-            var entity = _context.carts.FirstOrDefault(t => t.id == id);
-            _context.carts.Remove(entity);
-            _context.SaveChanges();
+            using (var command = _context.Database.GetDbConnection().CreateCommand())
+            {
+                command.CommandText = "SELECT * FROM get_cart_by_id(@p_cartid)";
+                command.CommandType = CommandType.Text;
+
+                command.Parameters.Add(new NpgsqlParameter("p_cartid", cartid));
+
+                _context.Database.OpenConnection();
+                using (var reader = command.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        return new Cart
+                        {
+                            cartid = reader["cartid"].ToString(),
+                            customerid = reader["customerid"].ToString(),
+                        };
+                    }
+                }
+                _context.Database.CloseConnection();
+            }
+            return null;
+
         }
 
-        public Cart GetCartsSingleRecord(int id)
+        public void UpdateCart(Cart cart)
         {
-            return _context.carts.FirstOrDefault(t => t.id == id);
+            // Implement logic for updating a cart here
         }
 
-        public List<Cart> GetCartsRecords()
+        public void DeleteCart(string cartid)
         {
-            return _context.carts.ToList();
+            using (var command = _context.Database.GetDbConnection().CreateCommand())
+            {
+                command.CommandText = @"
+                SELECT delete_cart(@p_cartid)";
+                command.CommandType = CommandType.Text;
+
+                command.Parameters.Add(new NpgsqlParameter("p_cartid", cartid));
+
+                _context.Database.OpenConnection();
+                command.ExecuteNonQuery();
+                _context.Database.CloseConnection();
+            }
         }
+
+        public List<Cart> GetAllCart()
+        {
+            var carts = new List<Cart>();
+            using (var command = _context.Database.GetDbConnection().CreateCommand())
+            {
+                command.CommandText = "SELECT * FROM get_all_cart()";
+                command.CommandType = CommandType.Text;
+
+                _context.Database.OpenConnection();
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        carts.Add(new Cart
+                        {
+                            cartid = reader["cartid"].ToString(),
+                            customerid = reader["customerid"].ToString()
+                        });
+                    }
+                }
+                _context.Database.CloseConnection();
+            }
+            return carts;
+        }
+
+
+        // Function for cart details
+        public void AddCartDetail(CartDetail cartDetail)
+        {
+            // Implement logic for adding a cart detail here
+        }
+
+        public void UpdateCartDetail(CartDetail cartDetail)
+        {
+            // Implement logic for updating a cart detail here
+        }
+
+        public void DeleteCartDetailByCartId(string cartid)
+        {
+            // Implement logic for deleting cart details by cart ID here
+        }
+
+        public CartDetail GetCartDetailByCustomerId(string customerid)
+        {
+            try
+            {
+                using (var command = _context.Database.GetDbConnection().CreateCommand())
+                {
+                    command.CommandText = @"
+                SELECT * FROM get_cart_detail_by_customerid(@p_customerid)";
+                    command.CommandType = CommandType.Text;
+
+                    command.Parameters.Add(new NpgsqlParameter("p_customerid", customerid));
+
+                    _context.Database.OpenConnection();
+                    using (var reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            var cartDetail = new CartDetail
+                            {
+                                cartid = reader.GetString(0),
+                                customerid = reader.GetString(1),
+                                cartdetailid = reader.GetString(2),
+                                productid = reader.GetString(3),
+                                quantity = reader.GetInt32(4),
+                                totalprice = reader.GetInt32(5),
+                                productname = reader.GetString(6),
+                                size = reader.GetString(7),
+                                image = reader.IsDBNull(8) ? null : (byte[])reader[8]
+                            };
+
+                            return cartDetail;
+                        }
+                    }
+                    _context.Database.CloseConnection();
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error getting cart details by customer ID");
+                throw;
+            }
+
+            return null;
+        }
+
+        public CartDetail GetCartDetailByCartId(string cartid)
+        {
+            // Implement logic for getting a cart detail by cart ID here
+            return null; // Placeholder, replace with actual implementation
+        }
+
+        public List<CartDetail> GetAllCartDetails()
+        {
+            var cartDetails = new List<CartDetail>();
+            using (var command = _context.Database.GetDbConnection().CreateCommand())
+            {
+                command.CommandText = "SELECT * FROM get_all_cartdetail()";
+                command.CommandType = CommandType.Text;
+
+                _context.Database.OpenConnection();
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        cartDetails.Add(new CartDetail
+                        {
+                            cartid = reader["cartid"].ToString(),
+                            customerid = reader["customerid"].ToString(),
+                            cartdetailid = reader["cartdetailid"].ToString(),
+                            productid = reader["productid"].ToString(),
+                            quantity = Convert.ToInt32(reader["quantity"]),
+                            totalprice = Convert.ToInt32(reader["totalprice"]),
+                            productname = reader["productname"].ToString(),
+                            size = reader["size"].ToString(),
+                            image = (byte[])reader["image"]
+                        });
+                    }
+                }
+                _context.Database.CloseConnection();
+            }
+            return cartDetails;
+        }
+
 
         // function for order
         public void AddOrdersRecord(Order order)
