@@ -34,11 +34,20 @@ namespace highlandcoffeeapp_BE.DataAccess
         List<Category> GetAllCategories();
 
         // function for cart
-        void AddCartsRecord(Cart cart);
-        void UpdateCartsRecord(Cart cart);
-        void DeleteCartsRecord(int id);
-        Cart GetCartsSingleRecord(int id);
-        List<Cart> GetCartsRecords();
+        void AddCart(CartDetail cartdetail);
+        void UpdateCart(Cart cart);
+        void DeleteCart(string cartid);
+        Cart GetCartByCustomerId(string customerid);
+        Cart GetCartById(string cartid);
+        List<Cart> GetAllCart();
+
+        // function for cart detail
+        void AddCartDetail(CartDetail cartDetail);
+        void UpdateCartDetail(CartDetail cartDetail);
+        void DeleteCartDetailByCartId(string cartid);
+        CartDetail GetCartDetailByCustomerId(string customerid);
+        CartDetail GetCartDetailByCartId(string cartid);
+        List<CartDetail> GetAllCartDetails();
 
         // function for staff
         void AddStaffRecord(Staff staff);
@@ -57,68 +66,12 @@ namespace highlandcoffeeapp_BE.DataAccess
         List<Product> GetAllProducts();
         List<Product> GetProductsByCategoryId(string categoryid);
 
-        // function for coffee
-        void AddCoffeesRecord(Coffee coffee);
-        void UpdateCoffeesRecord(Coffee coffee);
-        void DeleteCoffeesRecord(int id);
-        Coffee GetCoffeesSingleRecord(int id);
-        List<Coffee> GetCoffeesRecords();
-
-        // function for tea
-        void AddTeasRecord(Tea tea);
-        void UpdateTeasRecord(Tea tea);
-        void DeleteTeasRecord(int id);
-        Tea GetTeasSingleRecord(int id);
-        List<Tea> GetTeasRecords();
-
-        // function for freeze
-        void AddFreezesRecord(Freeze freeze);
-        void UpdateFreezesRecord(Freeze freeze);
-        void DeleteFreezesRecord(int id);
-        Freeze GetFreezesSingleRecord(int id);
-        List<Freeze> GetFreezesRecords();
-
-        // function for bread
-        void AddBreadsRecord(Bread bread);
-        void UpdateBreadsRecord(Bread bread);
-        void DeleteBreadsRecord(int id);
-        Bread GetBreadsSingleRecord(int id);
-        List<Bread> GetBreadsRecords();
-
-        // function for food
-        void AddFoodsRecord(Food food);
-        void UpdateFoodsRecord(Food food);
-        void DeleteFoodsRecord(int id);
-        Food GetFoodsSingleRecord(int id);
-        List<Food> GetFoodsRecords();
-
-        // function for other
-        void AddOthersRecord(Other other);
-        void UpdateOthersRecord(Other other);
-        void DeleteOthersRecord(int id);
-        Other GetOthersSingleRecord(int id);
-        List<Other> GetOthersRecords();
-
-        // function for popular
-        void AddPopularsRecord(Popular popular);
-        void UpdatePopularsRecord(Popular popular);
-        void DeletePopularsRecord(int id);
-        Popular GetPopularsSingleRecord(int id);
-        List<Popular> GetPopularsRecords();
-
-        // function for best sale
-        void AddBestSalesRecord(BestSale bestSale);
-        void UpdateBestSalesRecord(BestSale bestSale);
-        void DeleteBestSalesRecord(int id);
-        BestSale GetBestSalesSingleRecord(int id);
-        List<BestSale> GetBestSalesRecords();
-
         // function for favorite
         void AddFavorite(Favorite favorite);
-        void DeleteFavorite(string favoriteId);
+        void DeleteFavorite(string favoriteid);
         List<Favorite> GetAllFavorites();
-        Favorite GetFavoriteById(string favoriteId);
-        List<Favorite> GetFavoritesByCustomerId(string customerId);
+        Favorite GetFavoriteById(string favoriteid);
+        List<Favorite> GetFavoritesByCustomerId(string customerid);
 
         // function for order
         void AddOrdersRecord(Order order);
