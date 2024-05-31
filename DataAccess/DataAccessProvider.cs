@@ -405,18 +405,30 @@ namespace highlandcoffeeapp_BE.DataAccess
 
         public void UpdateCategory(Category category)
         {
-            using (var command = _context.Database.GetDbConnection().CreateCommand())
+            try
             {
-                command.CommandText = "update_category";
-                command.CommandType = CommandType.StoredProcedure;
+                using (var command = _context.Database.GetDbConnection().CreateCommand())
+                {
+                    command.CommandText = @"
+                    SELECT update_category(
+                        @p_categoryid,
+                        @p_categoryname,
+                        @p_description)";
+                    command.CommandType = CommandType.Text;
 
-                command.Parameters.Add(new NpgsqlParameter("p_categoryid", category.categoryid));
-                command.Parameters.Add(new NpgsqlParameter("p_categoryname", category.categoryname));
-                command.Parameters.Add(new NpgsqlParameter("p_description", category.description));
+                    command.Parameters.Add(new NpgsqlParameter("p_categoryid", category.categoryid));
+                    command.Parameters.Add(new NpgsqlParameter("p_categoryname", category.categoryname));
+                    command.Parameters.Add(new NpgsqlParameter("p_description", category.description));
 
-                _context.Database.OpenConnection();
-                command.ExecuteNonQuery();
-                _context.Database.CloseConnection();
+                    _context.Database.OpenConnection();
+                    command.ExecuteNonQuery();
+                    _context.Database.CloseConnection();
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error updating product");
+                throw;
             }
         }
 
@@ -424,8 +436,9 @@ namespace highlandcoffeeapp_BE.DataAccess
         {
             using (var command = _context.Database.GetDbConnection().CreateCommand())
             {
-                command.CommandText = "delete_category";
-                command.CommandType = CommandType.StoredProcedure;
+                command.CommandText = @"
+                SELECT delete_category(@p_categoryid)";
+                command.CommandType = CommandType.Text;
 
                 command.Parameters.Add(new NpgsqlParameter("p_categoryid", categoryid));
 
@@ -636,24 +649,42 @@ namespace highlandcoffeeapp_BE.DataAccess
 
         public void UpdateProduct(Product product)
         {
-            using (var command = _context.Database.GetDbConnection().CreateCommand())
+            try
             {
-                command.CommandText = "update_product";
-                command.CommandType = CommandType.StoredProcedure;
+                using (var command = _context.Database.GetDbConnection().CreateCommand())
+                {
+                    command.CommandText = @"
+                    SELECT update_product(
+                        @p_productid,
+                        @p_categoryid,
+                        @p_productname,
+                        @p_description,
+                        @p_size,
+                        @p_price,
+                        @p_unit,
+                        @p_image,
+                        @p_imagedetail)";
+                    command.CommandType = CommandType.Text;
 
-                command.Parameters.Add(new NpgsqlParameter("p_productid", product.productid));
-                command.Parameters.Add(new NpgsqlParameter("p_categoryid", product.categoryid));
-                command.Parameters.Add(new NpgsqlParameter("p_productname", product.productname));
-                command.Parameters.Add(new NpgsqlParameter("p_description", product.description));
-                command.Parameters.Add(new NpgsqlParameter("p_size", product.size));
-                command.Parameters.Add(new NpgsqlParameter("p_price", product.price));
-                command.Parameters.Add(new NpgsqlParameter("p_unit", product.unit));
-                command.Parameters.Add(new NpgsqlParameter("p_image", product.image));
-                command.Parameters.Add(new NpgsqlParameter("p_imagedetail", product.imagedetail));
+                    command.Parameters.Add(new NpgsqlParameter("p_productid", product.productid));
+                    command.Parameters.Add(new NpgsqlParameter("p_categoryid", product.categoryid));
+                    command.Parameters.Add(new NpgsqlParameter("p_productname", product.productname));
+                    command.Parameters.Add(new NpgsqlParameter("p_description", product.description));
+                    command.Parameters.Add(new NpgsqlParameter("p_size", product.size));
+                    command.Parameters.Add(new NpgsqlParameter("p_price", product.price));
+                    command.Parameters.Add(new NpgsqlParameter("p_unit", product.unit));
+                    command.Parameters.Add(new NpgsqlParameter("p_image", product.image));
+                    command.Parameters.Add(new NpgsqlParameter("p_imagedetail", product.imagedetail));
 
-                _context.Database.OpenConnection();
-                command.ExecuteNonQuery();
-                _context.Database.CloseConnection();
+                    _context.Database.OpenConnection();
+                    command.ExecuteNonQuery();
+                    _context.Database.CloseConnection();
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error updating product");
+                throw;
             }
         }
 

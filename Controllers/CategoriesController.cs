@@ -39,10 +39,17 @@ namespace highlandcoffeeapp_BE.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult Edit([FromBody] Category category)
+        public IActionResult Update(string id, [FromBody] Category category)
         {
             if (ModelState.IsValid)
             {
+                var existingProduct = _dataAccessProvider.GetCategoryById(id);
+                if (existingProduct == null)
+                {
+                    return NotFound();
+                }
+
+                category.categoryid = id;
                 _dataAccessProvider.UpdateCategory(category);
                 return Ok();
             }
@@ -50,14 +57,13 @@ namespace highlandcoffeeapp_BE.Controllers
         }
 
         [HttpDelete("{id}")]
-        public IActionResult Delete(string id)
+        public IActionResult DeleteConfirmed(string id)
         {
-            var category = _dataAccessProvider.GetCategoryById(id);
-            if (category == null)
+            var data = _dataAccessProvider.GetCategoryById(id);
+            if (data == null)
             {
                 return NotFound();
             }
-
             _dataAccessProvider.DeleteCategory(id);
             return Ok();
         }
