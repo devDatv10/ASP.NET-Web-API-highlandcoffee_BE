@@ -37,11 +37,18 @@ namespace highlandcoffeeapp_BE.Controllers
             return _dataAccessProvider.GetCustomerById(id);
         }
 
-        [HttpPut]
-        public IActionResult Edit([FromBody] Customer customer)
+        [HttpPut("{id}")]
+        public IActionResult Update(string id, [FromBody] Customer customer)
         {
             if (ModelState.IsValid)
             {
+                var existingProduct = _dataAccessProvider.GetCustomerById(id);
+                if (existingProduct == null)
+                {
+                    return NotFound();
+                }
+
+                customer.customerid = id;
                 _dataAccessProvider.UpdateCustomer(customer);
                 return Ok();
             }

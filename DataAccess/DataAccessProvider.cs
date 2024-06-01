@@ -285,21 +285,37 @@ namespace highlandcoffeeapp_BE.DataAccess
 
         public void UpdateCustomer(Customer customer)
         {
-            using (var command = _context.Database.GetDbConnection().CreateCommand())
+            try
             {
-                command.CommandText = "update_customer";
-                command.CommandType = CommandType.StoredProcedure;
+                using (var command = _context.Database.GetDbConnection().CreateCommand())
+                {
+                    command.CommandText = @"
+                    SELECT update_customer(
+                        @p_customerid,
+                        @p_name,
+                        @p_phonenumber,
+                        @p_address,
+                        @p_point,
+                        @p_password
+                        )";
+                    command.CommandType = CommandType.Text;
 
-                command.Parameters.Add(new NpgsqlParameter("p_customerid", customer.customerid));
-                command.Parameters.Add(new NpgsqlParameter("p_name", customer.name));
-                command.Parameters.Add(new NpgsqlParameter("p_phonenumber", customer.phonenumber));
-                command.Parameters.Add(new NpgsqlParameter("p_address", customer.address));
-                command.Parameters.Add(new NpgsqlParameter("p_point", customer.point));
-                command.Parameters.Add(new NpgsqlParameter("p_password", customer.password));
+                    command.Parameters.Add(new NpgsqlParameter("p_customerid", customer.customerid));
+                    command.Parameters.Add(new NpgsqlParameter("p_name", customer.name));
+                    command.Parameters.Add(new NpgsqlParameter("p_phonenumber", customer.phonenumber));
+                    command.Parameters.Add(new NpgsqlParameter("p_address", customer.address));
+                    command.Parameters.Add(new NpgsqlParameter("p_point", customer.point));
+                    command.Parameters.Add(new NpgsqlParameter("p_password", customer.password));
 
-                _context.Database.OpenConnection();
-                command.ExecuteNonQuery();
-                _context.Database.CloseConnection();
+                    _context.Database.OpenConnection();
+                    command.ExecuteNonQuery();
+                    _context.Database.CloseConnection();
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error updating product");
+                throw;
             }
         }
 
