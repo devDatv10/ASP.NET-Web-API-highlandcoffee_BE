@@ -1236,5 +1236,132 @@ namespace highlandcoffeeapp_BE.DataAccess
         {
             return _context.orders.ToList();
         }
+
+        // function for order detail
+
+        // function for order comment
+        public void AddComment(Comment comment)
+{
+    using (var command = _context.Database.GetDbConnection().CreateCommand())
+    {
+        command.CommandText = @"
+        SELECT add_comment(@p_customerid, @p_customername, @p_titlecomment, @p_contentcomment, @_image, @p_status)";
+        command.CommandType = CommandType.Text;
+
+        command.Parameters.Add(new NpgsqlParameter("p_customerid", comment.customerid));
+        command.Parameters.Add(new NpgsqlParameter("p_customername", comment.customername));
+        command.Parameters.Add(new NpgsqlParameter("p_titlecomment", comment.titlecomment));
+        command.Parameters.Add(new NpgsqlParameter("p_contentcomment", comment.contentcomment));
+        command.Parameters.Add(new NpgsqlParameter("_image", comment.image));
+        command.Parameters.Add(new NpgsqlParameter("p_status", comment.status));
+
+        _context.Database.OpenConnection();
+        command.ExecuteNonQuery();
+        _context.Database.CloseConnection();
+    }
+}
+
+
+        public void UpdateComment(Comment comment)
+        {
+            using (var command = _context.Database.GetDbConnection().CreateCommand())
+            {
+                command.CommandText = @"
+                SELECT update_comment(@p_commentid, @p_customerid, @p_customername, @p_titlecomment, @p_contentcomment, @p_date, @_image, @p_status)";
+                command.CommandType = CommandType.Text;
+
+                command.Parameters.Add(new NpgsqlParameter("p_commentid", comment.commentid));
+                command.Parameters.Add(new NpgsqlParameter("p_customerid", comment.customerid));
+                command.Parameters.Add(new NpgsqlParameter("p_customername", comment.customername));
+                command.Parameters.Add(new NpgsqlParameter("p_titlecomment", comment.titlecomment));
+                command.Parameters.Add(new NpgsqlParameter("p_contentcomment", comment.contentcomment));
+                command.Parameters.Add(new NpgsqlParameter("p_date", comment.date));
+                command.Parameters.Add(new NpgsqlParameter("_image", comment.image));
+                command.Parameters.Add(new NpgsqlParameter("p_status", comment.status));
+
+                _context.Database.OpenConnection();
+                command.ExecuteNonQuery();
+                _context.Database.CloseConnection();
+            }
+        }
+
+        public void DeleteComment(string commentid)
+        {
+            using (var command = _context.Database.GetDbConnection().CreateCommand())
+            {
+                command.CommandText = @"
+                SELECT delete_comment(@p_commentid)";
+                command.CommandType = CommandType.Text;
+
+                command.Parameters.Add(new NpgsqlParameter("p_commentid", commentid));
+
+                _context.Database.OpenConnection();
+                command.ExecuteNonQuery();
+                _context.Database.CloseConnection();
+            }
+        }
+
+        public Comment GetCommentById(string commentid)
+        {
+            using (var command = _context.Database.GetDbConnection().CreateCommand())
+            {
+                command.CommandText = "SELECT * FROM get_comment_by_id(@p_commentid)";
+                command.CommandType = CommandType.Text;
+
+                command.Parameters.Add(new NpgsqlParameter("p_commentid", commentid));
+
+                _context.Database.OpenConnection();
+                using (var reader = command.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        return new Comment
+                        {
+                            commentid = reader["commentid"].ToString(),
+                            customerid = reader["customerid"].ToString(),
+                            customername = reader["customername"].ToString(),
+                            titlecomment = reader["titlecomment"].ToString(),
+                            contentcomment = reader["contentcomment"].ToString(),
+                            date = DateTime.Parse(reader["date"].ToString()),
+                            image = reader["image"] as byte[],
+                            status = int.Parse(reader["status"].ToString())
+                        };
+                    }
+                }
+                _context.Database.CloseConnection();
+            }
+            return null;
+        }
+
+        public List<Comment> GetAllComments()
+        {
+            var comments = new List<Comment>();
+            using (var command = _context.Database.GetDbConnection().CreateCommand())
+            {
+                command.CommandText = "SELECT * FROM get_all_comments()";
+                command.CommandType = CommandType.Text;
+
+                _context.Database.OpenConnection();
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        comments.Add(new Comment
+                        {
+                            commentid = reader["commentid"].ToString(),
+                            customerid = reader["customerid"].ToString(),
+                            customername = reader["customername"].ToString(),
+                            titlecomment = reader["titlecomment"].ToString(),
+                            contentcomment = reader["contentcomment"].ToString(),
+                            date = DateTime.Parse(reader["date"].ToString()),
+                            image = reader["image"] as byte[],
+                            status = int.Parse(reader["status"].ToString())
+                        });
+                    }
+                }
+                _context.Database.CloseConnection();
+            }
+            return comments;
+        }
     }
 }

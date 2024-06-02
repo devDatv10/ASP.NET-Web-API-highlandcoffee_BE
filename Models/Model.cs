@@ -120,4 +120,17 @@ namespace highlandcoffeeapp_BE.Models
         public byte[] imagedetail { get; set; }
     }
 
+    // Models for Comment
+    public class Comment
+    {
+        public string commentid { get; set; }
+        public string customerid { get; set; }
+        public string customername { get; set; }
+        public string titlecomment { get; set; }
+        public string contentcomment { get; set; }
+        public DateTime date { get; set; }
+        public byte[] image { get; set; }
+        public int status { get; set; }
+    }
+
 }

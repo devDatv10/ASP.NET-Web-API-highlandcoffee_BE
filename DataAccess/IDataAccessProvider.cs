@@ -81,5 +81,12 @@ namespace highlandcoffeeapp_BE.DataAccess
         List<Order> GetOrdersRecords();
 
         // function for order detail
+
+        // function for comment
+        void AddComment(Comment comment);
+        void UpdateComment(Comment comment);
+        void DeleteComment(string commentid);
+        Comment GetCommentById(string commentid);
+        List<Comment> GetAllComments();
     }
 }
