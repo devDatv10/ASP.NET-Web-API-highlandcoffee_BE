@@ -1118,10 +1118,22 @@ namespace highlandcoffeeapp_BE.DataAccess
             // Implement logic for updating a cart detail here
         }
 
-        public void DeleteCartDetailByCartId(string cartid)
+        public void DeleteCartDetail(string cartdetailid)
         {
-            // Implement logic for deleting cart details by cart ID here
+            using (var command = _context.Database.GetDbConnection().CreateCommand())
+            {
+                command.CommandText = @"
+        SELECT remove_item_from_cart(@p_cartdetailid)";
+                command.CommandType = CommandType.Text;
+
+                command.Parameters.Add(new NpgsqlParameter("p_cartdetailid", cartdetailid));
+
+                _context.Database.OpenConnection();
+                command.ExecuteNonQuery();
+                _context.Database.CloseConnection();
+            }
         }
+
 
         public CartDetail GetCartDetailByCustomerId(string customerid)
         {
@@ -1168,11 +1180,39 @@ namespace highlandcoffeeapp_BE.DataAccess
             return null;
         }
 
-        public CartDetail GetCartDetailByCartId(string cartid)
+        public CartDetail GetCartDetailByCartDetailId(string cartdetailid)
         {
-            // Implement logic for getting a cart detail by cart ID here
-            return null; // Placeholder, replace with actual implementation
+            using (var command = _context.Database.GetDbConnection().CreateCommand())
+            {
+                command.CommandText = "SELECT * FROM get_cart_detail_by_cartdetailid(@p_cartdetailid)";
+                command.CommandType = CommandType.Text;
+
+                command.Parameters.Add(new NpgsqlParameter("p_cartdetailid", cartdetailid));
+
+                _context.Database.OpenConnection();
+                using (var reader = command.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        return new CartDetail
+                        {
+                            cartid = reader["cartid"].ToString(),
+                            customerid = reader["customerid"].ToString(),
+                            cartdetailid = reader["cartdetailid"].ToString(),
+                            productid = reader["productid"].ToString(),
+                            quantity = Convert.ToInt32(reader["quantity"]),
+                            totalprice = Convert.ToInt32(reader["totalprice"]),
+                            productname = reader["productname"].ToString(),
+                            size = reader["size"].ToString(),
+                            image = reader["image"] as byte[]
+                        };
+                    }
+                }
+                _context.Database.CloseConnection();
+            }
+            return null;
         }
+
 
         public List<CartDetail> GetAllCartDetails()
         {
@@ -1241,25 +1281,25 @@ namespace highlandcoffeeapp_BE.DataAccess
 
         // function for order comment
         public void AddComment(Comment comment)
-{
-    using (var command = _context.Database.GetDbConnection().CreateCommand())
-    {
-        command.CommandText = @"
+        {
+            using (var command = _context.Database.GetDbConnection().CreateCommand())
+            {
+                command.CommandText = @"
         SELECT add_comment(@p_customerid, @p_customername, @p_titlecomment, @p_contentcomment, @_image, @p_status)";
-        command.CommandType = CommandType.Text;
+                command.CommandType = CommandType.Text;
 
-        command.Parameters.Add(new NpgsqlParameter("p_customerid", comment.customerid));
-        command.Parameters.Add(new NpgsqlParameter("p_customername", comment.customername));
-        command.Parameters.Add(new NpgsqlParameter("p_titlecomment", comment.titlecomment));
-        command.Parameters.Add(new NpgsqlParameter("p_contentcomment", comment.contentcomment));
-        command.Parameters.Add(new NpgsqlParameter("_image", comment.image));
-        command.Parameters.Add(new NpgsqlParameter("p_status", comment.status));
+                command.Parameters.Add(new NpgsqlParameter("p_customerid", comment.customerid));
+                command.Parameters.Add(new NpgsqlParameter("p_customername", comment.customername));
+                command.Parameters.Add(new NpgsqlParameter("p_titlecomment", comment.titlecomment));
+                command.Parameters.Add(new NpgsqlParameter("p_contentcomment", comment.contentcomment));
+                command.Parameters.Add(new NpgsqlParameter("_image", comment.image));
+                command.Parameters.Add(new NpgsqlParameter("p_status", comment.status));
 
-        _context.Database.OpenConnection();
-        command.ExecuteNonQuery();
-        _context.Database.CloseConnection();
-    }
-}
+                _context.Database.OpenConnection();
+                command.ExecuteNonQuery();
+                _context.Database.CloseConnection();
+            }
+        }
 
 
         public void UpdateComment(Comment comment)

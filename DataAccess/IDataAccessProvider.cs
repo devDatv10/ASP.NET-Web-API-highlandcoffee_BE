@@ -44,9 +44,9 @@ namespace highlandcoffeeapp_BE.DataAccess
         // function for cart detail
         void AddCartDetail(CartDetail cartDetail);
         void UpdateCartDetail(CartDetail cartDetail);
-        void DeleteCartDetailByCartId(string cartid);
+        void DeleteCartDetail(string cartdetailid);
         CartDetail GetCartDetailByCustomerId(string customerid);
-        CartDetail GetCartDetailByCartId(string cartid);
+        CartDetail GetCartDetailByCartDetailId(string cartdetailid);
         List<CartDetail> GetAllCartDetails();
 
         // function for staff

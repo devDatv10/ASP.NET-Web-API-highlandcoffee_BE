@@ -50,14 +50,14 @@ namespace highlandcoffeeapp_BE.Controllers
         }
 
         [HttpDelete("{id}")]
-        public IActionResult Delete(string customerid)
+        public IActionResult DeleteConfirmed(string id)
         {
-            var data = _dataAccessProvider.GetCartDetailByCustomerId(customerid);
+            var data = _dataAccessProvider.GetCartDetailByCartDetailId(id);
             if (data == null)
             {
                 return NotFound();
             }
-            _dataAccessProvider.DeleteCartDetailByCartId(customerid);
+            _dataAccessProvider.DeleteCartDetail(id);
             return Ok();
         }
     }
