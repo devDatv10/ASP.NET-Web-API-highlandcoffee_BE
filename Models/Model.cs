@@ -71,18 +71,6 @@ namespace highlandcoffeeapp_BE.Models
         public byte[] imagedetail { get; set; }
     }
 
-    // Models for Order
-    public class Order
-    {
-        public int id { get; set; }
-    }
-
-    // Models for OrderDetail
-    public class OrderDetail
-    {
-        public int id { get; set; }
-    }
-
     // Models for Cart
     public class Cart
     {
@@ -132,5 +120,41 @@ namespace highlandcoffeeapp_BE.Models
         public byte[] image { get; set; }
         public int status { get; set; }
     }
+
+    // Models for Order
+    public class Order
+    {
+        public string orderid { get; set; }
+        public string customerid { get; set; }
+        public string staffid { get; set; }
+        public DateTime date { get; set; }
+        public string paymentmethod { get; set; }
+        public int status { get; set; }
+        public int totalprice { get; set; }
+    }
+
+
+    // Models for OrderDetail
+    public class OrderDetail
+    {
+        public string orderdetailid { get; set; }
+        public string orderid { get; set; }
+        public string cartid { get; set; }
+        public string staffid { get; set; }
+        public string customerid { get; set; }
+        public string productid { get; set; }
+        public string productname { get; set; }
+        public int quantity { get; set; }
+        public string size { get; set; }
+        public byte[] image { get; set; }
+        public int totalprice { get; set; }
+        public DateTime date { get; set; }
+        public string paymentmethod { get; set; }
+        public int status { get; set; }
+        public string customername { get; set; }
+        public string address { get; set; }
+        public string phonenumber { get; set; }
+    }
+
 
 }

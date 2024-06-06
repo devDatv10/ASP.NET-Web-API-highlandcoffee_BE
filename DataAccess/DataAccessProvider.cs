@@ -1248,36 +1248,367 @@ namespace highlandcoffeeapp_BE.DataAccess
 
 
         // function for order
-        public void AddOrdersRecord(Order order)
+        public void AddOrder(OrderDetail orderdetail)
         {
-            _context.orders.Add(order);
-            _context.SaveChanges();
+            try
+            {
+                using (var command = _context.Database.GetDbConnection().CreateCommand())
+                {
+                    command.CommandText = @"
+            SELECT public.add_order(
+                @p_customerid,
+                @p_productid,
+                @p_productname,
+                @p_quantity,
+                @p_size,
+                @p_image,
+                @p_totalprice,
+                @p_paymentmethod,
+                @p_cartid,
+                @p_customername,
+                @p_address,
+                @p_phonenumber)";
+                    command.CommandType = CommandType.Text;
+
+                    command.Parameters.Add(new NpgsqlParameter("p_customerid", orderdetail.customerid));
+                    command.Parameters.Add(new NpgsqlParameter("p_productid", orderdetail.productid));
+                    command.Parameters.Add(new NpgsqlParameter("p_productname", orderdetail.productname));
+                    command.Parameters.Add(new NpgsqlParameter("p_quantity", orderdetail.quantity));
+                    command.Parameters.Add(new NpgsqlParameter("p_size", orderdetail.size));
+                    command.Parameters.Add(new NpgsqlParameter("p_image", orderdetail.image));
+                    command.Parameters.Add(new NpgsqlParameter("p_totalprice", orderdetail.totalprice));
+                    command.Parameters.Add(new NpgsqlParameter("p_paymentmethod", orderdetail.paymentmethod));
+                    command.Parameters.Add(new NpgsqlParameter("p_cartid", orderdetail.cartid));
+                    command.Parameters.Add(new NpgsqlParameter("p_customername", orderdetail.customername));
+                    command.Parameters.Add(new NpgsqlParameter("p_address", orderdetail.address));
+                    command.Parameters.Add(new NpgsqlParameter("p_phonenumber", orderdetail.phonenumber));
+
+                    _context.Database.OpenConnection();
+                    command.ExecuteNonQuery();
+                    _context.Database.CloseConnection();
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error adding order");
+                throw;
+            }
         }
 
-        public void UpdateOrdersRecord(Order order)
+
+
+        public void UpdateOrder(Order order)
         {
-            _context.orders.Update(order);
-            _context.SaveChanges();
+            // Implement logic for adding a cart detail here
         }
 
-        public void DeleteOrdersRecord(int id)
+        public void DeleteOrder(string orderid)
         {
-            var entity = _context.orders.FirstOrDefault(t => t.id == id);
-            _context.orders.Remove(entity);
-            _context.SaveChanges();
+            // Implement logic for adding a cart detail here
         }
 
-        public Order GetOrdersSingleRecord(int id)
+        public Order GetOrderById(string orderid)
         {
-            return _context.orders.FirstOrDefault(t => t.id == id);
+            using (var command = _context.Database.GetDbConnection().CreateCommand())
+            {
+                command.CommandText = "SELECT * FROM get_order_by_orderid(@p_orderid)";
+                command.CommandType = CommandType.Text;
+
+                command.Parameters.Add(new NpgsqlParameter("p_orderid", orderid));
+
+                _context.Database.OpenConnection();
+                using (var reader = command.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        return new Order
+                        {
+                            orderid = reader["orderid"].ToString(),
+                            customerid = reader["customerid"].ToString(),
+                            staffid = reader["staffid"].ToString(),
+                            date = DateTime.Parse(reader["date"].ToString()),
+                            paymentmethod = reader["paymentmethod"].ToString(),
+                            status = int.Parse(reader["status"].ToString()),
+                            totalprice = int.Parse(reader["totalprice"].ToString())
+                        };
+                    }
+                }
+                _context.Database.CloseConnection();
+            }
+            return null;
         }
 
-        public List<Order> GetOrdersRecords()
+
+        public Order GetOrderByCustomerId(string customerid)
         {
-            return _context.orders.ToList();
+            Order order = null;
+            try
+            {
+                using (var command = _context.Database.GetDbConnection().CreateCommand())
+                {
+                    command.CommandText = @"
+                SELECT * FROM get_order_by_customerid(@p_customerid)";
+                    command.CommandType = CommandType.Text;
+
+                    command.Parameters.Add(new NpgsqlParameter("p_customerid", customerid));
+
+                    _context.Database.OpenConnection();
+                    using (var reader = command.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            order = new Order
+                            {
+                                orderid = reader["orderid"].ToString(),
+                                customerid = reader["customerid"].ToString(),
+                                staffid = reader["staffid"] != DBNull.Value ? reader["staffid"].ToString() : null,
+                                date = reader.GetDateTime(reader.GetOrdinal("date")),
+                                paymentmethod = reader["paymentmethod"].ToString(),
+                                status = reader.GetInt32(reader.GetOrdinal("status")),
+                                totalprice = reader.GetInt32(reader.GetOrdinal("totalprice"))
+                            };
+                        }
+                    }
+                    _context.Database.CloseConnection();
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error getting order by customer ID");
+                throw;
+            }
+
+            return order;
         }
+
+
+        public List<Order> GetAllOrders()
+        {
+            var orders = new List<Order>();
+            using (var command = _context.Database.GetDbConnection().CreateCommand())
+            {
+                command.CommandText = "SELECT * FROM get_all_order()";
+                command.CommandType = CommandType.Text;
+
+                _context.Database.OpenConnection();
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        orders.Add(new Order
+                        {
+                            orderid = reader["orderid"].ToString(),
+                            customerid = reader["customerid"].ToString(),
+                            staffid = reader["staffid"].ToString(),
+                            date = DateTime.Parse(reader["date"].ToString()),
+                            paymentmethod = reader["paymentmethod"].ToString(),
+                            status = int.Parse(reader["status"].ToString()),
+                            totalprice = int.Parse(reader["totalprice"].ToString())
+                        });
+                    }
+                }
+                _context.Database.CloseConnection();
+            }
+            return orders;
+        }
+
 
         // function for order detail
+        public void AddOrderDetail(OrderDetail orderDetail)
+        {
+            // Implement logic for adding a cart detail here
+        }
+
+        public void UpdateOrderDetail(OrderDetail orderDetail)
+        {
+            // Implement logic for adding a cart detail here
+        }
+
+        public void DeleteOrderDetail(string orderdetailid)
+        {
+            // Implement logic for adding a cart detail here
+        }
+
+        public OrderDetail GetOrderDetailById(string orderdetailid)
+        {
+            using (var command = _context.Database.GetDbConnection().CreateCommand())
+            {
+                command.CommandText = "SELECT * FROM get_orderdetail_by_orderdetailid(@p_orderdetailid)";
+                command.CommandType = CommandType.Text;
+
+                command.Parameters.Add(new NpgsqlParameter("p_orderdetailid", orderdetailid));
+
+                _context.Database.OpenConnection();
+                using (var reader = command.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        return new OrderDetail
+                        {
+                            orderdetailid = reader["orderdetailid"].ToString(),
+                            orderid = reader["orderid"].ToString(),
+                            productid = reader["productid"].ToString(),
+                            quantity = int.Parse(reader["quantity"].ToString()),
+                        };
+                    }
+                }
+                _context.Database.CloseConnection();
+            }
+            return null;
+        }
+
+        public List<OrderDetail> GetOrderDetailByOrderId(string orderid)
+{
+    var orderDetails = new List<OrderDetail>();
+    try
+    {
+        using (var command = _context.Database.GetDbConnection().CreateCommand())
+        {
+            command.CommandText = @"
+            SELECT * FROM get_orderdetail_by_orderid(@p_orderid)";
+            command.CommandType = CommandType.Text;
+
+            var parameter = new NpgsqlParameter("p_orderid", NpgsqlTypes.NpgsqlDbType.Varchar);
+            parameter.Value = orderid;
+            command.Parameters.Add(parameter);
+
+            _context.Database.OpenConnection();
+            using (var reader = command.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    var orderDetail = new OrderDetail
+                    {
+                        orderdetailid = reader["orderdetailid"].ToString(),
+                        orderid = reader["orderid"].ToString(),
+                        staffid = reader.IsDBNull(reader.GetOrdinal("staffid")) ? null : reader["staffid"].ToString(),
+                        customerid = reader["customerid"].ToString(),
+                        productid = reader["productid"].ToString(),
+                        productname = reader["productname"].ToString(),
+                        quantity = reader.GetInt32(reader.GetOrdinal("quantity")),
+                        size = reader["size"].ToString(),
+                        image = reader.IsDBNull(reader.GetOrdinal("image")) ? null : (byte[])reader["image"],
+                        totalprice = reader.GetInt32(reader.GetOrdinal("totalprice")),
+                        date = reader.GetDateTime(reader.GetOrdinal("date")),
+                        paymentmethod = reader["paymentmethod"].ToString(),
+                        status = reader.GetInt32(reader.GetOrdinal("status")),
+                        customername = reader["customername"].ToString(),
+                        address = reader["address"].ToString(),
+                        phonenumber = reader["phonenumber"].ToString()
+                    };
+                    orderDetails.Add(orderDetail);
+                }
+            }
+            _context.Database.CloseConnection();
+        }
+    }
+    catch (Exception ex)
+    {
+        _logger.LogError(ex, "Error getting order details by order ID");
+        throw;
+    }
+
+    return orderDetails;
+}
+
+
+
+        public OrderDetail GetOrderDetailByCustomerId(string customerid)
+        {
+            var orderDetails = new List<OrderDetail>();
+            try
+            {
+                using (var command = _context.Database.GetDbConnection().CreateCommand())
+                {
+                    command.CommandText = @"
+                SELECT * FROM get_order_detail_by_customerid(@p_customerid)";
+                    command.CommandType = CommandType.Text;
+
+                    command.Parameters.Add(new NpgsqlParameter("p_customerid", customerid));
+
+                    _context.Database.OpenConnection();
+                    using (var reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            var orderDetail = new OrderDetail
+                            {
+                                orderdetailid = reader["orderdetailid"].ToString(),
+                                orderid = reader["orderid"].ToString(),
+                                staffid = reader.IsDBNull(2) ? null : reader["staffid"].ToString(),
+                                customerid = reader["customerid"].ToString(),
+                                productid = reader["productid"].ToString(),
+                                productname = reader["productname"].ToString(),
+                                quantity = reader.GetInt32(6),
+                                size = reader["size"].ToString(),
+                                image = reader.IsDBNull(8) ? null : (byte[])reader["image"],
+                                totalprice = reader.GetInt32(9),
+                                date = reader.GetDateTime(10),
+                                paymentmethod = reader["paymentmethod"].ToString(),
+                                status = reader.GetInt32(12),
+                                customername = reader["customername"].ToString(),
+                                address = reader["address"].ToString(),
+                                phonenumber = reader["phonenumber"].ToString()
+                            };
+
+                            orderDetails.Add(orderDetail);
+                        }
+                    }
+                    _context.Database.CloseConnection();
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error getting order details by customer ID");
+                throw;
+            }
+
+            return null;
+        }
+
+
+        public List<OrderDetail> GetAllOrderDetails()
+        {
+            var orderDetails = new List<OrderDetail>();
+            using (var command = _context.Database.GetDbConnection().CreateCommand())
+            {
+                command.CommandText = "SELECT * FROM get_all_orderdetail()";
+                command.CommandType = CommandType.Text;
+
+                _context.Database.OpenConnection();
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        orderDetails.Add(new OrderDetail
+                        {
+                            orderdetailid = reader["orderdetailid"].ToString(),
+                            orderid = reader["orderid"].ToString(),
+                            staffid = reader["staffid"].ToString(),
+                            customerid = reader["customerid"].ToString(),
+                            productid = reader["productid"].ToString(),
+                            productname = reader["productname"].ToString(),
+                            quantity = int.Parse(reader["quantity"].ToString()),
+                            size = reader["size"].ToString(),
+                            image = reader["image"] as byte[],
+                            totalprice = int.Parse(reader["totalprice"].ToString()),
+                            date = DateTime.Parse(reader["date"].ToString()),
+                            paymentmethod = reader["paymentmethod"].ToString(),
+                            status = int.Parse(reader["status"].ToString()),
+                            customername = reader["customername"].ToString(),
+                            address = reader["address"].ToString(),
+                            phonenumber = reader["phonenumber"].ToString(),
+                        });
+                    }
+                }
+                _context.Database.CloseConnection();
+            }
+            return orderDetails;
+        }
+
+
+
+
 
         // function for order comment
         public void AddComment(Comment comment)

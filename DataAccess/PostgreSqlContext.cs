@@ -12,11 +12,11 @@ namespace highlandcoffeeapp_BE.DataAccess
 
         public DbSet<Account> accounts { get; set; }
         public DbSet<Admin> admins { get; set; }
+        public DbSet<Staff> staffs { get; set; }
         public DbSet<Customer> customers { get; set; }
         public DbSet<Category> categories { get; set; }
         public DbSet<Cart> carts { get; set; }
         public DbSet<CartDetail> cartdetails { get; set; }
-        public DbSet<Staff> staffs { get; set; }
         public DbSet<Product> products { get; set; }
         public DbSet<Favorite> favorites { get; set; }
         public DbSet<Order> orders { get; set; }

@@ -74,13 +74,22 @@ namespace highlandcoffeeapp_BE.DataAccess
         List<Favorite> GetFavoritesByCustomerId(string customerid);
 
         // function for order
-        void AddOrdersRecord(Order order);
-        void UpdateOrdersRecord(Order order);
-        void DeleteOrdersRecord(int id);
-        Order GetOrdersSingleRecord(int id);
-        List<Order> GetOrdersRecords();
+        void AddOrder(OrderDetail orderdetailid);
+        void UpdateOrder(Order order);
+        void DeleteOrder(string orderid);
+        Order GetOrderById(string orderid);
+        Order GetOrderByCustomerId(string customerid);
+        List<Order> GetAllOrders();
 
         // function for order detail
+        void AddOrderDetail(OrderDetail orderDetail);
+        void UpdateOrderDetail(OrderDetail orderDetail);
+        void DeleteOrderDetail(string orderdetailid);
+        OrderDetail GetOrderDetailById(string orderdetailid);
+        List<OrderDetail> GetOrderDetailByOrderId(string orderid);
+
+        OrderDetail GetOrderDetailByCustomerId(string customerid);
+        List<OrderDetail> GetAllOrderDetails();
 
         // function for comment
         void AddComment(Comment comment);

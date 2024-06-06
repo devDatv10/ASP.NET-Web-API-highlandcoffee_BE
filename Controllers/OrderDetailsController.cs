@@ -1,48 +1,49 @@
-﻿using highlandcoffeeapp_BE.DataAccess;
+using highlandcoffeeapp_BE.DataAccess;
 using highlandcoffeeapp_BE.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace highlandcoffeeapp_BE.Controllers
 {
     [Route("api/[controller]")]
-    public class OrdersController : ControllerBase
+    public class OrderDetailsController : ControllerBase
     {
         private readonly IDataAccessProvider _dataAccessProvider;
 
-        public OrdersController(IDataAccessProvider dataAccessProvider)
+        public OrderDetailsController(IDataAccessProvider dataAccessProvider)
         {
             _dataAccessProvider = dataAccessProvider;
         }
 
         [HttpGet]
-        public IEnumerable<Order> Get()
+        public IEnumerable<OrderDetail> Get()
         {
-            return _dataAccessProvider.GetAllOrders();
+            return _dataAccessProvider.GetAllOrderDetails();
         }
 
         [HttpPost]
-        public IActionResult Create([FromBody] OrderDetail orderdetail)
+        public IActionResult Create([FromBody] OrderDetail orderDetail)
         {
             if (ModelState.IsValid)
             {
-                _dataAccessProvider.AddOrder(orderdetail);
+                _dataAccessProvider.AddOrderDetail(orderDetail);
                 return Ok();
             }
             return BadRequest();
         }
 
-        [HttpGet("customer/{customerid}")]
-        public Order GetOrderByCustomerId(string customerid)
+        [HttpGet("order/{orderid}")]
+        public List<OrderDetail> GetOrderDetailByOrderId(string orderid)
         {
-            return _dataAccessProvider.GetOrderByCustomerId(customerid);
+            return _dataAccessProvider.GetOrderDetailByOrderId(orderid);
         }
 
+
         [HttpPut]
-        public IActionResult Edit([FromBody] Order order)
+        public IActionResult Edit([FromBody] OrderDetail orderDetail)
         {
             if (ModelState.IsValid)
             {
-                _dataAccessProvider.UpdateOrder(order);
+                _dataAccessProvider.UpdateOrderDetail(orderDetail);
                 return Ok();
             }
             return BadRequest();
@@ -51,12 +52,12 @@ namespace highlandcoffeeapp_BE.Controllers
         [HttpDelete("{id}")]
         public IActionResult DeleteConfirmed(string id)
         {
-            var data = _dataAccessProvider.GetOrderById(id);
+            var data = _dataAccessProvider.GetOrderDetailById(id);
             if (data == null)
             {
                 return NotFound();
             }
-            _dataAccessProvider.DeleteOrder(id);
+            _dataAccessProvider.DeleteOrderDetail(id);
             return Ok();
         }
     }
