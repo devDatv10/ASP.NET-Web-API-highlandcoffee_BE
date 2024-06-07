@@ -3,6 +3,7 @@ using highlandcoffeeapp_BE.Models;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
 using Microsoft.Extensions.Logging;
+using NpgsqlTypes;
 
 namespace highlandcoffeeapp_BE.DataAccess
 {
@@ -1249,51 +1250,40 @@ namespace highlandcoffeeapp_BE.DataAccess
 
         // function for order
         public void AddOrder(OrderDetail orderdetail)
+{
+    try
+    {
+        using (var command = _context.Database.GetDbConnection().CreateCommand())
         {
-            try
-            {
-                using (var command = _context.Database.GetDbConnection().CreateCommand())
-                {
-                    command.CommandText = @"
+            command.CommandText = @"
             SELECT public.add_order(
                 @p_customerid,
-                @p_productid,
-                @p_productname,
-                @p_quantity,
-                @p_size,
-                @p_image,
-                @p_totalprice,
                 @p_paymentmethod,
                 @p_cartid,
                 @p_customername,
                 @p_address,
                 @p_phonenumber)";
-                    command.CommandType = CommandType.Text;
+            command.CommandType = CommandType.Text;
 
-                    command.Parameters.Add(new NpgsqlParameter("p_customerid", orderdetail.customerid));
-                    command.Parameters.Add(new NpgsqlParameter("p_productid", orderdetail.productid));
-                    command.Parameters.Add(new NpgsqlParameter("p_productname", orderdetail.productname));
-                    command.Parameters.Add(new NpgsqlParameter("p_quantity", orderdetail.quantity));
-                    command.Parameters.Add(new NpgsqlParameter("p_size", orderdetail.size));
-                    command.Parameters.Add(new NpgsqlParameter("p_image", orderdetail.image));
-                    command.Parameters.Add(new NpgsqlParameter("p_totalprice", orderdetail.totalprice));
-                    command.Parameters.Add(new NpgsqlParameter("p_paymentmethod", orderdetail.paymentmethod));
-                    command.Parameters.Add(new NpgsqlParameter("p_cartid", orderdetail.cartid));
-                    command.Parameters.Add(new NpgsqlParameter("p_customername", orderdetail.customername));
-                    command.Parameters.Add(new NpgsqlParameter("p_address", orderdetail.address));
-                    command.Parameters.Add(new NpgsqlParameter("p_phonenumber", orderdetail.phonenumber));
+            // Thêm các tham số
+            command.Parameters.Add(new NpgsqlParameter("p_customerid", orderdetail.customerid));
+            command.Parameters.Add(new NpgsqlParameter("p_paymentmethod", orderdetail.paymentmethod));
+            command.Parameters.Add(new NpgsqlParameter("p_cartid", orderdetail.cartid));
+            command.Parameters.Add(new NpgsqlParameter("p_customername", orderdetail.customername));
+            command.Parameters.Add(new NpgsqlParameter("p_address", orderdetail.address));
+            command.Parameters.Add(new NpgsqlParameter("p_phonenumber", orderdetail.phonenumber));
 
-                    _context.Database.OpenConnection();
-                    command.ExecuteNonQuery();
-                    _context.Database.CloseConnection();
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error adding order");
-                throw;
-            }
+            _context.Database.OpenConnection();
+            command.ExecuteNonQuery();
+            _context.Database.CloseConnection();
         }
+    }
+    catch (Exception ex)
+    {
+        _logger.LogError(ex, "Error adding order");
+        throw;
+    }
+}
 
 
 
@@ -1339,47 +1329,49 @@ namespace highlandcoffeeapp_BE.DataAccess
         }
 
 
-        public Order GetOrderByCustomerId(string customerid)
+        public List<Order> GetOrderByCustomerId(string customerid)
+{
+    List<Order> orders = new List<Order>();
+    try
+    {
+        using (var command = _context.Database.GetDbConnection().CreateCommand())
         {
-            Order order = null;
-            try
-            {
-                using (var command = _context.Database.GetDbConnection().CreateCommand())
-                {
-                    command.CommandText = @"
+            command.CommandText = @"
                 SELECT * FROM get_order_by_customerid(@p_customerid)";
-                    command.CommandType = CommandType.Text;
+            command.CommandType = CommandType.Text;
 
-                    command.Parameters.Add(new NpgsqlParameter("p_customerid", customerid));
+            command.Parameters.Add(new NpgsqlParameter("p_customerid", customerid));
 
-                    _context.Database.OpenConnection();
-                    using (var reader = command.ExecuteReader())
+            _context.Database.OpenConnection();
+            using (var reader = command.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    Order order = new Order
                     {
-                        if (reader.Read())
-                        {
-                            order = new Order
-                            {
-                                orderid = reader["orderid"].ToString(),
-                                customerid = reader["customerid"].ToString(),
-                                staffid = reader["staffid"] != DBNull.Value ? reader["staffid"].ToString() : null,
-                                date = reader.GetDateTime(reader.GetOrdinal("date")),
-                                paymentmethod = reader["paymentmethod"].ToString(),
-                                status = reader.GetInt32(reader.GetOrdinal("status")),
-                                totalprice = reader.GetInt32(reader.GetOrdinal("totalprice"))
-                            };
-                        }
-                    }
-                    _context.Database.CloseConnection();
+                        orderid = reader["orderid"].ToString(),
+                        customerid = reader["customerid"].ToString(),
+                        staffid = reader["staffid"] != DBNull.Value ? reader["staffid"].ToString() : null,
+                        date = reader.GetDateTime(reader.GetOrdinal("date")),
+                        paymentmethod = reader["paymentmethod"].ToString(),
+                        status = reader.GetInt32(reader.GetOrdinal("status")),
+                        totalprice = reader.GetInt32(reader.GetOrdinal("totalprice"))
+                    };
+                    orders.Add(order);
                 }
             }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error getting order by customer ID");
-                throw;
-            }
-
-            return order;
+            _context.Database.CloseConnection();
         }
+    }
+    catch (Exception ex)
+    {
+        _logger.LogError(ex, "Error getting orders by customer ID");
+        throw;
+    }
+
+    return orders;
+}
+
 
 
         public List<Order> GetAllOrders()
@@ -1458,58 +1450,59 @@ namespace highlandcoffeeapp_BE.DataAccess
         }
 
         public List<OrderDetail> GetOrderDetailByOrderId(string orderid)
-{
-    var orderDetails = new List<OrderDetail>();
-    try
-    {
-        using (var command = _context.Database.GetDbConnection().CreateCommand())
         {
-            command.CommandText = @"
-            SELECT * FROM get_orderdetail_by_orderid(@p_orderid)";
-            command.CommandType = CommandType.Text;
-
-            var parameter = new NpgsqlParameter("p_orderid", NpgsqlTypes.NpgsqlDbType.Varchar);
-            parameter.Value = orderid;
-            command.Parameters.Add(parameter);
-
-            _context.Database.OpenConnection();
-            using (var reader = command.ExecuteReader())
+            var orderDetails = new List<OrderDetail>();
+            try
             {
-                while (reader.Read())
+                using (var command = _context.Database.GetDbConnection().CreateCommand())
                 {
-                    var orderDetail = new OrderDetail
+                    command.CommandText = @"
+            SELECT * FROM get_orderdetail_by_orderid(@p_orderid)";
+                    command.CommandType = CommandType.Text;
+
+                    var parameter = new NpgsqlParameter("p_orderid", NpgsqlTypes.NpgsqlDbType.Varchar);
+                    parameter.Value = orderid;
+                    command.Parameters.Add(parameter);
+
+                    _context.Database.OpenConnection();
+                    using (var reader = command.ExecuteReader())
                     {
-                        orderdetailid = reader["orderdetailid"].ToString(),
-                        orderid = reader["orderid"].ToString(),
-                        staffid = reader.IsDBNull(reader.GetOrdinal("staffid")) ? null : reader["staffid"].ToString(),
-                        customerid = reader["customerid"].ToString(),
-                        productid = reader["productid"].ToString(),
-                        productname = reader["productname"].ToString(),
-                        quantity = reader.GetInt32(reader.GetOrdinal("quantity")),
-                        size = reader["size"].ToString(),
-                        image = reader.IsDBNull(reader.GetOrdinal("image")) ? null : (byte[])reader["image"],
-                        totalprice = reader.GetInt32(reader.GetOrdinal("totalprice")),
-                        date = reader.GetDateTime(reader.GetOrdinal("date")),
-                        paymentmethod = reader["paymentmethod"].ToString(),
-                        status = reader.GetInt32(reader.GetOrdinal("status")),
-                        customername = reader["customername"].ToString(),
-                        address = reader["address"].ToString(),
-                        phonenumber = reader["phonenumber"].ToString()
-                    };
-                    orderDetails.Add(orderDetail);
+                        while (reader.Read())
+                        {
+                            var orderDetail = new OrderDetail
+                            {
+                                orderdetailid = reader["orderdetailid"].ToString(),
+                                orderid = reader["orderid"].ToString(),
+                                staffid = reader.IsDBNull(reader.GetOrdinal("staffid")) ? null : reader["staffid"].ToString(),
+                                customerid = reader["customerid"].ToString(),
+                                productid = reader["productid"].ToString(),
+                                productname = reader["productname"].ToString(),
+                                quantity = reader.GetInt32(reader.GetOrdinal("quantity")),
+                                size = reader["size"].ToString(),
+                                image = reader.IsDBNull(reader.GetOrdinal("image")) ? null : (byte[])reader["image"],
+                                intomoney = reader.GetInt32(reader.GetOrdinal("intomoney")),
+                                totalprice = reader.GetInt32(reader.GetOrdinal("totalprice")),
+                                date = reader.GetDateTime(reader.GetOrdinal("date")),
+                                paymentmethod = reader["paymentmethod"].ToString(),
+                                status = reader.GetInt32(reader.GetOrdinal("status")),
+                                customername = reader["customername"].ToString(),
+                                address = reader["address"].ToString(),
+                                phonenumber = reader["phonenumber"].ToString()
+                            };
+                            orderDetails.Add(orderDetail);
+                        }
+                    }
+                    _context.Database.CloseConnection();
                 }
             }
-            _context.Database.CloseConnection();
-        }
-    }
-    catch (Exception ex)
-    {
-        _logger.LogError(ex, "Error getting order details by order ID");
-        throw;
-    }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error getting order details by order ID");
+                throw;
+            }
 
-    return orderDetails;
-}
+            return orderDetails;
+        }
 
 
 
@@ -1542,6 +1535,7 @@ namespace highlandcoffeeapp_BE.DataAccess
                                 quantity = reader.GetInt32(6),
                                 size = reader["size"].ToString(),
                                 image = reader.IsDBNull(8) ? null : (byte[])reader["image"],
+                                intomoney = reader.GetInt32(9),
                                 totalprice = reader.GetInt32(9),
                                 date = reader.GetDateTime(10),
                                 paymentmethod = reader["paymentmethod"].ToString(),
@@ -1591,6 +1585,7 @@ namespace highlandcoffeeapp_BE.DataAccess
                             quantity = int.Parse(reader["quantity"].ToString()),
                             size = reader["size"].ToString(),
                             image = reader["image"] as byte[],
+                            intomoney = int.Parse(reader["intomoney"].ToString()),
                             totalprice = int.Parse(reader["totalprice"].ToString()),
                             date = DateTime.Parse(reader["date"].ToString()),
                             paymentmethod = reader["paymentmethod"].ToString(),

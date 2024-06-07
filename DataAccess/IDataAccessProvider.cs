@@ -78,7 +78,7 @@ namespace highlandcoffeeapp_BE.DataAccess
         void UpdateOrder(Order order);
         void DeleteOrder(string orderid);
         Order GetOrderById(string orderid);
-        Order GetOrderByCustomerId(string customerid);
+        List<Order> GetOrderByCustomerId(string customerid);
         List<Order> GetAllOrders();
 
         // function for order detail

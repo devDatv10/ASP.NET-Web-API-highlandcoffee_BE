@@ -32,7 +32,7 @@ namespace highlandcoffeeapp_BE.Controllers
         }
 
         [HttpGet("customer/{customerid}")]
-        public Order GetOrderByCustomerId(string customerid)
+        public List<Order> GetOrderByCustomerId(string customerid)
         {
             return _dataAccessProvider.GetOrderByCustomerId(customerid);
         }

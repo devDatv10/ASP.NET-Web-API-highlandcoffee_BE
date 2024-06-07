@@ -147,6 +147,7 @@ namespace highlandcoffeeapp_BE.Models
         public int quantity { get; set; }
         public string size { get; set; }
         public byte[] image { get; set; }
+        public int intomoney { get; set; }
         public int totalprice { get; set; }
         public DateTime date { get; set; }
         public string paymentmethod { get; set; }
