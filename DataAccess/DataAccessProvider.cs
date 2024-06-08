@@ -1250,12 +1250,12 @@ namespace highlandcoffeeapp_BE.DataAccess
 
         // function for order
         public void AddOrder(OrderDetail orderdetail)
-{
-    try
-    {
-        using (var command = _context.Database.GetDbConnection().CreateCommand())
         {
-            command.CommandText = @"
+            try
+            {
+                using (var command = _context.Database.GetDbConnection().CreateCommand())
+                {
+                    command.CommandText = @"
             SELECT public.add_order(
                 @p_customerid,
                 @p_paymentmethod,
@@ -1263,27 +1263,27 @@ namespace highlandcoffeeapp_BE.DataAccess
                 @p_customername,
                 @p_address,
                 @p_phonenumber)";
-            command.CommandType = CommandType.Text;
+                    command.CommandType = CommandType.Text;
 
-            // Thêm các tham số
-            command.Parameters.Add(new NpgsqlParameter("p_customerid", orderdetail.customerid));
-            command.Parameters.Add(new NpgsqlParameter("p_paymentmethod", orderdetail.paymentmethod));
-            command.Parameters.Add(new NpgsqlParameter("p_cartid", orderdetail.cartid));
-            command.Parameters.Add(new NpgsqlParameter("p_customername", orderdetail.customername));
-            command.Parameters.Add(new NpgsqlParameter("p_address", orderdetail.address));
-            command.Parameters.Add(new NpgsqlParameter("p_phonenumber", orderdetail.phonenumber));
+                    // Thêm các tham số
+                    command.Parameters.Add(new NpgsqlParameter("p_customerid", orderdetail.customerid));
+                    command.Parameters.Add(new NpgsqlParameter("p_paymentmethod", orderdetail.paymentmethod));
+                    command.Parameters.Add(new NpgsqlParameter("p_cartid", orderdetail.cartid));
+                    command.Parameters.Add(new NpgsqlParameter("p_customername", orderdetail.customername));
+                    command.Parameters.Add(new NpgsqlParameter("p_address", orderdetail.address));
+                    command.Parameters.Add(new NpgsqlParameter("p_phonenumber", orderdetail.phonenumber));
 
-            _context.Database.OpenConnection();
-            command.ExecuteNonQuery();
-            _context.Database.CloseConnection();
+                    _context.Database.OpenConnection();
+                    command.ExecuteNonQuery();
+                    _context.Database.CloseConnection();
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error adding order");
+                throw;
+            }
         }
-    }
-    catch (Exception ex)
-    {
-        _logger.LogError(ex, "Error adding order");
-        throw;
-    }
-}
 
 
 
@@ -1330,47 +1330,47 @@ namespace highlandcoffeeapp_BE.DataAccess
 
 
         public List<Order> GetOrderByCustomerId(string customerid)
-{
-    List<Order> orders = new List<Order>();
-    try
-    {
-        using (var command = _context.Database.GetDbConnection().CreateCommand())
         {
-            command.CommandText = @"
-                SELECT * FROM get_order_by_customerid(@p_customerid)";
-            command.CommandType = CommandType.Text;
-
-            command.Parameters.Add(new NpgsqlParameter("p_customerid", customerid));
-
-            _context.Database.OpenConnection();
-            using (var reader = command.ExecuteReader())
+            List<Order> orders = new List<Order>();
+            try
             {
-                while (reader.Read())
+                using (var command = _context.Database.GetDbConnection().CreateCommand())
                 {
-                    Order order = new Order
+                    command.CommandText = @"
+                SELECT * FROM get_order_by_customerid(@p_customerid)";
+                    command.CommandType = CommandType.Text;
+
+                    command.Parameters.Add(new NpgsqlParameter("p_customerid", customerid));
+
+                    _context.Database.OpenConnection();
+                    using (var reader = command.ExecuteReader())
                     {
-                        orderid = reader["orderid"].ToString(),
-                        customerid = reader["customerid"].ToString(),
-                        staffid = reader["staffid"] != DBNull.Value ? reader["staffid"].ToString() : null,
-                        date = reader.GetDateTime(reader.GetOrdinal("date")),
-                        paymentmethod = reader["paymentmethod"].ToString(),
-                        status = reader.GetInt32(reader.GetOrdinal("status")),
-                        totalprice = reader.GetInt32(reader.GetOrdinal("totalprice"))
-                    };
-                    orders.Add(order);
+                        while (reader.Read())
+                        {
+                            Order order = new Order
+                            {
+                                orderid = reader["orderid"].ToString(),
+                                customerid = reader["customerid"].ToString(),
+                                staffid = reader["staffid"] != DBNull.Value ? reader["staffid"].ToString() : null,
+                                date = reader.GetDateTime(reader.GetOrdinal("date")),
+                                paymentmethod = reader["paymentmethod"].ToString(),
+                                status = reader.GetInt32(reader.GetOrdinal("status")),
+                                totalprice = reader.GetInt32(reader.GetOrdinal("totalprice"))
+                            };
+                            orders.Add(order);
+                        }
+                    }
+                    _context.Database.CloseConnection();
                 }
             }
-            _context.Database.CloseConnection();
-        }
-    }
-    catch (Exception ex)
-    {
-        _logger.LogError(ex, "Error getting orders by customer ID");
-        throw;
-    }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error getting orders by customer ID");
+                throw;
+            }
 
-    return orders;
-}
+            return orders;
+        }
 
 
 
