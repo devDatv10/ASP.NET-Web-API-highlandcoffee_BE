@@ -551,7 +551,7 @@ namespace highlandcoffeeapp_BE.DataAccess
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.CommandText = "update_staff";
 
-                    cmd.Parameters.Add(new NpgsqlParameter("p_staffid", staff.id));
+                    cmd.Parameters.Add(new NpgsqlParameter("p_staffid", staff.staffid));
                     cmd.Parameters.Add(new NpgsqlParameter("p_name", staff.name));
                     cmd.Parameters.Add(new NpgsqlParameter("p_phonenumber", staff.phonenumber));
                     cmd.Parameters.Add(new NpgsqlParameter("p_startday", staff.startday));
@@ -563,7 +563,7 @@ namespace highlandcoffeeapp_BE.DataAccess
             }
         }
 
-        public void DeleteStaffRecord(string id)
+        public void DeleteStaffRecord(string staffid)
         {
             using (var conn = _context.Database.GetDbConnection())
             {
@@ -573,21 +573,21 @@ namespace highlandcoffeeapp_BE.DataAccess
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.CommandText = "delete_staff";
 
-                    cmd.Parameters.Add(new NpgsqlParameter("p_staffid", id));
+                    cmd.Parameters.Add(new NpgsqlParameter("p_staffid", staffid));
 
                     cmd.ExecuteNonQuery();
                 }
             }
         }
 
-        public Staff GetStaffById(string id)
+        public Staff GetStaffById(string staffid)
         {
             using (var command = _context.Database.GetDbConnection().CreateCommand())
             {
                 command.CommandText = "SELECT * FROM get_staff_by_id(@p_staffid)";
                 command.CommandType = CommandType.Text;
 
-                command.Parameters.Add(new NpgsqlParameter("p_staffid", id));
+                command.Parameters.Add(new NpgsqlParameter("p_staffid", staffid));
 
                 _context.Database.OpenConnection();
                 using (var reader = command.ExecuteReader())
@@ -596,7 +596,7 @@ namespace highlandcoffeeapp_BE.DataAccess
                     {
                         return new Staff
                         {
-                            id = reader["id"].ToString(),
+                            staffid = reader["staffid"].ToString(),
                             name = reader["name"].ToString(),
                             phonenumber = reader["phonenumber"].ToString(),
                             startday = DateTime.Parse(reader["startday"].ToString()),
@@ -625,7 +625,7 @@ namespace highlandcoffeeapp_BE.DataAccess
                     {
                         staffs.Add(new Staff
                         {
-                            id = reader["id"].ToString(),
+                            staffid = reader["staffid"].ToString(),
                             name = reader["name"].ToString(),
                             phonenumber = reader["phonenumber"].ToString(),
                             startday = DateTime.Parse(reader["startday"].ToString()),

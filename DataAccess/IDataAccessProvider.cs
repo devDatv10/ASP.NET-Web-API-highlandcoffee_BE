@@ -52,8 +52,8 @@ namespace highlandcoffeeapp_BE.DataAccess
         // function for staff
         void AddStaffRecord(Staff staff);
         void UpdateStaffRecord(Staff staff);
-        void DeleteStaffRecord(string id);
-        Staff GetStaffById(string id);
+        void DeleteStaffRecord(string staffid);
+        Staff GetStaffById(string staffid);
         List<Staff> GetAllStaffs();
 
 

@@ -48,7 +48,7 @@ namespace highlandcoffeeapp_BE.Models
     // Models for Staff
     public class Staff
     {
-        public string id { get; set; }
+        public string staffid { get; set; }
         public string name { get; set; }
         public string phonenumber { get; set; }
         public DateTime startday { get; set; }
