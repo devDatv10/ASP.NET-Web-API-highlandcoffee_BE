@@ -25,7 +25,7 @@ namespace highlandcoffeeapp_BE.Controllers
         {
             if (ModelState.IsValid)
             {
-                _dataAccessProvider.AddStaffRecord(staff);
+                _dataAccessProvider.AddStaff(staff);
                 return Ok();
             }
             return BadRequest();
@@ -37,12 +37,19 @@ namespace highlandcoffeeapp_BE.Controllers
             return _dataAccessProvider.GetStaffById(id);
         }
 
-        [HttpPut]
-        public IActionResult Edit([FromBody] Staff staff)
+        [HttpPut("{id}")]
+        public IActionResult Update(string id, [FromBody] Staff staff)
         {
             if (ModelState.IsValid)
             {
-                _dataAccessProvider.UpdateStaffRecord(staff);
+                var existingProduct = _dataAccessProvider.GetStaffById(id);
+                if (existingProduct == null)
+                {
+                    return NotFound();
+                }
+
+                staff.staffid = id;
+                _dataAccessProvider.UpdateStaff(staff);
                 return Ok();
             }
             return BadRequest();
@@ -56,7 +63,7 @@ namespace highlandcoffeeapp_BE.Controllers
             {
                 return NotFound();
             }
-            _dataAccessProvider.DeleteStaffRecord(id);
+            _dataAccessProvider.DeleteStaff(id);
             return Ok();
         }
     }

@@ -520,63 +520,95 @@ namespace highlandcoffeeapp_BE.DataAccess
 
 
         // function for staff
-        public void AddStaffRecord(Staff staff)
+        public void AddStaff(Staff staff)
         {
-            using (var conn = _context.Database.GetDbConnection())
+            try
             {
-                conn.Open();
-                using (var cmd = conn.CreateCommand())
+                using (var command = _context.Database.GetDbConnection().CreateCommand())
                 {
-                    cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.CommandText = "add_staff";
+                    // Sử dụng SELECT để gọi hàm add_staff
+                    command.CommandText = @"
+                SELECT add_staff(
+                    @p_name,
+                    @p_phonenumber,
+                    @p_password,
+                    @p_startday::date,
+                    @p_salary
+                )";
+                    command.CommandType = CommandType.Text;
 
-                    cmd.Parameters.Add(new NpgsqlParameter("p_name", staff.name));
-                    cmd.Parameters.Add(new NpgsqlParameter("p_phonenumber", staff.phonenumber));
-                    cmd.Parameters.Add(new NpgsqlParameter("p_startday", staff.startday));
-                    cmd.Parameters.Add(new NpgsqlParameter("p_salary", staff.salary));
-                    cmd.Parameters.Add(new NpgsqlParameter("p_password", staff.password));
+                    command.Parameters.Add(new NpgsqlParameter("p_name", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = staff.name });
+                    command.Parameters.Add(new NpgsqlParameter("p_phonenumber", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = staff.phonenumber });
+                    command.Parameters.Add(new NpgsqlParameter("p_password", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = staff.password });
+                    command.Parameters.Add(new NpgsqlParameter("p_startday", NpgsqlTypes.NpgsqlDbType.Date) { Value = (object)staff.startday ?? DBNull.Value });
+                    command.Parameters.Add(new NpgsqlParameter("p_salary", NpgsqlTypes.NpgsqlDbType.Integer) { Value = staff.salary });
 
-                    cmd.ExecuteNonQuery();
+                    _context.Database.OpenConnection();
+                    command.ExecuteNonQuery();
+                    _context.Database.CloseConnection();
                 }
+            }
+            catch (Exception ex)
+            {
+                // Log lỗi để biết nguyên nhân chính xác
+                _logger.LogError(ex, "Error adding staff");
+                throw;
             }
         }
 
-        public void UpdateStaffRecord(Staff staff)
+
+
+        public void UpdateStaff(Staff staff)
         {
-            using (var conn = _context.Database.GetDbConnection())
+            try
             {
-                conn.Open();
-                using (var cmd = conn.CreateCommand())
+                using (var command = _context.Database.GetDbConnection().CreateCommand())
                 {
-                    cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.CommandText = "update_staff";
+                    command.CommandText = @"
+                SELECT update_staff(
+                    @p_staffid,
+                    @p_name,
+                    @p_phonenumber,
+                    @p_startday,
+                    @p_salary,
+                    @p_password
+                )";
+                    command.CommandType = CommandType.Text;
 
-                    cmd.Parameters.Add(new NpgsqlParameter("p_staffid", staff.staffid));
-                    cmd.Parameters.Add(new NpgsqlParameter("p_name", staff.name));
-                    cmd.Parameters.Add(new NpgsqlParameter("p_phonenumber", staff.phonenumber));
-                    cmd.Parameters.Add(new NpgsqlParameter("p_startday", staff.startday));
-                    cmd.Parameters.Add(new NpgsqlParameter("p_salary", staff.salary));
-                    cmd.Parameters.Add(new NpgsqlParameter("p_password", staff.password));
+                    command.Parameters.Add(new NpgsqlParameter("p_staffid", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = staff.staffid });
+                    command.Parameters.Add(new NpgsqlParameter("p_name", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = staff.name });
+                    command.Parameters.Add(new NpgsqlParameter("p_phonenumber", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = staff.phonenumber });
+                    command.Parameters.Add(new NpgsqlParameter("p_password", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = staff.password });
+                    command.Parameters.Add(new NpgsqlParameter("p_startday", NpgsqlTypes.NpgsqlDbType.Date) { Value = (object)staff.startday ?? DBNull.Value });
+                    command.Parameters.Add(new NpgsqlParameter("p_salary", NpgsqlTypes.NpgsqlDbType.Integer) { Value = staff.salary });
 
-                    cmd.ExecuteNonQuery();
+                    _context.Database.OpenConnection();
+                    command.ExecuteNonQuery();
+                    _context.Database.CloseConnection();
                 }
+            }
+            catch (Exception ex)
+            {
+                // Log lỗi để biết nguyên nhân chính xác
+                _logger.LogError(ex, "Error updating staff");
+                throw;
             }
         }
 
-        public void DeleteStaffRecord(string staffid)
+
+        public void DeleteStaff(string staffid)
         {
-            using (var conn = _context.Database.GetDbConnection())
+            using (var command = _context.Database.GetDbConnection().CreateCommand())
             {
-                conn.Open();
-                using (var cmd = conn.CreateCommand())
-                {
-                    cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.CommandText = "delete_staff";
+                command.CommandText = @"
+                SELECT delete_staff(@p_staffid)";
+                command.CommandType = CommandType.Text;
 
-                    cmd.Parameters.Add(new NpgsqlParameter("p_staffid", staffid));
+                command.Parameters.Add(new NpgsqlParameter("p_staffid", staffid));
 
-                    cmd.ExecuteNonQuery();
-                }
+                _context.Database.OpenConnection();
+                command.ExecuteNonQuery();
+                _context.Database.CloseConnection();
             }
         }
 

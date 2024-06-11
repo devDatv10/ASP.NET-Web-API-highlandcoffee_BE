@@ -18,6 +18,13 @@ namespace highlandcoffeeapp_BE.DataAccess
         Admin GetAdminById(string adminid);
         List<Admin> GetAllAdmins();
 
+        // function for staff
+        void AddStaff(Staff staff);
+        void UpdateStaff(Staff staff);
+        void DeleteStaff(string staffid);
+        Staff GetStaffById(string staffid);
+        List<Staff> GetAllStaffs();
+
         // function for customer
         void AddCustomer(Customer customer);
         void UpdateCustomer(Customer customer);
@@ -32,6 +39,14 @@ namespace highlandcoffeeapp_BE.DataAccess
         void DeleteCategory(string categoryid);
         Category GetCategoryById(string categoryid);
         List<Category> GetAllCategories();
+
+        // function for product
+        void AddProduct(Product product);
+        void UpdateProduct(Product product);
+        void DeleteProduct(string productid);
+        Product GetProductById(string productid);
+        List<Product> GetAllProducts();
+        List<Product> GetProductsByCategoryId(string categoryid);
 
         // function for cart
         void AddCart(CartDetail cartdetail);
@@ -48,23 +63,6 @@ namespace highlandcoffeeapp_BE.DataAccess
         CartDetail GetCartDetailByCustomerId(string customerid);
         CartDetail GetCartDetailByCartDetailId(string cartdetailid);
         List<CartDetail> GetAllCartDetails();
-
-        // function for staff
-        void AddStaffRecord(Staff staff);
-        void UpdateStaffRecord(Staff staff);
-        void DeleteStaffRecord(string staffid);
-        Staff GetStaffById(string staffid);
-        List<Staff> GetAllStaffs();
-
-
-
-        // function for product
-        void AddProduct(Product product);
-        void UpdateProduct(Product product);
-        void DeleteProduct(string productid);
-        Product GetProductById(string productid);
-        List<Product> GetAllProducts();
-        List<Product> GetProductsByCategoryId(string categoryid);
 
         // function for favorite
         void AddFavorite(Favorite favorite);
