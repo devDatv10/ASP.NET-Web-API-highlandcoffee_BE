@@ -95,5 +95,8 @@ namespace highlandcoffeeapp_BE.DataAccess
         void DeleteComment(string commentid);
         Comment GetCommentById(string commentid);
         List<Comment> GetAllComments();
+
+        // function confirm order
+        void ConfirmOrder(string orderId, string staffId);
     }
 }

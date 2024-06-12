@@ -157,5 +157,12 @@ namespace highlandcoffeeapp_BE.Models
         public string phonenumber { get; set; }
     }
 
+    public class ConfirmOrderRequest
+    {
+        public string orderid { get; set; }
+        public string staffid { get; set; }
+    }
+
+
 
 }

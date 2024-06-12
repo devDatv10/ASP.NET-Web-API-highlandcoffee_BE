@@ -1442,6 +1442,35 @@ namespace highlandcoffeeapp_BE.DataAccess
             return orders;
         }
 
+        // function confirm order
+        public void ConfirmOrder(string orderid, string staffid)
+        {
+            try
+            {
+                using (var command = _context.Database.GetDbConnection().CreateCommand())
+                {
+                    command.CommandText = @"
+                SELECT confirm_order(
+                    @p_orderid,
+                    @p_staffid
+                )";
+                    command.CommandType = CommandType.Text;
+
+                    command.Parameters.Add(new NpgsqlParameter("p_orderid", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = orderid });
+                    command.Parameters.Add(new NpgsqlParameter("p_staffid", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = staffid });
+
+                    _context.Database.OpenConnection();
+                    command.ExecuteNonQuery();
+                    _context.Database.CloseConnection();
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error confirming order");
+                throw;
+            }
+        }
+
 
         // function for order detail
         public void AddOrderDetail(OrderDetail orderDetail)

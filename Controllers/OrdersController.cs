@@ -48,6 +48,18 @@ namespace highlandcoffeeapp_BE.Controllers
             return BadRequest();
         }
 
+        [HttpPut("confirm")]
+        public IActionResult ConfirmOrder([FromBody] ConfirmOrderRequest request)
+        {
+            if (ModelState.IsValid)
+            {
+                _dataAccessProvider.ConfirmOrder(request.orderid, request.staffid);
+                return Ok();
+            }
+            return BadRequest();
+        }
+
+
         [HttpDelete("{id}")]
         public IActionResult DeleteConfirmed(string id)
         {
