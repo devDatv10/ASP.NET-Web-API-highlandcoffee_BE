@@ -98,5 +98,8 @@ namespace highlandcoffeeapp_BE.DataAccess
 
         // function confirm order
         void ConfirmOrder(string orderId, string staffId);
+
+        // function cancel order
+        void CancelOrder(string orderid);
     }
 }

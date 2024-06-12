@@ -252,7 +252,7 @@ namespace highlandcoffeeapp_BE.DataAccess
         }
 
 
-        // Function for adding customer
+        // Function for customer
         public void AddCustomer(Customer customer)
         {
             try
@@ -1467,6 +1467,30 @@ namespace highlandcoffeeapp_BE.DataAccess
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error confirming order");
+                throw;
+            }
+        }
+
+        // function cancel order
+        public void CancelOrder(string orderid)
+        {
+            try
+            {
+                using (var command = _context.Database.GetDbConnection().CreateCommand())
+                {
+                    command.CommandText = "SELECT cancel_order(@p_orderid)";
+                    command.CommandType = CommandType.Text;
+
+                    command.Parameters.Add(new NpgsqlParameter("p_orderid", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = orderid });
+
+                    _context.Database.OpenConnection();
+                    command.ExecuteNonQuery();
+                    _context.Database.CloseConnection();
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error cancelling order");
                 throw;
             }
         }

@@ -59,6 +59,24 @@ namespace highlandcoffeeapp_BE.Controllers
             return BadRequest();
         }
 
+        [HttpPut("cancel/{id}")]
+        public IActionResult CancelOrder(string id)
+        {
+            var data = _dataAccessProvider.GetOrderById(id);
+            if (data == null)
+            {
+                return NotFound();
+            }
+
+            if (data.status != 0)
+            {
+                return BadRequest("Order cannot be cancelled as it is already confirmed or processed.");
+            }
+
+            _dataAccessProvider.CancelOrder(id);
+            return Ok();
+        }
+
 
         [HttpDelete("{id}")]
         public IActionResult DeleteConfirmed(string id)
