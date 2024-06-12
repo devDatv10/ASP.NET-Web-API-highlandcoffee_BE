@@ -524,24 +524,29 @@ namespace highlandcoffeeapp_BE.DataAccess
         {
             try
             {
+                // Loại bỏ các ký tự dư \r từ các thuộc tính của staff
+                staff.name = staff.name?.Replace("\r", "");
+                staff.phonenumber = staff.phonenumber?.Replace("\r", "");
+                staff.password = staff.password?.Replace("\r", "");
+
                 using (var command = _context.Database.GetDbConnection().CreateCommand())
                 {
                     // Sử dụng SELECT để gọi hàm add_staff
                     command.CommandText = @"
-                SELECT add_staff(
-                    @p_name,
-                    @p_phonenumber,
-                    @p_password,
-                    @p_startday::date,
-                    @p_salary
-                )";
+            SELECT add_staff(
+                @p_name,
+                @p_phonenumber,
+                @p_password,
+                @p_startday::date,
+                @p_salary
+            )";
                     command.CommandType = CommandType.Text;
 
-                    command.Parameters.Add(new NpgsqlParameter("p_name", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = staff.name });
-                    command.Parameters.Add(new NpgsqlParameter("p_phonenumber", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = staff.phonenumber });
-                    command.Parameters.Add(new NpgsqlParameter("p_password", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = staff.password });
-                    command.Parameters.Add(new NpgsqlParameter("p_startday", NpgsqlTypes.NpgsqlDbType.Date) { Value = (object)staff.startday ?? DBNull.Value });
-                    command.Parameters.Add(new NpgsqlParameter("p_salary", NpgsqlTypes.NpgsqlDbType.Integer) { Value = staff.salary });
+                    command.Parameters.Add(new NpgsqlParameter("p_name", staff.name));
+                    command.Parameters.Add(new NpgsqlParameter("p_phonenumber", staff.phonenumber));
+                    command.Parameters.Add(new NpgsqlParameter("p_password", staff.password));
+                    command.Parameters.Add(new NpgsqlParameter("p_startday", staff.startday == default(DateTime) ? (object)DBNull.Value : staff.startday));
+                    command.Parameters.Add(new NpgsqlParameter("p_salary", staff.salary));
 
                     _context.Database.OpenConnection();
                     command.ExecuteNonQuery();
@@ -555,6 +560,7 @@ namespace highlandcoffeeapp_BE.DataAccess
                 throw;
             }
         }
+
 
 
 
