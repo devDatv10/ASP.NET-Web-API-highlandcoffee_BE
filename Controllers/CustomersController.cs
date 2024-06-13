@@ -31,6 +31,36 @@ namespace highlandcoffeeapp_BE.Controllers
             return BadRequest();
         }
 
+        [HttpPost("activate/{id}")]
+        public IActionResult ActivateAccount(string id)
+        {
+            try
+            {
+                _dataAccessProvider.ActiveAccountCustomer(id);
+                return Ok("Account activated successfully");
+            }
+            catch (Exception ex)
+            {
+                // Xử lý exception nếu cần
+                return StatusCode(500, $"Error activating account: {ex.Message}");
+            }
+        }
+
+        [HttpPost("block/{id}")]
+        public IActionResult BlockAccount(string id)
+        {
+            try
+            {
+                _dataAccessProvider.BlockAccountCustomer(id);
+                return Ok("Account blocked successfully");
+            }
+            catch (Exception ex)
+            {
+                // Xử lý exception nếu cần
+                return StatusCode(500, $"Error blocking account: {ex.Message}");
+            }
+        }
+
         [HttpGet("{id}")]
         public Customer Details(string id)
         {

@@ -385,7 +385,8 @@ namespace highlandcoffeeapp_BE.DataAccess
                             phonenumber = reader["phonenumber"].ToString(),
                             address = reader["address"].ToString(),
                             point = int.Parse(reader["point"].ToString()),
-                            password = reader["password"].ToString()
+                            password = reader["password"].ToString(),
+                            status = int.Parse(reader["status"].ToString())
                         });
                     }
                 }
@@ -393,6 +394,55 @@ namespace highlandcoffeeapp_BE.DataAccess
             }
             return customers;
         }
+
+        public void ActiveAccountCustomer(string personid)
+        {
+            try
+            {
+                using (var command = _context.Database.GetDbConnection().CreateCommand())
+                {
+                    command.CommandText = @"
+                SELECT active_account_customer(@p_personid)";
+                    command.CommandType = CommandType.Text;
+
+                    command.Parameters.Add(new NpgsqlParameter("p_personid", personid));
+
+                    _context.Database.OpenConnection();
+                    command.ExecuteNonQuery();
+                    _context.Database.CloseConnection();
+                }
+            }
+            catch (Exception ex)
+            {
+                // Xử lý exception nếu cần
+                throw new Exception("Error activating account", ex);
+            }
+        }
+
+        public void BlockAccountCustomer(string personid)
+        {
+            try
+            {
+                using (var command = _context.Database.GetDbConnection().CreateCommand())
+                {
+                    command.CommandText = @"
+                SELECT block_account_customer(@p_personid)";
+                    command.CommandType = CommandType.Text;
+
+                    command.Parameters.Add(new NpgsqlParameter("p_personid", personid));
+
+                    _context.Database.OpenConnection();
+                    command.ExecuteNonQuery();
+                    _context.Database.CloseConnection();
+                }
+            }
+            catch (Exception ex)
+            {
+                // Xử lý exception nếu cần
+                throw new Exception("Error blocking account", ex);
+            }
+        }
+
 
         // function for category
         public void AddCategory(Category category)

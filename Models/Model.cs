@@ -42,6 +42,7 @@ namespace highlandcoffeeapp_BE.Models
         public string address { get; set; }
         public int point { get; set; }
         public string password { get; set; }
+        public int status { get; set; }
     }
 
 

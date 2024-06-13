@@ -32,6 +32,10 @@ namespace highlandcoffeeapp_BE.DataAccess
         Customer GetCustomerById(string customerid);
         List<Customer> GetAllCustomers();
 
+        // function active and block account customer
+        void ActiveAccountCustomer(string personid);
+        void BlockAccountCustomer(string personid);
+
 
         // function for category
         void AddCategory(Category category);
