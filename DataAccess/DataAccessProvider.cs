@@ -1870,5 +1870,206 @@ namespace highlandcoffeeapp_BE.DataAccess
             }
             return comments;
         }
+
+        // function for bill
+        public void AddBill(Bill bill)
+        {
+            try
+            {
+                using (var command = _context.Database.GetDbConnection().CreateCommand())
+                {
+                    command.CommandText = @"
+            SELECT public.add_bill(
+                @p_orderid,
+                @p_staffid)";
+                    command.CommandType = CommandType.Text;
+
+                    // Add parameters
+                    command.Parameters.Add(new NpgsqlParameter("p_orderid", bill.orderid));
+                    command.Parameters.Add(new NpgsqlParameter("p_staffid", bill.staffid));
+
+                    _context.Database.OpenConnection();
+                    command.ExecuteNonQuery();
+                    _context.Database.CloseConnection();
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error adding bill");
+                throw;
+            }
+        }
+
+
+        public void DeleteBill(string billid)
+        {
+            try
+            {
+                using (var command = _context.Database.GetDbConnection().CreateCommand())
+                {
+                    command.CommandText = "SELECT public.delete_bill(@p_billid)";
+                    command.CommandType = CommandType.Text;
+                    command.Parameters.Add(new NpgsqlParameter("p_billid", billid));
+
+                    _context.Database.OpenConnection();
+                    command.ExecuteNonQuery();
+                    _context.Database.CloseConnection();
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error deleting bill");
+                throw;
+            }
+        }
+
+        public void UpdateBill(Bill bill)
+        {
+            _context.bills.Update(bill);
+            _context.SaveChanges();
+        }
+
+        public List<Bill> GetAllBills()
+        {
+            var result = new List<Bill>();
+            try
+            {
+                using (var command = _context.Database.GetDbConnection().CreateCommand())
+                {
+                    command.CommandText = "SELECT * FROM public.get_all_bill()";
+                    command.CommandType = CommandType.Text;
+
+                    _context.Database.OpenConnection();
+                    using (var reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            var bill = new Bill
+                            {
+                                billid = reader.GetString(0),
+                                orderid = reader.GetString(1),
+                                staffid = reader.GetString(2),
+                                customerid = reader.GetString(3),
+                                date = reader.GetDateTime(4),
+                                paymentmethod = reader.GetString(5),
+                                totalprice = reader.GetInt32(6),
+                                discountcode = reader.GetInt32(7),
+                                status = reader.GetInt32(8),
+                                customername = reader.GetString(9),
+                                staffname = reader.GetString(10),
+                                address = reader.GetString(11),
+                                phonenumber = reader.GetString(12)
+                            };
+                            result.Add(bill);
+                        }
+                    }
+                    _context.Database.CloseConnection();
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error getting all bills");
+                throw;
+            }
+
+            return result;
+        }
+
+        public Bill GetBillById(string billid)
+        {
+            Bill result = null;
+            try
+            {
+                using (var command = _context.Database.GetDbConnection().CreateCommand())
+                {
+                    command.CommandText = "SELECT * FROM public.get_bill_by_id(@p_billid)";
+                    command.CommandType = CommandType.Text;
+                    command.Parameters.Add(new NpgsqlParameter("p_billid", billid));
+
+                    _context.Database.OpenConnection();
+                    using (var reader = command.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            result = new Bill
+                            {
+                                billid = reader.GetString(0),
+                                orderid = reader.GetString(1),
+                                staffid = reader.GetString(2),
+                                customerid = reader.GetString(3),
+                                date = reader.GetDateTime(4),
+                                paymentmethod = reader.GetString(5),
+                                totalprice = reader.GetInt32(6),
+                                discountcode = reader.GetInt32(7),
+                                status = reader.GetInt32(8),
+                                customername = reader.GetString(9),
+                                staffname = reader.GetString(10),
+                                address = reader.GetString(11),
+                                phonenumber = reader.GetString(12)
+                            };
+                        }
+                    }
+                    _context.Database.CloseConnection();
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error getting bill by id");
+                throw;
+            }
+
+            return result;
+        }
+
+        public List<Bill> GetBillByOrderId(string orderid)
+        {
+            var bills = new List<Bill>();
+            try
+            {
+                using (var command = _context.Database.GetDbConnection().CreateCommand())
+                {
+                    command.CommandText = @"
+                        SELECT * FROM public.get_bill_by_orderid(@p_orderid)";
+                    command.CommandType = CommandType.Text;
+
+                    var parameter = new NpgsqlParameter("p_orderid", NpgsqlTypes.NpgsqlDbType.Varchar);
+                    parameter.Value = orderid;
+                    command.Parameters.Add(parameter);
+
+                    _context.Database.OpenConnection();
+                    using (var reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            var bill = new Bill
+                            {
+                                billid = reader["billid"].ToString(),
+                                orderid = reader["orderid"].ToString(),
+                                totalprice = reader.GetInt32(reader.GetOrdinal("totalprice")),
+                                discountcode = reader.GetInt32(reader.GetOrdinal("discountcode")),
+                                status = reader.GetInt32(reader.GetOrdinal("status")),
+                                staffid = reader["staffid"].ToString(),
+                                staffname = reader["staffname"].ToString(),
+                                customerid = reader["customerid"].ToString(),
+                                customername = reader["customername"].ToString(),
+                                date = reader.GetDateTime(reader.GetOrdinal("date")),
+                                address = reader["address"].ToString(),
+                                phonenumber = reader["phonenumber"].ToString(),
+                                paymentmethod = reader["paymentmethod"].ToString()
+                            };
+                            bills.Add(bill);
+                        }
+                    }
+                    _context.Database.CloseConnection();
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error getting bills by order ID");
+                throw;
+            }
+
+            return bills;
+        }
     }
 }

@@ -164,6 +164,21 @@ namespace highlandcoffeeapp_BE.Models
         public string staffid { get; set; }
     }
 
-
-
+    // Models for Bill
+    public class Bill
+    {
+        public string billid { get; set; }
+        public string orderid { get; set; }
+        public string staffid { get; set; }
+        public string staffname { get; set; }
+        public string customerid { get; set; }
+        public string customername { get; set; }
+        public DateTime date { get; set; }
+        public string paymentmethod { get; set; }
+        public int totalprice { get; set; }
+        public int discountcode { get; set; }
+        public int status { get; set; }
+        public string address { get; set; }
+        public string phonenumber { get; set; }
+    }
 }

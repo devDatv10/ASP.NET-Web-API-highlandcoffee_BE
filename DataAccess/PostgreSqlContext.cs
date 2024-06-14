@@ -22,6 +22,7 @@ namespace highlandcoffeeapp_BE.DataAccess
         public DbSet<Order> orders { get; set; }
         public DbSet<OrderDetail> orderDetails { get; set; }
         public DbSet<Comment> comments { get; set; }
+        public DbSet<Bill> bills { get; set; }
 
         // Phương thức mở kết nối
         public void OpenConnection()

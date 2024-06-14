@@ -105,5 +105,13 @@ namespace highlandcoffeeapp_BE.DataAccess
 
         // function cancel order
         void CancelOrder(string orderid);
+
+        // function for bill
+        void AddBill(Bill bill);
+        void UpdateBill(Bill bill);
+        void DeleteBill(string billid);
+        Bill GetBillById(string bill);
+        List<Bill> GetAllBills();
+        List<Bill> GetBillByOrderId(string orderid);
     }
 }
