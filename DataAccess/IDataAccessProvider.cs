@@ -101,7 +101,7 @@ namespace highlandcoffeeapp_BE.DataAccess
         List<Comment> GetAllComments();
 
         // function confirm order
-        void ConfirmOrder(string orderId, string staffId);
+        void ConfirmOrder(string orderid, string staffid);
 
         // function cancel order
         void CancelOrder(string orderid);
@@ -113,5 +113,8 @@ namespace highlandcoffeeapp_BE.DataAccess
         Bill GetBillById(string bill);
         List<Bill> GetAllBills();
         List<Bill> GetBillByOrderId(string orderid);
+
+        // function frint bill
+        void PrintBill(string orderid, string staffid);
     }
 }

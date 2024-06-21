@@ -1545,6 +1545,30 @@ namespace highlandcoffeeapp_BE.DataAccess
             }
         }
 
+        public void PrintBill(string orderid, string staffid)
+        {
+            try
+            {
+                using (var command = _context.Database.GetDbConnection().CreateCommand())
+                {
+                    command.CommandText = "SELECT print_bill(@p_orderid, @p_staffid)";
+                    command.CommandType = CommandType.Text;
+
+                    command.Parameters.Add(new NpgsqlParameter("p_orderid", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = orderid });
+                    command.Parameters.Add(new NpgsqlParameter("p_staffid", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = staffid });
+
+                    _context.Database.OpenConnection();
+                    command.ExecuteNonQuery();
+                    _context.Database.CloseConnection();
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error printing bill");
+                throw;
+            }
+        }
+
 
         // function for order detail
         public void AddOrderDetail(OrderDetail orderDetail)

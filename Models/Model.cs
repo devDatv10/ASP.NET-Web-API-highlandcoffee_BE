@@ -164,6 +164,12 @@ namespace highlandcoffeeapp_BE.Models
         public string staffid { get; set; }
     }
 
+    public class PrintBillRequest
+    {
+        public string orderid { get; set; }
+        public string staffid { get; set; }
+    }
+
     // Models for Bill
     public class Bill
     {

@@ -56,6 +56,17 @@ namespace highlandcoffeeapp_BE.Controllers
             return BadRequest();
         }
 
+        [HttpPut("print")]
+        public IActionResult PrintBill([FromBody] PrintBillRequest request)
+        {
+            if (ModelState.IsValid)
+            {
+                _dataAccessProvider.PrintBill(request.orderid, request.staffid);
+                return Ok();
+            }
+            return BadRequest();
+        }
+
         [HttpDelete("{id}")]
         public IActionResult Delete(string id)
         {
