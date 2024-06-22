@@ -116,5 +116,11 @@ namespace highlandcoffeeapp_BE.DataAccess
 
         // function frint bill
         void PrintBill(string orderid, string staffid);
+
+        // function for daily revenue
+        int GetDailyRevenue(DateTime date);
+
+        // function for top products
+        List<TopProduct> GetTopProducts(DateTime date);
     }
 }

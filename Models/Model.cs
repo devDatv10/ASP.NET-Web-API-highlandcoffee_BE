@@ -187,4 +187,11 @@ namespace highlandcoffeeapp_BE.Models
         public string address { get; set; }
         public string phonenumber { get; set; }
     }
+
+    public class TopProduct
+    {
+        public string productid { get; set; }
+        public string productname { get; set; }
+        public int quantitysold { get; set; }
+    }
 }

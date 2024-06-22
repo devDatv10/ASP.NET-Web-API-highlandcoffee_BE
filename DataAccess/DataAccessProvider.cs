@@ -2095,5 +2095,97 @@ namespace highlandcoffeeapp_BE.DataAccess
 
             return bills;
         }
+
+        //
+
+        public int GetDailyRevenue(DateTime date)
+        {
+            int result = 0;
+            try
+            {
+                using (var command = _context.Database.GetDbConnection().CreateCommand())
+                {
+                    command.CommandText = @"
+            SELECT public.get_daily_revenue(@p_date)";
+                    command.CommandType = CommandType.Text;
+                    command.Parameters.Add(new NpgsqlParameter("p_date", NpgsqlDbType.Date)
+                    {
+                        Value = date.Date // Đảm bảo chuyển đổi thành kiểu DATE
+                    });
+
+                    _context.Database.OpenConnection();
+                    using (var reader = command.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            result = reader.GetInt32(0); // Đọc giá trị kiểu INTEGER
+                        }
+                    }
+                    _context.Database.CloseConnection();
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error getting daily revenue");
+                throw;
+            }
+            return result;
+        }
+
+
+        public List<TopProduct> GetTopProducts(DateTime date)
+        {
+            List<TopProduct> result = new List<TopProduct>();
+            try
+            {
+                using (var command = _context.Database.GetDbConnection().CreateCommand())
+                {
+                    command.CommandText = @"
+                SELECT
+                    od.productid,
+                    p.productname,
+                    SUM(od.quantity) AS quantity_sold
+                FROM
+                    public.orderdetails od
+                    JOIN public.products p ON od.productid = p.productid
+                    JOIN public.orders o ON od.orderid = o.orderid
+                WHERE
+                    o.date = @p_date
+                    AND o.status = 2
+                GROUP BY
+                    od.productid, p.productname
+                ORDER BY
+                    quantity_sold DESC";
+                    command.CommandType = CommandType.Text;
+                    command.Parameters.Add(new NpgsqlParameter("p_date", NpgsqlDbType.Date) { Value = date.Date });
+
+                    _context.Database.OpenConnection();
+                    using (var reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            var product = new TopProduct
+                            {
+                                productid = reader.GetString(0),
+                                productname = reader.GetString(1),
+                                quantitysold = reader.GetInt32(2)
+                            };
+                            result.Add(product);
+                        }
+                    }
+                    _context.Database.CloseConnection();
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error getting top products");
+                throw;
+            }
+            return result;
+        }
+
+
+
+
     }
 }
