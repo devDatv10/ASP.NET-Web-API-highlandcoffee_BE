@@ -51,6 +51,7 @@ namespace highlandcoffeeapp_BE.DataAccess
         Product GetProductById(string productid);
         List<Product> GetAllProducts();
         List<Product> GetProductsByCategoryId(string categoryid);
+        List<Product> GetPriceBySize(string productname);
 
         // function for cart
         void AddCart(CartDetail cartdetail);

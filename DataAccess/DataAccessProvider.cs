@@ -908,6 +908,32 @@ namespace highlandcoffeeapp_BE.DataAccess
             return products;
         }
 
+        public List<Product> GetPriceBySize(string productname){
+            var products = new List<Product>();
+            using (var command = _context.Database.GetDbConnection().CreateCommand())
+            {
+                command.CommandText = "SELECT * FROM get_price_by_size(@p_productname)";
+                command.CommandType = CommandType.Text;
+
+                command.Parameters.Add(new NpgsqlParameter("p_productname", productname));
+
+                _context.Database.OpenConnection();
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        products.Add(new Product
+                        {
+                            size = reader["size"].ToString(),
+                            price = int.Parse(reader["price"].ToString())
+                        });
+                    }
+                }
+                _context.Database.CloseConnection();
+            }
+            return products;
+        }
+
         // function for favorite
         public void AddFavorite(Favorite favorite)
         {

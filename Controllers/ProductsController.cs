@@ -27,6 +27,20 @@ namespace highlandcoffeeapp_BE.Controllers
             return _dataAccessProvider.GetProductsByCategoryId(categoryid);
         }
 
+        [HttpGet("sizes/{productname}")]
+        public IActionResult GetProductSizes(string productname)
+        {
+            try
+            {
+                var sizes = _dataAccessProvider.GetPriceBySize(productname);
+                return Ok(sizes);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Failed to get sizes and prices: {ex.Message}");
+            }
+        }
+
         [HttpPost]
         public IActionResult Create([FromBody] Product product)
         {
