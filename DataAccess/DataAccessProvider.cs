@@ -908,7 +908,8 @@ namespace highlandcoffeeapp_BE.DataAccess
             return products;
         }
 
-        public List<Product> GetPriceBySize(string productname){
+        public List<Product> GetPriceBySize(string productname)
+        {
             var products = new List<Product>();
             using (var command = _context.Database.GetDbConnection().CreateCommand())
             {
@@ -1408,8 +1409,19 @@ namespace highlandcoffeeapp_BE.DataAccess
 
         public void DeleteOrder(string orderid)
         {
-            // Implement logic for adding a cart detail here
+            using (var command = _context.Database.GetDbConnection().CreateCommand())
+            {
+                command.CommandText = @"SELECT public.delete_order(@p_orderid)";
+                command.CommandType = CommandType.Text;
+
+                command.Parameters.Add(new NpgsqlParameter("p_orderid", orderid));
+
+                _context.Database.OpenConnection();
+                command.ExecuteNonQuery();
+                _context.Database.CloseConnection();
+            }
         }
+
 
         public Order GetOrderById(string orderid)
         {
