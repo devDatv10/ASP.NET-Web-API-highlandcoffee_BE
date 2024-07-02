@@ -251,6 +251,139 @@ namespace highlandcoffeeapp_BE.DataAccess
             return admins;
         }
 
+        // Function for person
+        public Person GetPersonById(string personid)
+        {
+            using (var command = _context.Database.GetDbConnection().CreateCommand())
+            {
+                command.CommandText = "SELECT * FROM get_person_by_id(@p_personid)";
+                command.CommandType = CommandType.Text;
+
+                command.Parameters.Add(new NpgsqlParameter("p_personid", personid));
+
+                _context.Database.OpenConnection();
+                using (var reader = command.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        return new Person
+                        {
+                            personid = reader["personid"].ToString(),
+                            name = reader["name"].ToString(),
+                            role = reader["role"].ToString(),
+                            phonenumber = reader["phonenumber"].ToString(),
+                        };
+                    }
+                }
+                _context.Database.CloseConnection();
+            }
+            return null;
+        }
+
+        public List<Person> GetAllPersons()
+        {
+            var customers = new List<Person>();
+            using (var command = _context.Database.GetDbConnection().CreateCommand())
+            {
+                command.CommandText = "SELECT * FROM get_all_persons()";
+                command.CommandType = CommandType.Text;
+
+                _context.Database.OpenConnection();
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        customers.Add(new Person
+                        {
+                            personid = reader["personid"].ToString(),
+                            name = reader["name"].ToString(),
+                            role = reader["role"].ToString(),
+                            phonenumber = reader["phonenumber"].ToString(),
+                        });
+                    }
+                }
+                _context.Database.CloseConnection();
+            }
+            return customers;
+        }
+
+        public void UpdateStaffToAdmin(string personid)
+        {
+            try
+            {
+                using (var command = _context.Database.GetDbConnection().CreateCommand())
+                {
+                    command.CommandText = @"
+                SELECT update_staff_to_admin(@p_personid)";
+                    command.CommandType = CommandType.Text;
+
+                    command.Parameters.Add(new NpgsqlParameter("p_personid", personid));
+
+                    _context.Database.OpenConnection();
+                    command.ExecuteNonQuery();
+                    _context.Database.CloseConnection();
+                }
+            }
+            catch (Exception ex)
+            {
+                // Xử lý exception nếu cần
+                throw new Exception("Error add role for account", ex);
+            }
+        }
+
+        public void UpdateAdminToStaff(string personid)
+        {
+            try
+            {
+                using (var command = _context.Database.GetDbConnection().CreateCommand())
+                {
+                    command.CommandText = @"
+                SELECT update_admin_to_staff(@p_personid)";
+                    command.CommandType = CommandType.Text;
+
+                    command.Parameters.Add(new NpgsqlParameter("p_personid", personid));
+
+                    _context.Database.OpenConnection();
+                    command.ExecuteNonQuery();
+                    _context.Database.CloseConnection();
+                }
+            }
+            catch (Exception ex)
+            {
+                // Xử lý exception nếu cần
+                throw new Exception("Error cancel role for account", ex);
+            }
+        }
+
+        public Person GetRoleByPersonId(string personid)
+        {
+            using (var command = _context.Database.GetDbConnection().CreateCommand())
+            {
+                command.CommandText = "SELECT * FROM get_person_by_personid(@p_personid)";
+                command.CommandType = CommandType.Text;
+
+                command.Parameters.Add(new NpgsqlParameter("p_personid", personid));
+
+                _context.Database.OpenConnection();
+                using (var reader = command.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        return new Person
+                        {
+                            personid = reader["personid"].ToString(),
+                            name = reader["name"].ToString(),
+                            role = reader["role"].ToString(),
+                            phonenumber = reader["phonenumber"].ToString()
+                        };
+                    }
+                }
+                _context.Database.CloseConnection();
+            }
+            return null;
+        }
+
+
 
         // Function for customer
         public void AddCustomer(Customer customer)

@@ -11,6 +11,14 @@ namespace highlandcoffeeapp_BE.DataAccess
         Account GetAccountByUserName(string username);
         List<Account> GetAllAccounts();
 
+        // function for person
+        Person GetPersonById(string personid);
+        List<Person> GetAllPersons();
+
+        void UpdateStaffToAdmin(string personid);
+        void UpdateAdminToStaff(string personid);
+        Person GetRoleByPersonId(string personid);
+
         // function for admin
         void AddAdmin(Admin admin);
         void UpdateAdmin(Admin admin);

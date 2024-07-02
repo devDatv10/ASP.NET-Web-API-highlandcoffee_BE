@@ -11,6 +11,16 @@ namespace highlandcoffeeapp_BE.Models
         public string personid { get; set; }
         public int status { get; set; }
     }
+
+    // Models for Person
+    public class Person
+    {
+        public string personid { get; set; }
+        public string name { get; set; }
+        public string role { get; set; }
+        public string phonenumber { get; set; }
+    }
+
     // Models for Admin
     public class Admin
     {
