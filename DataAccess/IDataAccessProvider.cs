@@ -109,6 +109,8 @@ namespace highlandcoffeeapp_BE.DataAccess
         Comment GetCommentById(string commentid);
         List<Comment> GetAllComments();
 
+        void PublishComment(string commentid);
+
         // function confirm order
         void ConfirmOrder(string orderid, string staffid);
 

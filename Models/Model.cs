@@ -130,6 +130,7 @@ namespace highlandcoffeeapp_BE.Models
         public DateTime date { get; set; }
         public byte[] image { get; set; }
         public int status { get; set; }
+        public int rating { get; set;}
     }
 
     // Models for Order

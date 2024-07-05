@@ -1947,7 +1947,7 @@ namespace highlandcoffeeapp_BE.DataAccess
             using (var command = _context.Database.GetDbConnection().CreateCommand())
             {
                 command.CommandText = @"
-        SELECT add_comment(@p_customerid, @p_customername, @p_titlecomment, @p_contentcomment, @_image, @p_status)";
+            SELECT add_comment(@p_customerid, @p_customername, @p_titlecomment, @p_contentcomment, @_image, @p_rating, @p_status)";
                 command.CommandType = CommandType.Text;
 
                 command.Parameters.Add(new NpgsqlParameter("p_customerid", comment.customerid));
@@ -1955,6 +1955,7 @@ namespace highlandcoffeeapp_BE.DataAccess
                 command.Parameters.Add(new NpgsqlParameter("p_titlecomment", comment.titlecomment));
                 command.Parameters.Add(new NpgsqlParameter("p_contentcomment", comment.contentcomment));
                 command.Parameters.Add(new NpgsqlParameter("_image", comment.image));
+                command.Parameters.Add(new NpgsqlParameter("p_rating", comment.rating));
                 command.Parameters.Add(new NpgsqlParameter("p_status", comment.status));
 
                 _context.Database.OpenConnection();
@@ -1962,6 +1963,7 @@ namespace highlandcoffeeapp_BE.DataAccess
                 _context.Database.CloseConnection();
             }
         }
+
 
 
         public void UpdateComment(Comment comment)
@@ -2057,13 +2059,38 @@ namespace highlandcoffeeapp_BE.DataAccess
                             contentcomment = reader["contentcomment"].ToString(),
                             date = DateTime.Parse(reader["date"].ToString()),
                             image = reader["image"] as byte[],
-                            status = int.Parse(reader["status"].ToString())
+                            status = int.Parse(reader["status"].ToString()),
+                            rating = reader["rating"] != DBNull.Value ? int.Parse(reader["rating"].ToString()) : 0
                         });
                     }
                 }
                 _context.Database.CloseConnection();
             }
             return comments;
+        }
+
+        public void PublishComment(string commentid)
+        {
+            try
+            {
+                using (var command = _context.Database.GetDbConnection().CreateCommand())
+                {
+                    command.CommandText = @"
+                SELECT publish_comment(@p_commentid)";
+                    command.CommandType = CommandType.Text;
+
+                    command.Parameters.Add(new NpgsqlParameter("p_commentid", commentid));
+
+                    _context.Database.OpenConnection();
+                    command.ExecuteNonQuery();
+                    _context.Database.CloseConnection();
+                }
+            }
+            catch (Exception ex)
+            {
+                // Xử lý exception nếu cần
+                throw new Exception("Error publish comment", ex);
+            }
         }
 
         // function for bill

@@ -32,6 +32,21 @@ namespace highlandcoffeeapp_BE.Controllers
             return BadRequest();
         }
 
+        [HttpPost("publish-comment/{id}")]
+        public IActionResult PublicComment(string id)
+        {
+            try
+            {
+                _dataAccessProvider.PublishComment(id);
+                return Ok("Account activated successfully");
+            }
+            catch (Exception ex)
+            {
+                // Xử lý exception nếu cần
+                return StatusCode(500, $"Error activating account: {ex.Message}");
+            }
+        }
+
         [HttpGet("{id}")]
         public Comment Details(string id)
         {

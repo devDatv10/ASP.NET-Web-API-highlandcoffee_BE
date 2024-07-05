@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\buildMultiTargeting\highlandcoffeeapp_BE.props" />
+</Project>
