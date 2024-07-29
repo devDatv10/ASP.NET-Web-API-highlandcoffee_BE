@@ -44,6 +44,10 @@ namespace highlandcoffeeapp_BE.DataAccess
         void ActiveAccountCustomer(string personid);
         void BlockAccountCustomer(string personid);
 
+        // function for carousel
+        void AddCarousel(Carousel carousel);
+        List<Carousel> GetAllCarousels();
+
 
         // function for category
         void AddCategory(Category category);

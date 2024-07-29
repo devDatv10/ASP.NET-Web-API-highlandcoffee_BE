@@ -41,6 +41,13 @@ namespace highlandcoffeeapp_BE.Models
         public string description { get; set; }
     }
 
+    // Models for Carousel
+    public class Carousel
+    {
+        public string carouselid {get; set; }
+        public byte[] image {get; set; }
+    }
+
 
     // Models for Customer
 

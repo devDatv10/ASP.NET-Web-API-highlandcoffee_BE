@@ -576,6 +576,55 @@ namespace highlandcoffeeapp_BE.DataAccess
             }
         }
 
+        // function for carousel
+        public void AddCarousel(Carousel carousel)
+        {
+            try
+            {
+                using (var command = _context.Database.GetDbConnection().CreateCommand())
+                {
+                    command.CommandText = @"
+                    SELECT add_carousel(@p_image)";
+                    command.CommandType = CommandType.Text;
+
+                    command.Parameters.Add(new NpgsqlParameter("p_image", carousel.image));
+                    _context.Database.OpenConnection();
+                    command.ExecuteNonQuery();
+                    _context.Database.CloseConnection();
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error adding category");
+                throw;
+            }
+        }
+
+        public List<Carousel> GetAllCarousels()
+        {
+            var carousels = new List<Carousel>();
+            using (var command = _context.Database.GetDbConnection().CreateCommand())
+            {
+                command.CommandText = "SELECT * FROM get_all_carousels()";
+                command.CommandType = CommandType.Text;
+
+                _context.Database.OpenConnection();
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        carousels.Add(new Carousel
+                        {
+                            carouselid = reader["carouselid"].ToString(),
+                            image = reader["image"] as byte[],
+                        });
+                    }
+                }
+                _context.Database.CloseConnection();
+            }
+            return carousels;
+        }
+
 
         // function for category
         public void AddCategory(Category category)
