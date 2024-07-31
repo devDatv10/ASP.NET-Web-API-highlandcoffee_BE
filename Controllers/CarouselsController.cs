@@ -38,23 +38,47 @@ namespace highlandcoffeeapp_BE.Controllers
         //     return _dataAccessProvider.GetProductById(id);
         // }
 
-        // [HttpPut("{id}")]
-        // public IActionResult Update(string id, [FromBody] Product product)
-        // {
-        //     if (ModelState.IsValid)
-        //     {
-        //         var existingProduct = _dataAccessProvider.GetProductById(id);
-        //         if (existingProduct == null)
-        //         {
-        //             return NotFound();
-        //         }
+        [HttpPut("{id}/cancel")]
+        public IActionResult Cancel(string id)
+        {
+            try
+            {
+                var existingCarousel = _dataAccessProvider.GetCarouselById(id);
+                if (existingCarousel == null)
+                {
+                    return NotFound();
+                }
 
-        //         product.productid = id;
-        //         _dataAccessProvider.UpdateProduct(product);
-        //         return Ok();
-        //     }
-        //     return BadRequest();
-        // }
+                _dataAccessProvider.CancelCarousel(id);
+                return Ok("Carousel cancelled successfully");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+        [HttpPut("{id}/activate")]
+        public IActionResult Activate(string id)
+        {
+            try
+            {
+                var existingCarousel = _dataAccessProvider.GetCarouselById(id);
+                if (existingCarousel == null)
+                {
+                    return NotFound();
+                }
+
+                _dataAccessProvider.ActivateCarousel(id);
+                return Ok("Carousel activated successfully");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+
 
         // [HttpDelete("{id}")]
         // public IActionResult DeleteConfirmed(string id)

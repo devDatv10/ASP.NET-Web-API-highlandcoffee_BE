@@ -46,6 +46,7 @@ namespace highlandcoffeeapp_BE.Models
     {
         public string carouselid {get; set; }
         public byte[] image {get; set; }
+        public int status {get; set;}
     }
 
 

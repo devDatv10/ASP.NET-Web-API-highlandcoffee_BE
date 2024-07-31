@@ -46,6 +46,9 @@ namespace highlandcoffeeapp_BE.DataAccess
 
         // function for carousel
         void AddCarousel(Carousel carousel);
+        void ActivateCarousel(string crouselid);
+        void CancelCarousel(string carouselid);
+        Carousel GetCarouselById(string carouselid);
         List<Carousel> GetAllCarousels();
 
 

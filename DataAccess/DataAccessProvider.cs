@@ -600,6 +600,82 @@ namespace highlandcoffeeapp_BE.DataAccess
             }
         }
 
+        public void CancelCarousel(string carouselid)
+        {
+            try
+            {
+                using (var command = _context.Database.GetDbConnection().CreateCommand())
+                {
+                    command.CommandText = @"
+            SELECT cancel_carousel(@p_carouselid)";
+                    command.CommandType = CommandType.Text;
+
+                    command.Parameters.Add(new NpgsqlParameter("p_carouselid", carouselid));
+                    _context.Database.OpenConnection();
+                    command.ExecuteNonQuery();
+                    _context.Database.CloseConnection();
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error cancelling carousel");
+                throw;
+            }
+        }
+
+        public void ActivateCarousel(string carouselid)
+        {
+            try
+            {
+                using (var command = _context.Database.GetDbConnection().CreateCommand())
+                {
+                    command.CommandText = @"
+        SELECT active_carousel(@p_carouselid)";
+                    command.CommandType = CommandType.Text;
+
+                    command.Parameters.Add(new NpgsqlParameter("p_carouselid", carouselid));
+                    _context.Database.OpenConnection();
+                    command.ExecuteNonQuery();
+                    _context.Database.CloseConnection();
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error activating carousel");
+                throw;
+            }
+        }
+
+
+        public Carousel GetCarouselById(string carouselid)
+        {
+            using (var command = _context.Database.GetDbConnection().CreateCommand())
+            {
+                command.CommandText = "SELECT * FROM get_carousel_by_id(@p_carouselid)";
+                command.CommandType = CommandType.Text;
+
+                command.Parameters.Add(new NpgsqlParameter("p_carouselid", carouselid));
+
+                _context.Database.OpenConnection();
+                using (var reader = command.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        return new Carousel
+                        {
+                            carouselid = reader["carouselid"].ToString(),
+                            image = reader["image"] as byte[],
+                            status = int.Parse(reader["status"].ToString())
+                        };
+                    }
+                }
+                _context.Database.CloseConnection();
+            }
+            return null;
+        }
+
+
+
         public List<Carousel> GetAllCarousels()
         {
             var carousels = new List<Carousel>();
@@ -617,6 +693,7 @@ namespace highlandcoffeeapp_BE.DataAccess
                         {
                             carouselid = reader["carouselid"].ToString(),
                             image = reader["image"] as byte[],
+                            status = int.Parse(reader["status"].ToString()),
                         });
                     }
                 }
