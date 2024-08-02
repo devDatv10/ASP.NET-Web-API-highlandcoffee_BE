@@ -623,6 +623,33 @@ namespace highlandcoffeeapp_BE.DataAccess
             }
         }
 
+        public void UpdateCarousel(Carousel carousel)
+        {
+            try
+            {
+                using (var command = _context.Database.GetDbConnection().CreateCommand())
+                {
+                    command.CommandText = @"
+                    SELECT update_carousel(
+                        @p_carouselid,
+                        @p_carousel_image)";
+                    command.CommandType = CommandType.Text;
+
+                    command.Parameters.Add(new NpgsqlParameter("p_carouselid", carousel.carouselid));
+                    command.Parameters.Add(new NpgsqlParameter("p_carousel_image", carousel.image));
+
+                    _context.Database.OpenConnection();
+                    command.ExecuteNonQuery();
+                    _context.Database.CloseConnection();
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error updating carousel");
+                throw;
+            }
+        }
+
 
         public void CancelCarousel(string carouselid)
         {

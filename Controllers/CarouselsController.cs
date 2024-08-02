@@ -32,11 +32,24 @@ namespace highlandcoffeeapp_BE.Controllers
             return BadRequest();
         }
 
-        // [HttpGet("{id}")]
-        // public Product Details(string id)
-        // {
-        //     return _dataAccessProvider.GetProductById(id);
-        // }
+        [HttpPut("{id}")]
+        public IActionResult Update(string id, [FromBody] Carousel carousel)
+        {
+            if (ModelState.IsValid)
+            {
+                var existingCarousel = _dataAccessProvider.GetCarouselById(id);
+                if (existingCarousel == null)
+                {
+                    return NotFound();
+                }
+
+                carousel.carouselid = id;
+                _dataAccessProvider.UpdateCarousel(carousel);
+                return Ok();
+            }
+            return BadRequest();
+        }
+
 
         [HttpPut("{id}/cancel")]
         public IActionResult Cancel(string id)
