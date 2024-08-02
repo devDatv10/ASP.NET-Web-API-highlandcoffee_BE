@@ -78,18 +78,25 @@ namespace highlandcoffeeapp_BE.Controllers
             }
         }
 
+        [HttpDelete("{id}")]
+        public IActionResult Delete(string id)
+        {
+            try
+            {
+                var existingCarousel = _dataAccessProvider.GetCarouselById(id);
+                if (existingCarousel == null)
+                {
+                    return NotFound();
+                }
 
+                _dataAccessProvider.DeleteCarousel(id);
+                return Ok("Carousel deleted successfully");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
 
-        // [HttpDelete("{id}")]
-        // public IActionResult DeleteConfirmed(string id)
-        // {
-        //     var data = _dataAccessProvider.GetProductById(id);
-        //     if (data == null)
-        //     {
-        //         return NotFound();
-        //     }
-        //     _dataAccessProvider.DeleteProduct(id);
-        //     return Ok();
-        // }
     }
 }

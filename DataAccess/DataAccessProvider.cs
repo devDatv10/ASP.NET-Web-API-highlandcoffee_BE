@@ -600,6 +600,30 @@ namespace highlandcoffeeapp_BE.DataAccess
             }
         }
 
+        public void DeleteCarousel(string carouselid)
+        {
+            try
+            {
+                using (var command = _context.Database.GetDbConnection().CreateCommand())
+                {
+                    command.CommandText = @"
+                SELECT delete_carousel_by_id(@p_carouselid)";
+                    command.CommandType = CommandType.Text;
+
+                    command.Parameters.Add(new NpgsqlParameter("p_carouselid", carouselid));
+                    _context.Database.OpenConnection();
+                    command.ExecuteNonQuery();
+                    _context.Database.CloseConnection();
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error deleting carousel");
+                throw;
+            }
+        }
+
+
         public void CancelCarousel(string carouselid)
         {
             try
