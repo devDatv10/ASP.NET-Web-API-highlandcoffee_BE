@@ -56,6 +56,8 @@ namespace highlandcoffeeapp_BE.DataAccess
         // function for carousel number
         List<CarouselNumber> GetAllNumberOfCarousels();
         int GetNumberOfCarousels();
+        CarouselNumber GetCarouselNumberById(string settingid);
+        void UpdateCarouselNumber(CarouselNumber carouselnumber);
         // void UpdateNumberOfCarousels(int numberOfCarousels);
 
 

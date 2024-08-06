@@ -793,8 +793,75 @@ namespace highlandcoffeeapp_BE.DataAccess
                 }
                 _context.Database.CloseConnection();
             }
-            return 0; // or throw an exception
+            return 0;
         }
+
+        public void UpdateCarouselNumber(CarouselNumber carouselnumber)
+        {
+            try
+            {
+                using (var command = _context.Database.GetDbConnection().CreateCommand())
+                {
+                    command.CommandText = @"
+            SELECT update_carousel_number(
+                @p_settingid,
+                @p_new_number)";
+                    command.CommandType = CommandType.Text;
+
+                    command.Parameters.Add(new NpgsqlParameter("p_settingid", carouselnumber.settingid));
+                    command.Parameters.Add(new NpgsqlParameter("p_new_number", carouselnumber.numberofcarousel));
+
+                    _context.Database.OpenConnection();
+                    command.ExecuteNonQuery();
+                    _context.Database.CloseConnection();
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error updating carousel number");
+                throw;
+            }
+        }
+
+        public CarouselNumber GetCarouselNumberById(string settingid)
+        {
+            try
+            {
+                using (var command = _context.Database.GetDbConnection().CreateCommand())
+                {
+                    command.CommandText = @"
+            SELECT * FROM get_carousel_number_by_id(
+                @p_setting_id)";
+                    command.CommandType = CommandType.Text;
+
+                    command.Parameters.Add(new NpgsqlParameter("p_setting_id", settingid));
+
+                    _context.Database.OpenConnection();
+                    using (var reader = command.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            var carouselNumber = new CarouselNumber
+                            {
+                                settingid = reader["settingid"].ToString(),
+                                numberofcarousel = int.Parse(reader["numberofcarousel"].ToString())
+                            };
+                            _context.Database.CloseConnection();
+                            return carouselNumber;
+                        }
+                    }
+                    _context.Database.CloseConnection();
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error retrieving carousel number by id");
+                throw;
+            }
+            return null;
+        }
+
+
 
 
         // function for category

@@ -21,11 +21,22 @@ namespace highlandcoffeeapp_BE.Controllers
             return _dataAccessProvider.GetAllNumberOfCarousels();
         }
 
-        [HttpGet("carousel-settings")]
-        public IActionResult GetCarouselSettings()
+        [HttpPut("{id}")]
+        public IActionResult Update(string id, [FromBody] CarouselNumber carouselnumber)
         {
-            var numberOfCarousels = _dataAccessProvider.GetNumberOfCarousels();
-            return Ok(new { number_of_carousels = numberOfCarousels });
+            if (ModelState.IsValid)
+            {
+                var existingCarousel = _dataAccessProvider.GetCarouselNumberById(id);
+                if (existingCarousel == null)
+                {
+                    return NotFound();
+                }
+
+                carouselnumber.settingid = id;
+                _dataAccessProvider.UpdateCarouselNumber(carouselnumber);
+                return Ok();
+            }
+            return BadRequest();
         }
     }
 }
