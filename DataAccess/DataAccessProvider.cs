@@ -753,6 +753,49 @@ namespace highlandcoffeeapp_BE.DataAccess
             return carousels;
         }
 
+        public List<CarouselNumber> GetAllNumberOfCarousels()
+        {
+            var carouselnumbers = new List<CarouselNumber>();
+            using (var command = _context.Database.GetDbConnection().CreateCommand())
+            {
+                command.CommandText = "SELECT * FROM get_all_number_carousels()";
+                command.CommandType = CommandType.Text;
+
+                _context.Database.OpenConnection();
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        carouselnumbers.Add(new CarouselNumber
+                        {
+                            settingid = reader["settingid"].ToString(),
+                            numberofcarousel = int.Parse(reader["numberofcarousel"].ToString()),
+                        });
+                    }
+                }
+                _context.Database.CloseConnection();
+            }
+            return carouselnumbers;
+        }
+
+        public int GetNumberOfCarousels()
+        {
+            using (var command = _context.Database.GetDbConnection().CreateCommand())
+            {
+                command.CommandText = "SELECT get_number_of_carousels()";
+                _context.Database.OpenConnection();
+                using (var reader = command.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        return reader.GetInt32(0);
+                    }
+                }
+                _context.Database.CloseConnection();
+            }
+            return 0; // or throw an exception
+        }
+
 
         // function for category
         public void AddCategory(Category category)

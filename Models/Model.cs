@@ -49,6 +49,15 @@ namespace highlandcoffeeapp_BE.Models
         public int status {get; set;}
     }
 
+    // Models for Carousel Number
+    public class CarouselNumber
+    {
+        [Key]
+        public string settingid {get; set; }
+        public int numberofcarousel {get; set; }
+
+    }
+
 
     // Models for Customer
 

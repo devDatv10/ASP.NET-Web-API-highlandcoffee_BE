@@ -53,6 +53,11 @@ namespace highlandcoffeeapp_BE.DataAccess
         Carousel GetCarouselById(string carouselid);
         List<Carousel> GetAllCarousels();
 
+        // function for carousel number
+        List<CarouselNumber> GetAllNumberOfCarousels();
+        int GetNumberOfCarousels();
+        // void UpdateNumberOfCarousels(int numberOfCarousels);
+
 
         // function for category
         void AddCategory(Category category);

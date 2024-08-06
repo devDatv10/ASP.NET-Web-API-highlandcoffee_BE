@@ -16,6 +16,7 @@ namespace highlandcoffeeapp_BE.DataAccess
         public DbSet<Staff> staffs { get; set; }
         public DbSet<Customer> customers { get; set; }
         public DbSet<Carousel> carousels {get; set;}
+        public DbSet<CarouselNumber> carouselnumbers {get; set; }
         public DbSet<Category> categories { get; set; }
         public DbSet<Cart> carts { get; set; }
         public DbSet<CartDetail> cartdetails { get; set; }
