@@ -528,6 +528,29 @@ namespace highlandcoffeeapp_BE.DataAccess
             return customers;
         }
 
+        public int GetCustomerPoints(string customerid)
+        {
+            using (var command = _context.Database.GetDbConnection().CreateCommand())
+            {
+                command.CommandText = "SELECT * FROM get_customer_point_by_id(@p_customerid)";
+                command.CommandType = CommandType.Text;
+
+                command.Parameters.Add(new NpgsqlParameter("p_customerid", customerid));
+
+                _context.Database.OpenConnection();
+                using (var reader = command.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        return int.Parse(reader["get_customer_point_by_id"].ToString());
+                    }
+                }
+                _context.Database.CloseConnection();
+            }
+            return -1;
+        }
+
+
         public void ActiveAccountCustomer(string personid)
         {
             try

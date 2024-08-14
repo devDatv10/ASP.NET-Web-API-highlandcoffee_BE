@@ -40,6 +40,9 @@ namespace highlandcoffeeapp_BE.DataAccess
         Customer GetCustomerById(string customerid);
         List<Customer> GetAllCustomers();
 
+        // Get customer point for feature Discount
+        int GetCustomerPoints(string customerid);
+
         // function active and block account customer
         void ActiveAccountCustomer(string personid);
         void BlockAccountCustomer(string personid);

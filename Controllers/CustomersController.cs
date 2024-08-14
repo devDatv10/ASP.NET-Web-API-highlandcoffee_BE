@@ -20,6 +20,17 @@ namespace highlandcoffeeapp_BE.Controllers
             return _dataAccessProvider.GetAllCustomers();
         }
 
+        [HttpGet("points/{id}")]
+        public IActionResult GetCustomerPoints(string id)
+        {
+            int points = _dataAccessProvider.GetCustomerPoints(id);
+            if (points >= 0)
+            {
+                return Ok(points);
+            }
+            return NotFound("Customer not found or no points available.");
+        }
+
         [HttpPost]
         public IActionResult Create([FromBody] Customer customer)
         {
