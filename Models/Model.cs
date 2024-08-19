@@ -184,6 +184,7 @@ namespace highlandcoffeeapp_BE.Models
         public string customername { get; set; }
         public string address { get; set; }
         public string phonenumber { get; set; }
+        public int discountamount { get; set; }
     }
 
     public class ConfirmOrderRequest
