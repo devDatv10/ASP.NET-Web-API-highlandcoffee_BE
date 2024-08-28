@@ -27,7 +27,7 @@ namespace highlandcoffeeapp_BE.DataAccess
         public DbSet<Comment> comments { get; set; }
         public DbSet<Bill> bills { get; set; }
 
-        // Phương thức mở kết nối
+        // Method open connection
         public void OpenConnection()
         {
             if (Database.GetDbConnection().State != System.Data.ConnectionState.Open)
@@ -36,7 +36,7 @@ namespace highlandcoffeeapp_BE.DataAccess
             }
         }
 
-        // Phương thức đóng kết nối
+        // Method close connection
         public void CloseConnection()
         {
             if (Database.GetDbConnection().State != System.Data.ConnectionState.Closed)
