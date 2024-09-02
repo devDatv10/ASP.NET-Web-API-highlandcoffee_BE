@@ -217,6 +217,13 @@ namespace highlandcoffeeapp_BE.Models
         public string phonenumber { get; set; }
     }
 
+    // Model for Store Information
+    public class BillInformation
+    {
+        
+    }
+
+    // Model for Top Product
     public class TopProduct
     {
         public string productid { get; set; }
