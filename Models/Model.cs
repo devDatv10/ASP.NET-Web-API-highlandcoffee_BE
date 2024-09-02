@@ -218,9 +218,13 @@ namespace highlandcoffeeapp_BE.Models
     }
 
     // Model for Store Information
-    public class BillInformation
+    public class Store
     {
-        
+        public string storeid {get; set; }
+        public byte[] storelogo {get; set; }
+        public string storename  {get; set; }
+        public string storeaddress {get; set; }
+        public string storephonenumber {get; set; }
     }
 
     // Model for Top Product

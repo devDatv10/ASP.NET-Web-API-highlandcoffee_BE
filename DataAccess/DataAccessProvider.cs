@@ -2234,7 +2234,7 @@ namespace highlandcoffeeapp_BE.DataAccess
                             image = reader["image"] as byte[],
                             intomoney = int.Parse(reader["intomoney"].ToString()),
                             totalprice = int.Parse(reader["totalprice"].ToString()),
-                            discountamount  = int.Parse(reader["discountamount"].ToString()),
+                            discountamount = int.Parse(reader["discountamount"].ToString()),
                             date = DateTime.Parse(reader["date"].ToString()),
                             paymentmethod = reader["paymentmethod"].ToString(),
                             status = int.Parse(reader["status"].ToString()),
@@ -2606,8 +2606,134 @@ namespace highlandcoffeeapp_BE.DataAccess
             return bills;
         }
 
-        //
+        // function for Bill Information
 
+        public void AddStoreInformation(Store store)
+        {
+            using (var command = _context.Database.GetDbConnection().CreateCommand())
+            {
+                command.CommandText = @"
+                    SELECT add_store_information(@p_storelogo, @p_storename, @p_storeaddress, @p_storephonenumber)";
+                command.CommandType = CommandType.Text;
+
+                command.Parameters.Add(new NpgsqlParameter("p_storelogo", store.storelogo));
+                command.Parameters.Add(new NpgsqlParameter("p_storename", store.storename));
+                command.Parameters.Add(new NpgsqlParameter("p_storeaddress", store.storeaddress));
+                command.Parameters.Add(new NpgsqlParameter("p_storephonenumber", store.storephonenumber));
+
+                _context.Database.OpenConnection();
+                command.ExecuteNonQuery();
+                _context.Database.CloseConnection();
+            }
+        }
+
+        public void UpdateStoreInformation(Store store)
+        {
+            try
+            {
+                using (var command = _context.Database.GetDbConnection().CreateCommand())
+                {
+                    command.CommandText = @"
+                    SELECT update_store_information(
+                        @p_storeid,
+                        @p_storelogo,
+                        @p_storename,
+                        @p_storeaddress,
+                        @p_storephonenumber)";
+                    command.CommandType = CommandType.Text;
+
+                    command.Parameters.Add(new NpgsqlParameter("p_storeid", store.storeid));
+                    command.Parameters.Add(new NpgsqlParameter("p_storelogo", store.storelogo));
+                    command.Parameters.Add(new NpgsqlParameter("p_storename", store.storename));
+                    command.Parameters.Add(new NpgsqlParameter("p_storeaddress", store.storeaddress));
+                    command.Parameters.Add(new NpgsqlParameter("p_storephonenumber", store.storephonenumber));
+
+                    _context.Database.OpenConnection();
+                    command.ExecuteNonQuery();
+                    _context.Database.CloseConnection();
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error updating store information");
+                throw;
+            }
+        }
+
+        public void DeleteStoreInformation(string storeid)
+        {
+            using (var command = _context.Database.GetDbConnection().CreateCommand())
+            {
+                command.CommandText = @"
+                SELECT delete_store_information(@p_storeid)";
+                command.CommandType = CommandType.Text;
+
+                command.Parameters.Add(new NpgsqlParameter("p_storeid", storeid));
+
+                _context.Database.OpenConnection();
+                command.ExecuteNonQuery();
+                _context.Database.CloseConnection();
+            }
+        }
+
+        public Store GetStoreInformationById(string storeid)
+        {
+            using (var command = _context.Database.GetDbConnection().CreateCommand())
+            {
+                command.CommandText = "SELECT * FROM get_store_information_by_id(@p_storeid)";
+                command.CommandType = CommandType.Text;
+
+                command.Parameters.Add(new NpgsqlParameter("p_storeid", storeid));
+
+                _context.Database.OpenConnection();
+                using (var reader = command.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        return new Store
+                        {
+                            storeid = reader["storeid"].ToString(),
+                            storelogo = reader["storelogo"] as byte[],
+                            storename = reader["storename"].ToString(),
+                            storeaddress = reader["storeaddress"].ToString(),
+                            storephonenumber = reader["storephonenumber"].ToString()
+                        };
+                    }
+                }
+                _context.Database.CloseConnection();
+            }
+            return null;
+        }
+
+        public List<Store> GetAllStore()
+        {
+            var billinformations = new List<Store>();
+            using (var command = _context.Database.GetDbConnection().CreateCommand())
+            {
+                command.CommandText = "SELECT * FROM get_all_store_information()";
+                command.CommandType = CommandType.Text;
+
+                _context.Database.OpenConnection();
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        billinformations.Add(new Store
+                        {
+                            storeid = reader["storeid"].ToString(),
+                            storelogo = reader["storelogo"] as byte[],
+                            storename = reader["storename"].ToString(),
+                            storeaddress = reader["storeaddress"].ToString(),
+                            storephonenumber = reader["storephonenumber"].ToString(),
+                        });
+                    }
+                }
+                _context.Database.CloseConnection();
+            }
+            return billinformations;
+        }
+
+        // function for
         public int GetDailyRevenue(DateTime date)
         {
             int result = 0;
@@ -2620,7 +2746,7 @@ namespace highlandcoffeeapp_BE.DataAccess
                     command.CommandType = CommandType.Text;
                     command.Parameters.Add(new NpgsqlParameter("p_date", NpgsqlDbType.Date)
                     {
-                        Value = date.Date // Đảm bảo chuyển đổi thành kiểu DATE
+                        Value = date.Date
                     });
 
                     _context.Database.OpenConnection();
@@ -2628,7 +2754,7 @@ namespace highlandcoffeeapp_BE.DataAccess
                     {
                         if (reader.Read())
                         {
-                            result = reader.GetInt32(0); // Đọc giá trị kiểu INTEGER
+                            result = reader.GetInt32(0);
                         }
                     }
                     _context.Database.CloseConnection();

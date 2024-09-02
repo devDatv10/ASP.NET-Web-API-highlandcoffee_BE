@@ -144,6 +144,13 @@ namespace highlandcoffeeapp_BE.DataAccess
         List<Bill> GetAllBills();
         List<Bill> GetBillByOrderId(string orderid);
 
+        // function for billInformation
+        void AddStoreInformation(Store store);
+        void UpdateStoreInformation(Store store);
+        void DeleteStoreInformation(string store);
+        Store GetStoreInformationById(string storeid);
+        List<Store> GetAllStore();
+
         // function frint bill
         void PrintBill(string orderid, string staffid);
 
