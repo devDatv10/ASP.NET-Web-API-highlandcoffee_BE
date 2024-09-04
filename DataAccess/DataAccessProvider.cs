@@ -2400,7 +2400,6 @@ namespace highlandcoffeeapp_BE.DataAccess
             }
             catch (Exception ex)
             {
-                // Xử lý exception nếu cần
                 throw new Exception("Error publish comment", ex);
             }
         }
@@ -2417,8 +2416,6 @@ namespace highlandcoffeeapp_BE.DataAccess
                 @p_orderid,
                 @p_staffid)";
                     command.CommandType = CommandType.Text;
-
-                    // Add parameters
                     command.Parameters.Add(new NpgsqlParameter("p_orderid", bill.orderid));
                     command.Parameters.Add(new NpgsqlParameter("p_staffid", bill.staffid));
 
@@ -2606,20 +2603,21 @@ namespace highlandcoffeeapp_BE.DataAccess
             return bills;
         }
 
-        // function for Bill Information
+        // function for Store Information
 
         public void AddStoreInformation(Store store)
         {
             using (var command = _context.Database.GetDbConnection().CreateCommand())
             {
                 command.CommandText = @"
-                    SELECT add_store_information(@p_storelogo, @p_storename, @p_storeaddress, @p_storephonenumber)";
+                    SELECT add_store_information(@p_storelogo, @p_storename, @p_storeaddress, @p_storephonenumber, @p_status)";
                 command.CommandType = CommandType.Text;
 
                 command.Parameters.Add(new NpgsqlParameter("p_storelogo", store.storelogo));
                 command.Parameters.Add(new NpgsqlParameter("p_storename", store.storename));
                 command.Parameters.Add(new NpgsqlParameter("p_storeaddress", store.storeaddress));
                 command.Parameters.Add(new NpgsqlParameter("p_storephonenumber", store.storephonenumber));
+                command.Parameters.Add(new NpgsqlParameter("p_status", store.status));
 
                 _context.Database.OpenConnection();
                 command.ExecuteNonQuery();
@@ -2696,7 +2694,8 @@ namespace highlandcoffeeapp_BE.DataAccess
                             storelogo = reader["storelogo"] as byte[],
                             storename = reader["storename"].ToString(),
                             storeaddress = reader["storeaddress"].ToString(),
-                            storephonenumber = reader["storephonenumber"].ToString()
+                            storephonenumber = reader["storephonenumber"].ToString(),
+                            status = int.Parse(reader["status"].ToString())
                         };
                     }
                 }
@@ -2725,6 +2724,7 @@ namespace highlandcoffeeapp_BE.DataAccess
                             storename = reader["storename"].ToString(),
                             storeaddress = reader["storeaddress"].ToString(),
                             storephonenumber = reader["storephonenumber"].ToString(),
+                            status = int.Parse(reader["status"].ToString())
                         });
                     }
                 }
@@ -2733,7 +2733,7 @@ namespace highlandcoffeeapp_BE.DataAccess
             return billinformations;
         }
 
-        // function for
+        // function for Get Daily Revenue
         public int GetDailyRevenue(DateTime date)
         {
             int result = 0;

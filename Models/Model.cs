@@ -225,6 +225,7 @@ namespace highlandcoffeeapp_BE.Models
         public string storename  {get; set; }
         public string storeaddress {get; set; }
         public string storephonenumber {get; set; }
+        public int status { get; set; }
     }
 
     // Model for Top Product
