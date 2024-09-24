@@ -10,12 +10,12 @@ namespace highlandcoffeeapp_BE.DataAccess
     public class DataAccessProvider : IDataAccessProvider
     {
         private readonly PostgreSqlContext _context;
-        private readonly ILogger<DataAccessProvider> _logger; // Khai báo ILogger
+        private readonly ILogger<DataAccessProvider> _logger;
 
         public DataAccessProvider(PostgreSqlContext context, ILogger<DataAccessProvider> logger)
         {
             _context = context;
-            _logger = logger; // Khởi tạo ILogger
+            _logger = logger;
         }
 
         // function for account
@@ -126,6 +126,7 @@ namespace highlandcoffeeapp_BE.DataAccess
         }
 
         // function for admin
+
         // Function for adding admin
         public void AddAdmin(Admin admin)
         {
@@ -133,7 +134,6 @@ namespace highlandcoffeeapp_BE.DataAccess
             {
                 using (var command = _context.Database.GetDbConnection().CreateCommand())
                 {
-                    // Sử dụng SELECT để gọi hàm add_admin
                     command.CommandText = @"
                 SELECT add_admin(@p_name, @p_phonenumber, @p_shift, @p_password)";
                     command.CommandType = CommandType.Text;
@@ -150,7 +150,6 @@ namespace highlandcoffeeapp_BE.DataAccess
             }
             catch (Exception ex)
             {
-                // Log lỗi để biết nguyên nhân chính xác
                 _logger.LogError(ex, "Error adding admin");
                 throw;
             }
@@ -326,7 +325,6 @@ namespace highlandcoffeeapp_BE.DataAccess
             }
             catch (Exception ex)
             {
-                // Xử lý exception nếu cần
                 throw new Exception("Error add role for account", ex);
             }
         }
@@ -350,7 +348,6 @@ namespace highlandcoffeeapp_BE.DataAccess
             }
             catch (Exception ex)
             {
-                // Xử lý exception nếu cần
                 throw new Exception("Error cancel role for account", ex);
             }
         }
@@ -383,8 +380,6 @@ namespace highlandcoffeeapp_BE.DataAccess
             return null;
         }
 
-
-
         // Function for customer
         public void AddCustomer(Customer customer)
         {
@@ -392,7 +387,6 @@ namespace highlandcoffeeapp_BE.DataAccess
             {
                 using (var command = _context.Database.GetDbConnection().CreateCommand())
                 {
-                    // Sử dụng SELECT để gọi hàm add_new_customer
                     command.CommandText = @"
                         SELECT add_customer(@p_name, @p_phonenumber, @p_address, @p_point, @p_password)";
                     command.CommandType = CommandType.Text;
@@ -410,12 +404,10 @@ namespace highlandcoffeeapp_BE.DataAccess
             }
             catch (Exception ex)
             {
-                // Log lỗi để biết nguyên nhân chính xác
                 _logger.LogError(ex, "Error adding customer");
                 throw;
             }
         }
-
 
         public void UpdateCustomer(Customer customer)
         {
@@ -570,7 +562,6 @@ namespace highlandcoffeeapp_BE.DataAccess
             }
             catch (Exception ex)
             {
-                // Xử lý exception nếu cần
                 throw new Exception("Error activating account", ex);
             }
         }
@@ -594,7 +585,6 @@ namespace highlandcoffeeapp_BE.DataAccess
             }
             catch (Exception ex)
             {
-                // Xử lý exception nếu cần
                 throw new Exception("Error blocking account", ex);
             }
         }
@@ -884,9 +874,6 @@ namespace highlandcoffeeapp_BE.DataAccess
             return null;
         }
 
-
-
-
         // function for category
         public void AddCategory(Category category)
         {
@@ -1017,14 +1004,12 @@ namespace highlandcoffeeapp_BE.DataAccess
         {
             try
             {
-                // Loại bỏ các ký tự dư \r từ các thuộc tính của staff
                 staff.name = staff.name?.Replace("\r", "");
                 staff.phonenumber = staff.phonenumber?.Replace("\r", "");
                 staff.password = staff.password?.Replace("\r", "");
 
                 using (var command = _context.Database.GetDbConnection().CreateCommand())
                 {
-                    // Sử dụng SELECT để gọi hàm add_staff
                     command.CommandText = @"
             SELECT add_staff(
                 @p_name,
@@ -1048,7 +1033,6 @@ namespace highlandcoffeeapp_BE.DataAccess
             }
             catch (Exception ex)
             {
-                // Log lỗi để biết nguyên nhân chính xác
                 _logger.LogError(ex, "Error adding staff");
                 throw;
             }
@@ -1088,7 +1072,6 @@ namespace highlandcoffeeapp_BE.DataAccess
             }
             catch (Exception ex)
             {
-                // Log lỗi để biết nguyên nhân chính xác
                 _logger.LogError(ex, "Error updating staff");
                 throw;
             }
@@ -1552,7 +1535,7 @@ namespace highlandcoffeeapp_BE.DataAccess
             }
         }
 
-        // Method for getting cart by customer ID
+        // function for getting cart by customer ID
         public Cart GetCartByCustomerId(string customerid)
         {
             try
@@ -1575,8 +1558,6 @@ namespace highlandcoffeeapp_BE.DataAccess
                                 cartid = reader.GetString(0),
                                 customerid = reader.GetString(1)
                             };
-
-                            // Assuming one cart per customer
                             return cart;
                         }
                     }
@@ -1621,7 +1602,7 @@ namespace highlandcoffeeapp_BE.DataAccess
 
         public void UpdateCart(Cart cart)
         {
-            // Implement logic for updating a cart here
+            //miss Handle update cart
         }
 
         public void DeleteCart(string cartid)
@@ -1669,12 +1650,12 @@ namespace highlandcoffeeapp_BE.DataAccess
         // Function for cart details
         public void AddCartDetail(CartDetail cartDetail)
         {
-            // Implement logic for adding a cart detail here
+            // miss handel adding a cart detail
         }
 
         public void UpdateCartDetail(CartDetail cartDetail)
         {
-            // Implement logic for updating a cart detail here
+            // miss handel update cart detail
         }
 
         public void DeleteCartDetail(string cartdetailid)
@@ -1823,7 +1804,6 @@ namespace highlandcoffeeapp_BE.DataAccess
                 @p_phonenumber)";
                     command.CommandType = CommandType.Text;
 
-                    // Thêm các tham số
                     command.Parameters.Add(new NpgsqlParameter("p_customerid", orderdetail.customerid));
                     command.Parameters.Add(new NpgsqlParameter("p_paymentmethod", orderdetail.paymentmethod));
                     command.Parameters.Add(new NpgsqlParameter("p_cartid", orderdetail.cartid));
@@ -1847,7 +1827,7 @@ namespace highlandcoffeeapp_BE.DataAccess
 
         public void UpdateOrder(Order order)
         {
-            // Implement logic for adding a cart detail here
+            //miss handle add a cart detail
         }
 
         public void DeleteOrder(string orderid)
@@ -2054,17 +2034,17 @@ namespace highlandcoffeeapp_BE.DataAccess
         // function for order detail
         public void AddOrderDetail(OrderDetail orderDetail)
         {
-            // Implement logic for adding a cart detail here
+            // misss handle
         }
 
         public void UpdateOrderDetail(OrderDetail orderDetail)
         {
-            // Implement logic for adding a cart detail here
+            // misss handle
         }
 
         public void DeleteOrderDetail(string orderdetailid)
         {
-            // Implement logic for adding a cart detail here
+            // misss handle
         }
 
         public OrderDetail GetOrderDetailById(string orderdetailid)
@@ -2249,10 +2229,6 @@ namespace highlandcoffeeapp_BE.DataAccess
             return orderDetails;
         }
 
-
-
-
-
         // function for order comment
         public void AddComment(Comment comment)
         {
@@ -2275,8 +2251,6 @@ namespace highlandcoffeeapp_BE.DataAccess
                 _context.Database.CloseConnection();
             }
         }
-
-
 
         public void UpdateComment(Comment comment)
         {
@@ -2604,7 +2578,6 @@ namespace highlandcoffeeapp_BE.DataAccess
         }
 
         // function for Store Information
-
         public void AddStoreInformation(Store store)
         {
             using (var command = _context.Database.GetDbConnection().CreateCommand())
@@ -2819,9 +2792,5 @@ namespace highlandcoffeeapp_BE.DataAccess
             }
             return result;
         }
-
-
-
-
     }
 }
